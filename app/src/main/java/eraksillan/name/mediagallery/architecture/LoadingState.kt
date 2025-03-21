@@ -1,4 +1,4 @@
-package eraksillan.name.mediagallery
+package eraksillan.name.mediagallery.architecture
 
 enum class LoadingState {
     NONE,

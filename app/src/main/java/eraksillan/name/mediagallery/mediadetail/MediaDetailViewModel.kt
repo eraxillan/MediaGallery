@@ -7,6 +7,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 
+// https://medium.com/@cgaisl/how-to-pass-arguments-to-a-hiltviewmodel-from-compose-97c74a75f772
 @HiltViewModel(assistedFactory = MediaDetailViewModel.ViewModelFactory::class)
 class MediaDetailViewModel @AssistedInject constructor(
     //val exampleRepository: ExampleRepository,

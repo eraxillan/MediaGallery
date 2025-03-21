@@ -1,7 +1,7 @@
 package eraksillan.name.mediagallery.mediadetail
 
-import eraksillan.name.mediagallery.ErrorState
-import eraksillan.name.mediagallery.LoadingState
+import eraksillan.name.mediagallery.architecture.ErrorState
+import eraksillan.name.mediagallery.architecture.LoadingState
 
 data class MediaDetailState(
     val data: String,
