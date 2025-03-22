@@ -15,13 +15,18 @@ import kotlinx.coroutines.launch
 
 abstract class PagingViewModel<T : Any> : ViewModel() {
 
-    val list = mutableStateListOf<T>()
     abstract var callback: (page: Int, pageSize: Int) -> Flow<NetworkResult<List<T>>>
+
+    val list = mutableStateListOf<T>()
+
+    var canPaginate by mutableStateOf(false)
+    var listState by mutableStateOf(PagingListState.IDLE)
+
+    val pageNo: Int
+        get() = page
 
     private var page by mutableIntStateOf(1)
     private val pageSize = 24
-    var canPaginate by mutableStateOf(false)
-    var listState by mutableStateOf(PagingListState.IDLE)
 
     private val isFirstPage: Boolean
         get() = page == 1
