@@ -1,6 +1,8 @@
 package eraksillan.name.mediagallery.medialist
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -17,13 +19,19 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -33,13 +41,68 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import eraksillan.name.mediagallery.R
 import eraksillan.name.mediagallery.paging.PagingListState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaListCompose(viewModel: MediaListViewModel) {
+    val pagerState = rememberPagerState { 4 }
+    val coroutineScope = rememberCoroutineScope()
+
+    val seasonTriple = viewModel.getSeasonTriple() ?: return
+    val tabs = listOf(
+        seasonTriple.last.tabTitleResId,
+        seasonTriple.current.tabTitleResId,
+        seasonTriple.next.tabTitleResId,
+        R.string.archive_seasons
+    )
+
+    Scaffold(
+        modifier = Modifier
+            .navigationBarsPadding()
+            .imePadding(),
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding()
+                )
+        ) {
+            PrimaryTabRow(
+                selectedTabIndex = pagerState.currentPage
+            ) {
+                tabs.forEachIndexed { index, titleResId ->
+                    Tab(
+                        selected = pagerState.currentPage == index,
+                        onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
+                        text = { Text(stringResource(titleResId)) },
+                        unselectedContentColor = MaterialTheme.colorScheme.secondary,
+                    )
+                }
+            }
+            HorizontalPager(
+                modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                state = pagerState,
+                verticalAlignment = Alignment.Top
+            ) { index ->
+                when (index) {
+                    0, 1, 2 -> ActualSeasonCompose(viewModel)
+                    3 -> ArchiveSeasonCompose(viewModel)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ActualSeasonCompose(viewModel: MediaListViewModel) {
     val listState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -57,50 +120,45 @@ fun MediaListCompose(viewModel: MediaListViewModel) {
         viewModel.getPageData()
     }
 
-    Scaffold(
-        modifier = Modifier
-            .navigationBarsPadding()
-            .imePadding(),
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier.padding(
-                top = paddingValues.calculateTopPadding(),
-                bottom = paddingValues.calculateBottomPadding()
-            )
+    Column {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            state = listState,
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(all = 16.dp),
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                state = listState,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(all = 16.dp),
+            items(items = medias, key = { it.uniqueId }) {
+                MediaListItem(it) { viewModel.navigateToDetail() }
+            }
+
+            fullWidthItem(
+                key = viewModel.listState,
             ) {
-                items(items = medias, key = { it.uniqueId }) {
-                    MediaListItem(it) { viewModel.navigateToDetail() }
-                }
-
-                fullWidthItem(
-                    key = viewModel.listState,
-                ) {
-                    when (viewModel.listState) {
-                        PagingListState.LOADING -> {
-                            FirstPageLoadingCompose()
-                        }
-
-                        PagingListState.PAGINATING -> {
-                            PageLoadingCompose(viewModel.pageNo)
-                        }
-
-                        PagingListState.PAGINATION_EXHAUST -> {
-                            LastPageLoadingCompose(coroutineScope, listState)
-                        }
-
-                        else -> {}
+                when (viewModel.listState) {
+                    PagingListState.LOADING -> {
+                        FirstPageLoadingCompose()
                     }
+
+                    PagingListState.PAGINATING -> {
+                        PageLoadingCompose(viewModel.pageNo)
+                    }
+
+                    PagingListState.PAGINATION_EXHAUST -> {
+                        LastPageLoadingCompose(coroutineScope, listState)
+                    }
+
+                    else -> {}
                 }
             }
         }
     }
+}
+
+@Composable
+private fun ArchiveSeasonCompose(viewModel: MediaListViewModel) {
+    // TODO: implement
+    Box(modifier = Modifier.fillMaxSize())
 }
 
 @Composable
