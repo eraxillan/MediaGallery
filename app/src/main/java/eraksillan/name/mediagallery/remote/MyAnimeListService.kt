@@ -8,13 +8,16 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-// https://api.jikan.moe/v4
 interface MyAnimeListService {
-    // https://api.jikan.moe/v4/schedules
-    @GET("schedules")
-    suspend fun getWeeklySchedules(
+    // https://api.jikan.moe/v4/seasons/{year}/{season}
+    @GET("seasons/{year}/{season}")
+    suspend fun getSeasonMedias(
+        @Path("year") year: Int,
+        @Path("season") season: String,
         @Query("page") page: Int,
-        @Query("limit") pageSize: Int
+        @Query("limit") pageSize: Int,
+        @Query("filter") filter: String,
+        @Query("continuing") continuing: Boolean,
     ): RetrofitNetworkResult<Schedule, LocalSchedule>
 
     // https://api.jikan.moe/v4/anime/4459/pictures

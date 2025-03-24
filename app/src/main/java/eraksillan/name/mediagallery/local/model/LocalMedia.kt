@@ -59,12 +59,12 @@ data class LocalMedia(
         UNKNOWN,
     }
 
-    enum class Season {
-        WINTER,
-        SPRING,
-        SUMMER,
-        FALL,
-        UNKNOWN,
+    enum class Season(val query: String) {
+        WINTER("winter"),
+        SPRING("spring"),
+        SUMMER("summer"),
+        FALL("fall"),
+        UNKNOWN("<unknown>"),
     }
 
     enum class Rating {

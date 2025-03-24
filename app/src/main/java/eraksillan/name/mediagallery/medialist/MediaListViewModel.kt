@@ -9,6 +9,8 @@ import eraksillan.name.mediagallery.ComposeScreen
 import eraksillan.name.mediagallery.R
 import eraksillan.name.mediagallery.architecture.NetworkResult
 import eraksillan.name.mediagallery.local.model.LocalMedia
+import eraksillan.name.mediagallery.local.model.LocalMediaFilter
+import eraksillan.name.mediagallery.local.model.LocalMediaTypeFilter
 import eraksillan.name.mediagallery.paging.PagingMediaRepository
 import eraksillan.name.mediagallery.paging.PagingViewModel
 import kotlinx.coroutines.flow.Flow
@@ -24,9 +26,18 @@ class MediaListViewModel @AssistedInject constructor(
     private val repository: PagingMediaRepository
 ) : PagingViewModel<LocalMedia>() {
 
+    val mediaFilter: LocalMediaFilter = getDefaultMediaFilter()
+
     override var callback: (Int, Int) -> Flow<NetworkResult<List<LocalMedia>>> =
         { page: Int, pageSize: Int ->
-            repository.getWeeklySchedules(page, pageSize)
+            repository.getSeasonMedias(
+                year = mediaFilter.year,
+                season = mediaFilter.season,
+                page = page,
+                pageSize = pageSize,
+                filter = mediaFilter.type,
+                continuing = mediaFilter.continuing
+            )
                 .map {
                     when (it) {
                         is NetworkResult.Success -> NetworkResult.Success(it.data.mediaList)
@@ -38,6 +49,96 @@ class MediaListViewModel @AssistedInject constructor(
 
     init {
         getPageData()
+    }
+
+    fun getSeasonTriple(): SeasonInfoTriple? {
+        val currentYear = System.now()
+            .toLocalDateTime(TimeZone.currentSystemDefault())
+            .year
+        val previousYear = currentYear - 1
+        return when (getCurrentSeason()) {
+            LocalMedia.Season.WINTER -> SeasonInfoTriple(
+                data = listOf(
+                    SeasonInfo(
+                        value = LocalMedia.Season.FALL,
+                        year = previousYear,
+                        tabTitleResId = R.string.fall
+                    ),
+                    SeasonInfo(
+                        value = LocalMedia.Season.WINTER,
+                        year = currentYear,
+                        tabTitleResId = R.string.winter
+                    ),
+                    SeasonInfo(
+                        value = LocalMedia.Season.SPRING,
+                        year = currentYear,
+                        tabTitleResId = R.string.spring
+                    )
+                )
+            )
+
+            LocalMedia.Season.SPRING -> SeasonInfoTriple(
+                data = listOf(
+                    SeasonInfo(
+                        value = LocalMedia.Season.WINTER,
+                        year = currentYear,
+                        tabTitleResId = R.string.winter
+                    ),
+                    SeasonInfo(
+                        value = LocalMedia.Season.SPRING,
+                        year = currentYear,
+                        tabTitleResId = R.string.spring
+                    ),
+                    SeasonInfo(
+                        value = LocalMedia.Season.SUMMER,
+                        year = currentYear,
+                        tabTitleResId = R.string.summer
+                    )
+                )
+            )
+
+            LocalMedia.Season.SUMMER -> SeasonInfoTriple(
+                data = listOf(
+                    SeasonInfo(
+                        value = LocalMedia.Season.SPRING,
+                        year = currentYear,
+                        tabTitleResId = R.string.spring
+                    ),
+                    SeasonInfo(
+                        value = LocalMedia.Season.SUMMER,
+                        year = currentYear,
+                        tabTitleResId = R.string.summer
+                    ),
+                    SeasonInfo(
+                        value = LocalMedia.Season.FALL,
+                        year = currentYear,
+                        tabTitleResId = R.string.fall
+                    )
+                )
+            )
+
+            LocalMedia.Season.FALL -> SeasonInfoTriple(
+                listOf(
+                    SeasonInfo(
+                        value = LocalMedia.Season.SUMMER,
+                        year = previousYear,
+                        tabTitleResId = R.string.summer
+                    ),
+                    SeasonInfo(
+                        value = LocalMedia.Season.FALL,
+                        year = currentYear,
+                        tabTitleResId = R.string.fall
+                    ),
+                    SeasonInfo(
+                        value = LocalMedia.Season.WINTER,
+                        year = currentYear,
+                        tabTitleResId = R.string.winter
+                    )
+                )
+            )
+
+            LocalMedia.Season.UNKNOWN -> null
+        }
     }
 
     fun navigateToDetail() {
@@ -57,100 +158,24 @@ class MediaListViewModel @AssistedInject constructor(
         }
     }
 
+    private fun getDefaultMediaFilter(): LocalMediaFilter {
+        return LocalMediaFilter(
+            year = System.now().toLocalDateTime(TimeZone.currentSystemDefault()).year,
+            season = getCurrentSeason(),
+            type = LocalMediaTypeFilter.TV_NEW,
+            continuing = false
+        )
+    }
+
     data class SeasonInfo(
         val value: LocalMedia.Season,
         val year: Int,
         val tabTitleResId: Int,
     )
 
-    // `this` is the reserved Kotlin keyword, so use `current`
     data class SeasonInfoTriple(
-        val last: SeasonInfo,
-        val current: SeasonInfo,
-        val next: SeasonInfo,
+        val data: List<SeasonInfo>
     )
-
-    fun getSeasonTriple(): SeasonInfoTriple? {
-        val currentYear = System.now()
-            .toLocalDateTime(TimeZone.currentSystemDefault())
-            .year
-        val previousYear = currentYear - 1
-        return when (getCurrentSeason()) {
-            LocalMedia.Season.WINTER -> SeasonInfoTriple(
-                last = SeasonInfo(
-                    value = LocalMedia.Season.FALL,
-                    year = previousYear,
-                    tabTitleResId = R.string.fall
-                ),
-                current = SeasonInfo(
-                    value = LocalMedia.Season.WINTER,
-                    year = currentYear,
-                    tabTitleResId = R.string.winter
-                ),
-                next = SeasonInfo(
-                    value = LocalMedia.Season.SPRING,
-                    year = currentYear,
-                    tabTitleResId = R.string.spring
-                )
-            )
-
-            LocalMedia.Season.SPRING -> SeasonInfoTriple(
-                last = SeasonInfo(
-                    value = LocalMedia.Season.WINTER,
-                    year = currentYear,
-                    tabTitleResId = R.string.winter
-                ),
-                current = SeasonInfo(
-                    value = LocalMedia.Season.SPRING,
-                    year = currentYear,
-                    tabTitleResId = R.string.spring
-                ),
-                next = SeasonInfo(
-                    value = LocalMedia.Season.SUMMER,
-                    year = currentYear,
-                    tabTitleResId = R.string.summer
-                )
-            )
-
-            LocalMedia.Season.SUMMER -> SeasonInfoTriple(
-                last = SeasonInfo(
-                    value = LocalMedia.Season.SPRING,
-                    year = currentYear,
-                    tabTitleResId = R.string.spring
-                ),
-                current = SeasonInfo(
-                    value = LocalMedia.Season.SUMMER,
-                    year = currentYear,
-                    tabTitleResId = R.string.summer
-                ),
-                next = SeasonInfo(
-                    value = LocalMedia.Season.FALL,
-                    year = currentYear,
-                    tabTitleResId = R.string.fall
-                )
-            )
-
-            LocalMedia.Season.FALL -> SeasonInfoTriple(
-                last = SeasonInfo(
-                    value = LocalMedia.Season.SUMMER,
-                    year = previousYear,
-                    tabTitleResId = R.string.summer
-                ),
-                current = SeasonInfo(
-                    value = LocalMedia.Season.FALL,
-                    year = currentYear,
-                    tabTitleResId = R.string.fall
-                ),
-                next = SeasonInfo(
-                    value = LocalMedia.Season.WINTER,
-                    year = currentYear,
-                    tabTitleResId = R.string.winter
-                )
-            )
-
-            LocalMedia.Season.UNKNOWN -> null
-        }
-    }
 
     @AssistedFactory
     interface ViewModelFactory {

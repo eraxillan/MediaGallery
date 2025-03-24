@@ -1,7 +1,9 @@
 package eraksillan.name.mediagallery.remote
 
 import eraksillan.name.mediagallery.architecture.NetworkResult
+import eraksillan.name.mediagallery.local.model.LocalMedia
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
+import eraksillan.name.mediagallery.local.model.LocalMediaTypeFilter
 import eraksillan.name.mediagallery.local.model.LocalSchedule
 import eraksillan.name.mediagallery.remote.model.MediaPictures
 import eraksillan.name.mediagallery.remote.model.Schedule
@@ -10,10 +12,22 @@ import javax.inject.Inject
 class OnlineMediaRepository @Inject constructor(
     private val network: RetrofitMediaRepository,
 ) {
-    suspend fun getWeeklySchedules(
-        page: Int, pageSize: Int
+    suspend fun getSeasonMedias(
+        year: Int,
+        season: LocalMedia.Season,
+        page: Int,
+        pageSize: Int,
+        filter: LocalMediaTypeFilter,
+        continuing: Boolean
     ): NetworkResult<LocalSchedule> {
-        val result = network.getWeeklySchedules(page, pageSize)
+        val result = network.getSeasonMedias(
+            year = year,
+            season = season.query,
+            page = page,
+            pageSize = pageSize,
+            filter = filter.query,
+            continuing = continuing
+        )
         return toLocal<Schedule, LocalSchedule>(result)
     }
 

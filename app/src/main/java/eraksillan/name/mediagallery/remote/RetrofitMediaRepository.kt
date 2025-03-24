@@ -6,9 +6,13 @@ import eraksillan.name.mediagallery.remote.model.MediaPictures
 import eraksillan.name.mediagallery.remote.model.Schedule
 
 interface RetrofitMediaRepository {
-    suspend fun getWeeklySchedules(
+    suspend fun getSeasonMedias(
+        year: Int,
+        season: String,
         page: Int,
-        pageSize: Int
+        pageSize: Int,
+        filter: String,
+        continuing: Boolean,
     ): RetrofitNetworkResult<Schedule, LocalSchedule>
 
     suspend fun getMediaPictures(

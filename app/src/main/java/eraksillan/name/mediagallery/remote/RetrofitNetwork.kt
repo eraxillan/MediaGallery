@@ -31,11 +31,22 @@ class RetrofitNetwork @Inject constructor(
             .build()
             .create(MyAnimeListService::class.java)
 
-    override suspend fun getWeeklySchedules(
+    override suspend fun getSeasonMedias(
+        year: Int,
+        season: String,
         page: Int,
-        pageSize: Int
+        pageSize: Int,
+        filter: String,
+        continuing: Boolean
     ): RetrofitNetworkResult<Schedule, LocalSchedule> {
-        return networkApi.getWeeklySchedules(page, pageSize)
+        return networkApi.getSeasonMedias(
+            year = year,
+            season = season,
+            page = page,
+            pageSize = pageSize,
+            filter = filter,
+            continuing = continuing
+        )
     }
 
     override suspend fun getMediaPictures(
