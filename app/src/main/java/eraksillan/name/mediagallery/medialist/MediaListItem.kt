@@ -35,6 +35,10 @@ import eraksillan.name.mediagallery.R
 import eraksillan.name.mediagallery.local.model.LocalMedia
 import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
 import kotlinx.datetime.Instant
+import kotlinx.datetime.format
+import kotlinx.datetime.format.DateTimeComponents
+import kotlinx.datetime.format.MonthNames.Companion.ENGLISH_ABBREVIATED
+import kotlinx.datetime.format.char
 import java.net.URL
 import java.util.Locale
 
@@ -56,6 +60,7 @@ fun MediaListItem(data: LocalMedia, onClick: () -> Unit) {
 
         val displayThemes = data.themes.joinToString(", ") { it.name }
         val displayDemographics = data.demographics.joinToString(", ") { it.name }
+
         var displayGenres = data.genres.joinToString(", ") { it.name }
         if (data.themes.isNotEmpty()) {
             if (displayGenres.isNotEmpty()) {
@@ -69,6 +74,17 @@ fun MediaListItem(data: LocalMedia, onClick: () -> Unit) {
             }
             displayGenres += displayDemographics
         }
+
+        // Example: Mar 26, 2025
+        val dateCustomFormat = DateTimeComponents.Format {
+            monthName(ENGLISH_ABBREVIATED)
+            char(' ')
+            dayOfMonth()
+            char(',')
+            char(' ')
+            year()
+        }
+        val displayStartDate = data.aired.from?.format(dateCustomFormat) ?: "N/A"
 
         val imageStub = painterResource(id = R.drawable.media_item_placeholder)
 
@@ -106,7 +122,11 @@ fun MediaListItem(data: LocalMedia, onClick: () -> Unit) {
 
             Text(text = displayDefaultTitle, maxLines = 2, overflow = TextOverflow.Ellipsis)
 
-            Text(text = displayGenres, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if (displayGenres.isNotEmpty()) {
+                Text(text = displayGenres, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+
+            Text(text = displayStartDate, maxLines = 1, color = MaterialTheme.colorScheme.outline)
         }
     }
 }
