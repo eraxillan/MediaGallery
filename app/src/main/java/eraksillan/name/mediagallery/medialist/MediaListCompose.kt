@@ -29,11 +29,11 @@ import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -60,21 +60,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import eraksillan.name.mediagallery.R
+import eraksillan.name.mediagallery.local.model.LocalMediaSortType
 import eraksillan.name.mediagallery.local.model.LocalMediaTypeFilter
+import eraksillan.name.mediagallery.local.utils.MediaSeasonInfo
+import eraksillan.name.mediagallery.local.utils.getSeasonTriple
 import eraksillan.name.mediagallery.paging.PagingListState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MediaListCompose(viewModel: MediaListViewModel) {
-    val pagerState = rememberPagerState(initialPage = 1) { 4 }
+fun MediaListCompose(viewModels: List<MediaListViewModel>) {
+    val pagerState = rememberPagerState(initialPage = 1) { TAB_PAGE_COUNT }
     val coroutineScope = rememberCoroutineScope()
 
-    val seasonTriple = viewModel.getSeasonTriple() ?: return
-    val tabs = listOf(
+    val seasonTriple = getSeasonTriple() ?: return
+    val tabTitles = listOf(
         R.string.last_tab,
         R.string.this_season,
         R.string.next_season,
@@ -97,7 +100,7 @@ fun MediaListCompose(viewModel: MediaListViewModel) {
             TabRow(
                 selectedTabIndex = pagerState.currentPage
             ) {
-                tabs.forEachIndexed { index, titleResId ->
+                tabTitles.forEachIndexed { index, titleResId ->
                     Tab(
                         selected = pagerState.currentPage == index,
                         onClick = {
@@ -119,25 +122,29 @@ fun MediaListCompose(viewModel: MediaListViewModel) {
                 verticalAlignment = Alignment.Top
             ) { index ->
                 when (index) {
-                    0, 1, 2 -> ActualSeasonCompose(viewModel, seasonTriple.data[index])
-                    3 -> ArchiveSeasonCompose(viewModel)
+                    LAST_TAB_INDEX, CURRENT_TAB_INDEX, NEXT_TAB_INDEX -> {
+                        ActualSeasonCompose(viewModels[index], seasonTriple.data[index])
+                    }
+
+                    ARCHIVE_TAB_INDEX -> {
+                        ArchiveSeasonCompose()
+                    }
                 }
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ActualSeasonCompose(
     viewModel: MediaListViewModel,
-    seasonInfo: MediaListViewModel.SeasonInfo
+    seasonInfo: MediaSeasonInfo
 ) {
+    // val state by viewModel.state.collectAsState()
+
     val listState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
 
-    // https://medium.com/androiddevelopers/jetpack-compose-when-should-i-use-derivedstateof-63ce7954c11b
-    // https://stackoverflow.com/q/66712286/1794089
     val shouldStartPaginate by remember {
         derivedStateOf {
             viewModel.canPaginate && !listState.canScrollForward
@@ -146,8 +153,11 @@ private fun ActualSeasonCompose(
 
     val medias = viewModel.list
     val mediaTypes = LocalMediaTypeFilter.entries.map { stringResource(it.titleResId) }
+    val season = stringResource(seasonInfo.tabTitleResId) + " " + seasonInfo.year
 
-    if (shouldStartPaginate && viewModel.listState == PagingListState.IDLE) {
+    var listInitialised by remember { mutableStateOf(false) }
+
+    if (listInitialised && shouldStartPaginate && viewModel.listState == PagingListState.IDLE) {
         viewModel.getPageData()
     }
 
@@ -159,11 +169,10 @@ private fun ActualSeasonCompose(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            ComboBox(mediaTypes) {
-                // FIXME: implement
+            ComboBox(mediaTypes) { index, title ->
+                viewModel.onEvent(MediaListAction.MediaTypeSelected(index))
             }
 
-            val season = stringResource(seasonInfo.tabTitleResId) + " " + seasonInfo.year
             TinyOutlinedReadOnlyTextField(
                 text = season,
                 longestText = season,
@@ -173,15 +182,34 @@ private fun ActualSeasonCompose(
                 },
             )
 
-            IconButton(
-                onClick = {
-                    // FIXME: implement
-                },
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.baseline_filter_list_off_24),
-                    contentDescription = null,
-                    tint = Color.Black
+            Box {
+                var expanded by remember { mutableStateOf(false) }
+
+                IconButton(
+                    enabled = viewModel.listState == PagingListState.PAGINATION_EXHAUST,
+                    onClick = {
+                        expanded = !expanded
+                    },
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.baseline_sort_24),
+                        contentDescription = null,
+                        tint = if (viewModel.listState == PagingListState.PAGINATION_EXHAUST) {
+                            Color.Black
+                        } else {
+                            Color.LightGray
+                        }
+                    )
+                }
+
+                ContextMenuCompose(
+                    expanded = expanded,
+                    items = LocalMediaSortType.entries.map { stringResource(it.title) },
+                    onItemClicked = { index ->
+                        viewModel.onEvent(MediaListAction.SortTypeClicked(index))
+                        expanded = false
+                    },
+                    onDismissRequest = { expanded = false }
                 )
             }
         }
@@ -216,12 +244,14 @@ private fun ActualSeasonCompose(
                     else -> {}
                 }
             }
+
+            listInitialised = true
         }
     }
 }
 
 @Composable
-private fun ArchiveSeasonCompose(viewModel: MediaListViewModel) {
+private fun ArchiveSeasonCompose() {
     // TODO: implement
     Box(modifier = Modifier.fillMaxSize())
 }
@@ -301,7 +331,7 @@ private fun LastPageLoadingCompose(coroutineScope: CoroutineScope, listState: La
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ComboBox(items: List<String>, onSelected: () -> Unit) {
+private fun ComboBox(items: List<String>, onSelected: (Int, String) -> Unit) {
     val textFieldState = rememberTextFieldState(items[0])
 
     var expanded by remember { mutableStateOf(false) }
@@ -328,7 +358,7 @@ private fun ComboBox(items: List<String>, onSelected: () -> Unit) {
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
-            items.forEach { title ->
+            items.forEachIndexed { index, title ->
                 DropdownMenuItem(
                     text = { Text(title, style = MaterialTheme.typography.bodyLarge) },
                     onClick = {
@@ -336,7 +366,7 @@ private fun ComboBox(items: List<String>, onSelected: () -> Unit) {
                         textFieldState.setTextAndPlaceCursorAtEnd(title)
                         expanded = false
 
-                        onSelected()
+                        onSelected(index, title)
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 )
@@ -388,6 +418,27 @@ private fun TinyOutlinedReadOnlyTextField(
     )
 }
 
+@Composable
+private fun ContextMenuCompose(
+    expanded: Boolean,
+    items: List<String>,
+    onItemClicked: (Int) -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    DropdownMenu(
+        offset = DpOffset(0.dp, 16.dp),
+        expanded = expanded,
+        onDismissRequest = onDismissRequest
+    ) {
+        items.forEachIndexed { index, title ->
+            DropdownMenuItem(
+                text = { Text(title) },
+                onClick = { onItemClicked(index) }
+            )
+        }
+    }
+}
+
 /**
  * An item that occupies the entire width.
  */
@@ -401,3 +452,9 @@ fun LazyGridScope.fullWidthItem(
     contentType = contentType,
     content = content
 )
+
+private const val TAB_PAGE_COUNT = 4
+private const val LAST_TAB_INDEX = 0
+private const val CURRENT_TAB_INDEX = 1
+private const val NEXT_TAB_INDEX = 2
+private const val ARCHIVE_TAB_INDEX = 3

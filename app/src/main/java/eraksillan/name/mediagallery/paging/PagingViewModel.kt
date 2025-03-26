@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 abstract class PagingViewModel<T : Any> : ViewModel() {
 
-    abstract var callback: (page: Int, pageSize: Int) -> Flow<NetworkResult<List<T>>>
+    abstract var getPageCallback: (page: Int, pageSize: Int) -> Flow<NetworkResult<List<T>>>
 
     val list = mutableStateListOf<T>()
 
@@ -35,7 +35,7 @@ abstract class PagingViewModel<T : Any> : ViewModel() {
     private val isInIdle: Boolean
         get() = (listState == PagingListState.IDLE)
 
-    fun getPageData() =
+    fun getPageData() {
         viewModelScope.launch {
             if (isFirstPage || (canPaginateFurther && isInIdle)) {
                 listState = if (isFirstPage) {
@@ -44,7 +44,7 @@ abstract class PagingViewModel<T : Any> : ViewModel() {
                     PagingListState.PAGINATING
                 }
 
-                callback(page, pageSize).collect {
+                getPageCallback(page, pageSize).collect {
                     it.onSuccess {
                         canPaginate = it.size == pageSize
 
@@ -74,11 +74,17 @@ abstract class PagingViewModel<T : Any> : ViewModel() {
                 }
             }
         }
+    }
 
-    override fun onCleared() {
+    fun reset() {
+        list.clear()
         page = 1
         listState = PagingListState.IDLE
         canPaginate = false
+    }
+
+    override fun onCleared() {
+        reset()
 
         super.onCleared()
     }

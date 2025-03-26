@@ -18,6 +18,7 @@ interface MyAnimeListService {
         @Query("limit") pageSize: Int,
         @Query("filter") filter: String,
         @Query("continuing") continuing: Boolean,
+        @Query("sfw") safeForWork: Boolean = true
     ): RetrofitNetworkResult<Schedule, LocalSchedule>
 
     // https://api.jikan.moe/v4/anime/4459/pictures
