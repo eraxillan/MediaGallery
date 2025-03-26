@@ -11,34 +11,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridItemScope
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -55,14 +42,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import eraksillan.name.mediagallery.R
+import eraksillan.name.mediagallery.designsystem.ComboBox
+import eraksillan.name.mediagallery.designsystem.ContextMenuCompose
+import eraksillan.name.mediagallery.designsystem.TinyOutlinedReadOnlyTextField
+import eraksillan.name.mediagallery.designsystem.fullWidthItem
 import eraksillan.name.mediagallery.local.model.LocalMediaSortType
 import eraksillan.name.mediagallery.local.model.LocalMediaTypeFilter
 import eraksillan.name.mediagallery.local.utils.MediaSeasonInfo
@@ -328,130 +315,6 @@ private fun LastPageLoadingCompose(coroutineScope: CoroutineScope, listState: La
         )
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ComboBox(items: List<String>, onSelected: (Int, String) -> Unit) {
-    val textFieldState = rememberTextFieldState(items[0])
-
-    var expanded by remember { mutableStateOf(false) }
-    var text by remember { mutableStateOf(items[0]) }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = it }
-    ) {
-        TinyOutlinedReadOnlyTextField(
-            text = text,
-            longestText = stringResource(R.string.tv_continued),
-            style = MaterialTheme.typography.bodyLarge,
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-            },
-            label = {
-                Text(stringResource(R.string.media_type))
-            },
-            modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable)
-        )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-        ) {
-            items.forEachIndexed { index, title ->
-                DropdownMenuItem(
-                    text = { Text(title, style = MaterialTheme.typography.bodyLarge) },
-                    onClick = {
-                        text = title
-                        textFieldState.setTextAndPlaceCursorAtEnd(title)
-                        expanded = false
-
-                        onSelected(index, title)
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                )
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TinyOutlinedReadOnlyTextField(
-    text: String,
-    longestText: String,
-    style: TextStyle,
-    modifier: Modifier = Modifier,
-    trailingIcon: @Composable (() -> Unit)? = null,
-    label: @Composable (() -> Unit)? = null
-) {
-    val measurer = rememberTextMeasurer()
-    val density = LocalDensity.current
-
-    // https://stackoverflow.com/a/77983232/1794089
-    val textResult = measurer.measure(
-        text = longestText,
-        style = style
-    )
-
-    var maxComboBoxWidth = with(density) {
-        textResult.size.width.toDp()
-    }
-    // Add start and end paddings (16dp each)
-    maxComboBoxWidth += 32.dp
-    // Add icon with padding if present
-    if (trailingIcon != null) {
-        maxComboBoxWidth += 32.dp
-        // Crutch
-        maxComboBoxWidth += 4.dp
-    }
-
-    OutlinedTextField(
-        textStyle = style,
-        value = text,
-        onValueChange = { },
-        readOnly = true,
-        singleLine = true,
-        label = label,
-        trailingIcon = trailingIcon,
-        modifier = modifier.width(maxComboBoxWidth)
-    )
-}
-
-@Composable
-private fun ContextMenuCompose(
-    expanded: Boolean,
-    items: List<String>,
-    onItemClicked: (Int) -> Unit,
-    onDismissRequest: () -> Unit
-) {
-    DropdownMenu(
-        offset = DpOffset(0.dp, 16.dp),
-        expanded = expanded,
-        onDismissRequest = onDismissRequest
-    ) {
-        items.forEachIndexed { index, title ->
-            DropdownMenuItem(
-                text = { Text(title) },
-                onClick = { onItemClicked(index) }
-            )
-        }
-    }
-}
-
-/**
- * An item that occupies the entire width.
- */
-fun LazyGridScope.fullWidthItem(
-    key: Any? = null,
-    contentType: Any? = null,
-    content: @Composable LazyGridItemScope.() -> Unit
-) = item(
-    span = { GridItemSpan(this.maxLineSpan) },
-    key = key,
-    contentType = contentType,
-    content = content
-)
 
 private const val TAB_PAGE_COUNT = 4
 private const val LAST_TAB_INDEX = 0

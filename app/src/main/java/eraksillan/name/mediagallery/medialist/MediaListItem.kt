@@ -33,14 +33,14 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import eraksillan.name.mediagallery.R
 import eraksillan.name.mediagallery.local.model.LocalMedia
+import eraksillan.name.mediagallery.local.utils.displayDefaultTitle
+import eraksillan.name.mediagallery.local.utils.displayGenresText
+import eraksillan.name.mediagallery.local.utils.displayStartDateText
+import eraksillan.name.mediagallery.local.utils.membersDisplayText
+import eraksillan.name.mediagallery.local.utils.scoreDisplayText
 import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
 import kotlinx.datetime.Instant
-import kotlinx.datetime.format
-import kotlinx.datetime.format.DateTimeComponents
-import kotlinx.datetime.format.MonthNames.Companion.ENGLISH_ABBREVIATED
-import kotlinx.datetime.format.char
 import java.net.URL
-import java.util.Locale
 
 @Composable
 fun MediaListItem(data: LocalMedia, onClick: () -> Unit) {
@@ -54,42 +54,9 @@ fun MediaListItem(data: LocalMedia, onClick: () -> Unit) {
                 onClick()
             }
     ) {
-        val displayDefaultTitle = data.titles.firstOrNull {
-            it.type == LocalMedia.Title.Type.DEFAULT
-        }?.title ?: ""
-
-        val displayThemes = data.themes.joinToString(", ") { it.name }
-        val displayDemographics = data.demographics.joinToString(", ") { it.name }
-
-        var displayGenres = data.genres.joinToString(", ") { it.name }
-        if (data.themes.isNotEmpty()) {
-            if (displayGenres.isNotEmpty()) {
-                displayGenres += ", "
-            }
-            displayGenres += displayThemes
-        }
-        if (data.demographics.isNotEmpty()) {
-            if (displayGenres.isNotEmpty()) {
-                displayGenres += ", "
-            }
-            displayGenres += displayDemographics
-        }
-
-        // Example: Mar 26, 2025
-        val dateCustomFormat = DateTimeComponents.Format {
-            monthName(ENGLISH_ABBREVIATED)
-            char(' ')
-            dayOfMonth()
-            char(',')
-            char(' ')
-            year()
-        }
-        val displayStartDate = data.aired.from?.format(dateCustomFormat) ?: "N/A"
-
-        val imageStub = painterResource(id = R.drawable.media_item_placeholder)
-
         Column {
             Box {
+                val imageStub = painterResource(id = R.drawable.media_item_placeholder)
                 AsyncImage(
                     model = data.images.jpeg?.base.toString(),
                     modifier = Modifier
@@ -105,8 +72,7 @@ fun MediaListItem(data: LocalMedia, onClick: () -> Unit) {
                 )
 
                 PopularityBadge(
-                    score = data.score,
-                    members = data.members,
+                    data = data,
                     modifier = Modifier
                         .align(Alignment.BottomStart)
                         .padding(8.dp)
@@ -120,22 +86,19 @@ fun MediaListItem(data: LocalMedia, onClick: () -> Unit) {
                 )
             }
 
-            Text(text = displayDefaultTitle, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(text = data.displayDefaultTitle(), maxLines = 2, overflow = TextOverflow.Ellipsis)
 
-            if (displayGenres.isNotEmpty()) {
-                Text(text = displayGenres, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if (data.displayGenresText().isNotEmpty()) {
+                Text(text = data.displayGenresText(), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
 
-            Text(text = displayStartDate, maxLines = 1, color = MaterialTheme.colorScheme.outline)
+            Text(text = data.displayStartDateText(), maxLines = 1, color = MaterialTheme.colorScheme.outline)
         }
     }
 }
 
 @Composable
-private fun PopularityBadge(score: Float?, members: Int?, modifier: Modifier) {
-    val scoreText = if (score != null) String.format(Locale.GERMANY, "%-,2.2f", score) else "N/A"
-    val membersText =
-        if (members != null) String.format(Locale.forLanguageTag("RU"), "%,d", members) else "N/A"
+private fun PopularityBadge(data: LocalMedia, modifier: Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -143,7 +106,7 @@ private fun PopularityBadge(score: Float?, members: Int?, modifier: Modifier) {
             .padding(4.dp)
     ) {
         Row {
-            Text(text = scoreText, color = Color.White)
+            Text(text = data.scoreDisplayText(), color = Color.White)
             Icon(
                 imageVector = Icons.Default.Star,
                 contentDescription = null,
@@ -151,7 +114,7 @@ private fun PopularityBadge(score: Float?, members: Int?, modifier: Modifier) {
             )
         }
         Row {
-            Text(text = membersText, color = Color.White)
+            Text(text = data.membersDisplayText(), color = Color.White)
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.baseline_people_24),
                 contentDescription = null,
