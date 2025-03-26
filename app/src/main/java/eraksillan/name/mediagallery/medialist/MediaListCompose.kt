@@ -34,29 +34,36 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import eraksillan.name.mediagallery.R
 import eraksillan.name.mediagallery.designsystem.ComboBox
 import eraksillan.name.mediagallery.designsystem.ContextMenuCompose
 import eraksillan.name.mediagallery.designsystem.TinyOutlinedReadOnlyTextField
 import eraksillan.name.mediagallery.designsystem.fullWidthItem
+import eraksillan.name.mediagallery.local.model.LocalMedia
 import eraksillan.name.mediagallery.local.model.LocalMediaSortType
 import eraksillan.name.mediagallery.local.model.LocalMediaTypeFilter
 import eraksillan.name.mediagallery.local.utils.MediaSeasonInfo
 import eraksillan.name.mediagallery.local.utils.getSeasonTriple
 import eraksillan.name.mediagallery.paging.PagingListState
+import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
+import java.net.URL
 
 @Composable
 fun MediaListCompose(viewModels: List<MediaListViewModel>) {
@@ -141,11 +148,44 @@ private fun ActualSeasonCompose(
     val medias = viewModel.list
     val mediaTypes = LocalMediaTypeFilter.entries.map { stringResource(it.titleResId) }
     val season = stringResource(seasonInfo.tabTitleResId) + " " + seasonInfo.year
+    val pagingListState = viewModel.listState
+    val pageNo = viewModel.pageNo
+
+    ActualSeasonContentCompose(
+        medias = medias,
+        mediaTypes = mediaTypes,
+        season = season,
+        pagingListState = pagingListState,
+        pageNo = pageNo,
+        shouldStartPaginate = shouldStartPaginate,
+        listState = listState,
+        coroutineScope = coroutineScope,
+        onEvent = { viewModel.onEvent(it) },
+        getPageData = { viewModel.getPageData() },
+        navigateToDetail = { viewModel.navigateToDetail() }
+    )
+}
+
+@Composable
+private fun ActualSeasonContentCompose(
+    medias: SnapshotStateList<LocalMedia>,
+    mediaTypes: List<String>,
+    season: String,
+    pagingListState: PagingListState,
+    pageNo: Int,
+    shouldStartPaginate: Boolean,
+    listState: LazyGridState,
+    coroutineScope: CoroutineScope,
+    onEvent: (MediaListAction) -> Unit,
+    getPageData: () -> Unit,
+    navigateToDetail: () -> Unit
+) {
+    val isPaginationExhaust = pagingListState == PagingListState.PAGINATION_EXHAUST
 
     var listInitialised by remember { mutableStateOf(false) }
 
-    if (listInitialised && shouldStartPaginate && viewModel.listState == PagingListState.IDLE) {
-        viewModel.getPageData()
+    if (listInitialised && shouldStartPaginate && pagingListState == PagingListState.IDLE) {
+        getPageData()
     }
 
     Column {
@@ -156,9 +196,12 @@ private fun ActualSeasonCompose(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            ComboBox(mediaTypes) { index, title ->
-                viewModel.onEvent(MediaListAction.MediaTypeSelected(index))
-            }
+            ComboBox(
+                items = mediaTypes,
+                onSelected = { index, title ->
+                    onEvent(MediaListAction.MediaTypeSelected(index))
+                }
+            )
 
             TinyOutlinedReadOnlyTextField(
                 text = season,
@@ -173,7 +216,7 @@ private fun ActualSeasonCompose(
                 var expanded by remember { mutableStateOf(false) }
 
                 IconButton(
-                    enabled = viewModel.listState == PagingListState.PAGINATION_EXHAUST,
+                    enabled = isPaginationExhaust,
                     onClick = {
                         expanded = !expanded
                     },
@@ -181,7 +224,7 @@ private fun ActualSeasonCompose(
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.baseline_sort_24),
                         contentDescription = null,
-                        tint = if (viewModel.listState == PagingListState.PAGINATION_EXHAUST) {
+                        tint = if (isPaginationExhaust) {
                             Color.Black
                         } else {
                             Color.LightGray
@@ -193,7 +236,7 @@ private fun ActualSeasonCompose(
                     expanded = expanded,
                     items = LocalMediaSortType.entries.map { stringResource(it.title) },
                     onItemClicked = { index ->
-                        viewModel.onEvent(MediaListAction.SortTypeClicked(index))
+                        onEvent(MediaListAction.SortTypeClicked(index))
                         expanded = false
                     },
                     onDismissRequest = { expanded = false }
@@ -209,19 +252,19 @@ private fun ActualSeasonCompose(
             contentPadding = PaddingValues(all = 16.dp),
         ) {
             items(items = medias, key = { it.uniqueId }) {
-                MediaListItem(it) { viewModel.navigateToDetail() }
+                MediaListItem(it) { navigateToDetail() }
             }
 
             fullWidthItem(
-                key = viewModel.listState,
+                key = pagingListState,
             ) {
-                when (viewModel.listState) {
+                when (pagingListState) {
                     PagingListState.LOADING -> {
                         FirstPageLoadingCompose()
                     }
 
                     PagingListState.PAGINATING -> {
-                        PageLoadingCompose(viewModel.pageNo)
+                        PageLoadingCompose(pageNo)
                     }
 
                     PagingListState.PAGINATION_EXHAUST -> {
@@ -312,6 +355,157 @@ private fun LastPageLoadingCompose(coroutineScope: CoroutineScope, listState: La
                     )
                 }
             }
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun ActualSeasonContentComposePreview() {
+    val medias = remember {
+        mutableStateListOf(
+            LocalMedia(
+                malId = 4459,
+                url = URL("https://myanimelist.net/anime/4459/Ojarumaru"),
+                images = LocalMedia.Images(
+                    jpeg = LocalMedia.ImageUrls(
+                        base = URL("https://cdn.myanimelist.net/images/anime/1839/132018.jpg"),
+                        small = URL("https://cdn.myanimelist.net/images/anime/1839/132018t.jpg"),
+                        large = URL("https://cdn.myanimelist.net/images/anime/1839/132018l.jpg")
+                    ),
+                    webp = LocalMedia.ImageUrls(
+                        base = URL("https://cdn.myanimelist.net/images/anime/1839/132018.webp"),
+                        small = URL("https://cdn.myanimelist.net/images/anime/1839/132018t.webp"),
+                        large = URL("https://cdn.myanimelist.net/images/anime/1839/132018l.webp")
+                    ),
+                ),
+                trailer = LocalMedia.Trailer(
+                    youtubeId = null,
+                    url = null,
+                    embedUrl = null,
+                    images = LocalMedia.ImageUrls()
+                ),
+                approved = true,
+                titles = listOf<LocalMedia.Title>(
+                    LocalMedia.Title(type = LocalMedia.Title.Type.DEFAULT, title = "Ojarumaru"),
+                    LocalMedia.Title(type = LocalMedia.Title.Type.JAPANESE, title = "おじゃる丸"),
+                    LocalMedia.Title(type = LocalMedia.Title.Type.ENGLISH, title = "Prince Mackaroo"),
+                ),
+                type = LocalMedia.Type.TV,
+                source = "Original",
+                episodes = null,
+                status = LocalMedia.Status.CURRENTLY_AIRING,
+                airing = true,
+                aired = LocalMedia.Aired(
+                    from = Instant.parse("1998-10-05T00:00:00+00:00"),
+                    to = null,
+                    prop = LocalMedia.Aired.Prop(
+                        from = LocalMedia.Aired.Date(day = 5, month = 10, year = 1998),
+                        to = LocalMedia.Aired.Date(day = null, month = null, year = null)
+                    ),
+                    displayString = "Oct 5, 1998 to ?"
+                ),
+                duration = "10 min",
+                rating = LocalMedia.Rating.G,
+                score = 6.38f,
+                scoredBy = 554,
+                rank = 7785,
+                popularity = 11543,
+                members = 2223,
+                favorites = 5,
+                synopsis = "In the Heian era, around 1000 years ago, a young boy of noble family named Ojarumaru...",
+                background = "The second season that aired in 1999 (episodes 91-180) was awarded the Excellence...",
+                season = LocalMedia.Season.FALL,
+                year = 1998,
+                broadcast = LocalMedia.Broadcast(
+                    day = null,
+                    time = null,
+                    timeZone = null,
+                    displayString = "Not scheduled once per week"
+                ),
+                producers = listOf<LocalMedia.Entity>(
+                    LocalMedia.Entity(
+                        malId = 111,
+                        type = "anime",
+                        name = "NHK",
+                        url = URL("https://myanimelist.net/anime/producer/111/NHK")
+                    )
+                ),
+                licensors = listOf<LocalMedia.Entity>(
+                    LocalMedia.Entity(
+                        malId = 311,
+                        type = "anime",
+                        name = "Enoki Films",
+                        url = URL("https://myanimelist.net/anime/producer/311/Enoki_Films")
+                    )
+                ),
+                studios = listOf<LocalMedia.Entity>(
+                    LocalMedia.Entity(
+                        malId = 36,
+                        type = "anime",
+                        name = "Gallop",
+                        url = URL("https://myanimelist.net/anime/producer/36/Gallop")
+                    )
+                ),
+                genres = listOf<LocalMedia.Entity>(
+                    LocalMedia.Entity(
+                        malId = 2,
+                        type = "anime",
+                        name = "Adventure",
+                        url = URL("https://myanimelist.net/anime/genre/2/Adventure")
+                    ),
+                    LocalMedia.Entity(
+                        malId = 46,
+                        type = "anime",
+                        name = "Award Winning",
+                        url = URL("https://myanimelist.net/anime/genre/46/Award_Winning")
+                    ),
+                    LocalMedia.Entity(
+                        malId = 4,
+                        type = "anime",
+                        name = "Comedy",
+                        url = URL("https://myanimelist.net/anime/genre/4/Comedy")
+                    ),
+                    LocalMedia.Entity(
+                        malId = 10,
+                        type = "anime",
+                        name = "Fantasy",
+                        url = URL("https://myanimelist.net/anime/genre/10/Fantasy")
+                    )
+                ),
+                explicitGenres = listOf<LocalMedia.Entity>(),
+                themes = listOf<LocalMedia.Entity>(),
+                demographics = listOf<LocalMedia.Entity>(
+                    LocalMedia.Entity(
+                        malId = 15,
+                        type = "anime",
+                        name = "Kids",
+                        url = URL("https://myanimelist.net/anime/genre/15/Kids")
+                    )
+                ),
+            )
+        )
+    }
+    val mediaTypes = LocalMediaTypeFilter.entries.map { stringResource(it.titleResId) }
+    val season = "Spring 2025"
+    val pagingListState = PagingListState.IDLE
+    val pageNo = 1
+    val shouldStartPaginate = false
+    val listState = rememberLazyGridState()
+    val coroutineScope = rememberCoroutineScope()
+    MediaGalleryTheme {
+        ActualSeasonContentCompose(
+            medias = medias,
+            mediaTypes = mediaTypes,
+            season = season,
+            pagingListState = pagingListState,
+            pageNo = pageNo,
+            shouldStartPaginate = shouldStartPaginate,
+            listState = listState,
+            coroutineScope = coroutineScope,
+            onEvent = { },
+            getPageData = { },
+            navigateToDetail = { }
         )
     }
 }

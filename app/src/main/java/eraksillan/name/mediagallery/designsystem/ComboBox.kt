@@ -1,5 +1,6 @@
 package eraksillan.name.mediagallery.designsystem
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.DropdownMenuItem
@@ -16,11 +17,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import eraksillan.name.mediagallery.R
+import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ComboBox(items: List<String>, onSelected: (Int, String) -> Unit) {
+fun ComboBox(items: List<String>, onSelected: (Int, String) -> Unit, modifier: Modifier = Modifier) {
     val textFieldState = rememberTextFieldState(items[0])
 
     var expanded by remember { mutableStateOf(false) }
@@ -28,7 +32,8 @@ fun ComboBox(items: List<String>, onSelected: (Int, String) -> Unit) {
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { expanded = it }
+        onExpandedChange = { expanded = it },
+        modifier = modifier
     ) {
         TinyOutlinedReadOnlyTextField(
             text = text,
@@ -61,5 +66,17 @@ fun ComboBox(items: List<String>, onSelected: (Int, String) -> Unit) {
                 )
             }
         }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun ComboBoxPreview() {
+    MediaGalleryTheme {
+        ComboBox(
+            items = listOf("First", "Second", "Third"),
+            onSelected = { index, title -> },
+            modifier = Modifier.padding(16.dp).padding(bottom = 180.dp)
+        )
     }
 }
