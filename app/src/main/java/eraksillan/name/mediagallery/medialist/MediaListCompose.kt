@@ -1,6 +1,5 @@
 package eraksillan.name.mediagallery.medialist
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +15,6 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
@@ -27,8 +24,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -51,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import eraksillan.name.mediagallery.R
 import eraksillan.name.mediagallery.designsystem.ComboBox
 import eraksillan.name.mediagallery.designsystem.ContextMenuCompose
+import eraksillan.name.mediagallery.designsystem.SwipeableTabRow
 import eraksillan.name.mediagallery.designsystem.TinyOutlinedReadOnlyTextField
 import eraksillan.name.mediagallery.designsystem.fullWidthItem
 import eraksillan.name.mediagallery.local.model.LocalMedia
@@ -67,9 +63,6 @@ import java.net.URL
 
 @Composable
 fun MediaListCompose(viewModels: List<MediaListViewModel>) {
-    val pagerState = rememberPagerState(initialPage = 1) { TAB_PAGE_COUNT }
-    val coroutineScope = rememberCoroutineScope()
-
     val seasonTriple = getSeasonTriple() ?: return
     val tabTitles = listOf(
         R.string.last_tab,
@@ -91,40 +84,21 @@ fun MediaListCompose(viewModels: List<MediaListViewModel>) {
                     bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
-            TabRow(
-                selectedTabIndex = pagerState.currentPage
-            ) {
-                tabTitles.forEachIndexed { index, titleResId ->
-                    Tab(
-                        selected = pagerState.currentPage == index,
-                        onClick = {
-                            coroutineScope.launch { pagerState.animateScrollToPage(index) }
-                        },
-                        text = {
-                            Text(
-                                text = stringResource(titleResId),
-                                style = MaterialTheme.typography.labelLarge
-                            )
-                        },
-                        unselectedContentColor = MaterialTheme.colorScheme.secondary,
-                    )
-                }
-            }
-            HorizontalPager(
-                modifier = Modifier.background(MaterialTheme.colorScheme.background),
-                state = pagerState,
-                verticalAlignment = Alignment.Top
-            ) { index ->
-                when (index) {
-                    LAST_TAB_INDEX, CURRENT_TAB_INDEX, NEXT_TAB_INDEX -> {
-                        ActualSeasonCompose(viewModels[index], seasonTriple.data[index])
-                    }
+            SwipeableTabRow(
+                tabTitles = tabTitles.map { stringResource(it) },
+                initialPageIndex = INITIAL_TAB_INDEX,
+                pageContent = { index ->
+                    when (index) {
+                        LAST_TAB_INDEX, CURRENT_TAB_INDEX, NEXT_TAB_INDEX -> {
+                            ActualSeasonCompose(viewModels[index], seasonTriple.data[index])
+                        }
 
-                    ARCHIVE_TAB_INDEX -> {
-                        ArchiveSeasonCompose()
+                        ARCHIVE_TAB_INDEX -> {
+                            ArchiveSeasonCompose()
+                        }
                     }
                 }
-            }
+            )
         }
     }
 }
@@ -160,9 +134,7 @@ private fun ActualSeasonCompose(
         shouldStartPaginate = shouldStartPaginate,
         listState = listState,
         coroutineScope = coroutineScope,
-        onEvent = { viewModel.onEvent(it) },
-        getPageData = { viewModel.getPageData() },
-        navigateToDetail = { viewModel.navigateToDetail() }
+        onEvent = { viewModel.onEvent(it) }
     )
 }
 
@@ -176,16 +148,14 @@ private fun ActualSeasonContentCompose(
     shouldStartPaginate: Boolean,
     listState: LazyGridState,
     coroutineScope: CoroutineScope,
-    onEvent: (MediaListAction) -> Unit,
-    getPageData: () -> Unit,
-    navigateToDetail: () -> Unit
+    onEvent: (MediaListAction) -> Unit
 ) {
     val isPaginationExhaust = pagingListState == PagingListState.PAGINATION_EXHAUST
 
     var listInitialised by remember { mutableStateOf(false) }
 
     if (listInitialised && shouldStartPaginate && pagingListState == PagingListState.IDLE) {
-        getPageData()
+        onEvent(MediaListAction.GetNextPage)
     }
 
     Column {
@@ -252,7 +222,7 @@ private fun ActualSeasonContentCompose(
             contentPadding = PaddingValues(all = 16.dp),
         ) {
             items(items = medias, key = { it.uniqueId }) {
-                MediaListItem(it) { navigateToDetail() }
+                MediaListItem(it) { onEvent(MediaListAction.NavigateToDetail) }
             }
 
             fullWidthItem(
@@ -503,14 +473,12 @@ private fun ActualSeasonContentComposePreview() {
             shouldStartPaginate = shouldStartPaginate,
             listState = listState,
             coroutineScope = coroutineScope,
-            onEvent = { },
-            getPageData = { },
-            navigateToDetail = { }
+            onEvent = { }
         )
     }
 }
 
-private const val TAB_PAGE_COUNT = 4
+private const val INITIAL_TAB_INDEX = 1
 private const val LAST_TAB_INDEX = 0
 private const val CURRENT_TAB_INDEX = 1
 private const val NEXT_TAB_INDEX = 2

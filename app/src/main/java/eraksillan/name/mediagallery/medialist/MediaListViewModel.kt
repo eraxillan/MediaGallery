@@ -58,6 +58,10 @@ class MediaListViewModel @AssistedInject constructor(
 
     fun onEvent(action: MediaListAction) {
         when (action) {
+            is MediaListAction.GetNextPage -> {
+                getPageData()
+            }
+
             is MediaListAction.MediaTypeSelected -> {
                 _state.update { it.copy(type = LocalMediaTypeFilter.entries[action.index]) }
                 reset()
@@ -76,6 +80,10 @@ class MediaListViewModel @AssistedInject constructor(
                     // Sort by score
                     2 -> list.addAll(listCopy.sortedBy { it.score }.asReversed())
                 }
+            }
+
+            is MediaListAction.NavigateToDetail -> {
+                navigateToDetail()
             }
         }
     }
