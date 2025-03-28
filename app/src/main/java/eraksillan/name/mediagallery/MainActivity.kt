@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import eraksillan.name.mediagallery.navigation.Route
 import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MediaGalleryTheme {
-                MediaGalleryNavHost(startDestination = ComposeScreen.MEDIA_LIST.name, {})
+                MediaGalleryNavHost(startDestination = Route.MediaList)
             }
         }
     }

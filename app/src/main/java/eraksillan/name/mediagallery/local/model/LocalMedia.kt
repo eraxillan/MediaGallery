@@ -1,15 +1,17 @@
 package eraksillan.name.mediagallery.local.model
 
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.TimeZone
-import java.net.URL
+import android.os.Parcelable
+import eraksillan.name.mediagallery.R
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
+@Parcelize
+@Serializable
 data class LocalMedia(
     val uniqueId: String = UUID.randomUUID().toString(),
     val malId: Int,
-    val url: URL,
+    val url: String,
     val images: Images,
     val trailer: Trailer,
     val approved: Boolean,
@@ -40,7 +42,7 @@ data class LocalMedia(
     val explicitGenres: List<Entity>,
     val themes: List<Entity>,
     val demographics: List<Entity>,
-) {
+) : Parcelable {
 
     enum class Type {
         TV,
@@ -59,12 +61,12 @@ data class LocalMedia(
         UNKNOWN,
     }
 
-    enum class Season(val query: String) {
-        WINTER("winter"),
-        SPRING("spring"),
-        SUMMER("summer"),
-        FALL("fall"),
-        UNKNOWN("<unknown>"),
+    enum class Season(val query: String, val titleResId: Int) {
+        WINTER("winter", R.string.winter),
+        SPRING("spring", R.string.spring),
+        SUMMER("summer", R.string.summer),
+        FALL("fall", R.string.fall),
+        UNKNOWN("<unknown>", -1),
     }
 
     enum class Rating {
@@ -101,26 +103,34 @@ data class LocalMedia(
         UNKNOWN,
     }
 
+    @Parcelize
+    @Serializable
     data class ImageUrls(
-        val base: URL? = null,
-        val small: URL? = null,
-        val medium: URL? = null,
-        val large: URL? = null,
-        val extraLarge: URL? = null,
-    )
+        val base: String? = null,
+        val small: String? = null,
+        val medium: String? = null,
+        val large: String? = null,
+        val extraLarge: String? = null,
+    ) : Parcelable
 
+    @Parcelize
+    @Serializable
     data class Images(
         val jpeg: ImageUrls? = null,
         val webp: ImageUrls? = null,
-    )
+    ) : Parcelable
 
+    @Parcelize
+    @Serializable
     data class Trailer(
         val youtubeId: String?,
-        val url: URL?,
-        val embedUrl: URL?,
+        val url: String?,
+        val embedUrl: String?,
         val images: ImageUrls?,
-    )
+    ) : Parcelable
 
+    @Parcelize
+    @Serializable
     data class Title(
         /**
          * Title type: "Default", "Japanese", "English" or "Synonym"
@@ -130,7 +140,7 @@ data class LocalMedia(
          * Title value
          */
         val title: String,
-    ) {
+    ) : Parcelable {
         enum class Type {
             DEFAULT,
             JAPANESE,
@@ -140,35 +150,46 @@ data class LocalMedia(
         }
     }
 
+    @Parcelize
+    @Serializable
     data class Aired(
-        val from: Instant?,
-        val to: Instant?,
+        val from: String?,
+        val to: String?,
         val prop: Prop,
         val displayString: String
-    ) {
+    ) : Parcelable {
+
+        @Parcelize
+        @Serializable
         data class Date(
             val day: Int?,
             val month: Int?,
             val year: Int?,
-        )
+        ) : Parcelable
 
+        @Parcelize
+        @Serializable
         data class Prop(
             val from: Date,
             val to: Date,
-        )
+        ) : Parcelable
     }
 
+    @Parcelize
+    @Serializable
     data class Broadcast(
         val day: String?,
-        val time: LocalTime?,
-        val timeZone: TimeZone?,
+        val time: String?,
+        val timeZone: String?,
         val displayString: String?,
-    )
+    ) : Parcelable
 
+    @Parcelize
+    @Serializable
     data class Entity(
         val malId: Int,
         val type: String,
         val name: String,
-        val url: URL,
-    )
+        val url: String,
+    ) : Parcelable
 }

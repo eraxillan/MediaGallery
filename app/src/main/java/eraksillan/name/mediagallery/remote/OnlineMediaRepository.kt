@@ -5,8 +5,10 @@ import eraksillan.name.mediagallery.local.model.LocalMedia
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
 import eraksillan.name.mediagallery.local.model.LocalMediaTypeFilter
 import eraksillan.name.mediagallery.local.model.LocalSchedule
+import eraksillan.name.mediagallery.local.model.LocalSeasonList
 import eraksillan.name.mediagallery.remote.model.MediaPictures
 import eraksillan.name.mediagallery.remote.model.Schedule
+import eraksillan.name.mediagallery.remote.model.SeasonList
 import javax.inject.Inject
 
 class OnlineMediaRepository @Inject constructor(
@@ -29,6 +31,11 @@ class OnlineMediaRepository @Inject constructor(
             continuing = continuing
         )
         return toLocal<Schedule, LocalSchedule>(result)
+    }
+
+    suspend fun getSeasonList(): NetworkResult<LocalSeasonList> {
+        val result = network.getSeasonList()
+        return toLocal<SeasonList, LocalSeasonList>(result)
     }
 
     suspend fun getMediaPictures(

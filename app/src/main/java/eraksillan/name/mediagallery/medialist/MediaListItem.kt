@@ -39,8 +39,6 @@ import eraksillan.name.mediagallery.local.utils.displayStartDateText
 import eraksillan.name.mediagallery.local.utils.membersDisplayText
 import eraksillan.name.mediagallery.local.utils.scoreDisplayText
 import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
-import kotlinx.datetime.Instant
-import java.net.URL
 
 @Composable
 fun MediaListItem(data: LocalMedia, onClick: () -> Unit) {
@@ -144,17 +142,17 @@ private fun AddToListButton(onClick: () -> Unit, modifier: Modifier) {
 private fun MediaListItemPreview() {
     val media = LocalMedia(
         malId = 4459,
-        url = URL("https://myanimelist.net/anime/4459/Ojarumaru"),
+        url = "https://myanimelist.net/anime/4459/Ojarumaru",
         images = LocalMedia.Images(
             jpeg = LocalMedia.ImageUrls(
-                base = URL("https://cdn.myanimelist.net/images/anime/1839/132018.jpg"),
-                small = URL("https://cdn.myanimelist.net/images/anime/1839/132018t.jpg"),
-                large = URL("https://cdn.myanimelist.net/images/anime/1839/132018l.jpg")
+                base = "https://cdn.myanimelist.net/images/anime/1839/132018.jpg",
+                small = "https://cdn.myanimelist.net/images/anime/1839/132018t.jpg",
+                large = "https://cdn.myanimelist.net/images/anime/1839/132018l.jpg"
             ),
             webp = LocalMedia.ImageUrls(
-                base = URL("https://cdn.myanimelist.net/images/anime/1839/132018.webp"),
-                small = URL("https://cdn.myanimelist.net/images/anime/1839/132018t.webp"),
-                large = URL("https://cdn.myanimelist.net/images/anime/1839/132018l.webp")
+                base = "https://cdn.myanimelist.net/images/anime/1839/132018.webp",
+                small = "https://cdn.myanimelist.net/images/anime/1839/132018t.webp",
+                large = "https://cdn.myanimelist.net/images/anime/1839/132018l.webp"
             ),
         ),
         trailer = LocalMedia.Trailer(
@@ -175,7 +173,7 @@ private fun MediaListItemPreview() {
         status = LocalMedia.Status.CURRENTLY_AIRING,
         airing = true,
         aired = LocalMedia.Aired(
-            from = Instant.parse("1998-10-05T00:00:00+00:00"),
+            from = "1998-10-05T00:00:00+00:00",
             to = null,
             prop = LocalMedia.Aired.Prop(
                 from = LocalMedia.Aired.Date(day = 5, month = 10, year = 1998),
@@ -191,8 +189,8 @@ private fun MediaListItemPreview() {
         popularity = 11543,
         members = 2223,
         favorites = 5,
-        synopsis = "In the Heian era, around 1000 years ago, a young boy of noble family named Ojarumaru is bored with his life of privilege. Meanwhile, three demons steal the power-stick of Enma, king of demons, and then lose it. Ojarumaru finds it, and uses it to transport himself to the present time. Here, he is befriended by a young boy named Kazuma, and becomes a member of his family. As time goes on, Ojarumaru makes many new friends, while dodging the comedic efforts of the three demons, Akane, Kisuke, and Aobee, as they try to recover the stick. (from ANN)",
-        background = "The second season that aired in 1999 (episodes 91-180) was awarded the Excellence Award on the 3rd Japan Media Arts Festival.",
+        synopsis = "In the Heian era, around 1000 years ago, a young boy of noble family named Ojarumaru...",
+        background = "The second season that aired in 1999 (episodes 91-180) was awarded ...",
         season = LocalMedia.Season.FALL,
         year = 1998,
         broadcast = LocalMedia.Broadcast(
@@ -206,7 +204,7 @@ private fun MediaListItemPreview() {
                 malId = 111,
                 type = "anime",
                 name = "NHK",
-                url = URL("https://myanimelist.net/anime/producer/111/NHK")
+                url = "https://myanimelist.net/anime/producer/111/NHK"
             )
         ),
         licensors = listOf<LocalMedia.Entity>(
@@ -214,7 +212,7 @@ private fun MediaListItemPreview() {
                 malId = 311,
                 type = "anime",
                 name = "Enoki Films",
-                url = URL("https://myanimelist.net/anime/producer/311/Enoki_Films")
+                url = "https://myanimelist.net/anime/producer/311/Enoki_Films"
             )
         ),
         studios = listOf<LocalMedia.Entity>(
@@ -222,7 +220,7 @@ private fun MediaListItemPreview() {
                 malId = 36,
                 type = "anime",
                 name = "Gallop",
-                url = URL("https://myanimelist.net/anime/producer/36/Gallop")
+                url = "https://myanimelist.net/anime/producer/36/Gallop"
             )
         ),
         genres = listOf<LocalMedia.Entity>(
@@ -230,25 +228,25 @@ private fun MediaListItemPreview() {
                 malId = 2,
                 type = "anime",
                 name = "Adventure",
-                url = URL("https://myanimelist.net/anime/genre/2/Adventure")
+                url = "https://myanimelist.net/anime/genre/2/Adventure"
             ),
             LocalMedia.Entity(
                 malId = 46,
                 type = "anime",
                 name = "Award Winning",
-                url = URL("https://myanimelist.net/anime/genre/46/Award_Winning")
+                url = "https://myanimelist.net/anime/genre/46/Award_Winning"
             ),
             LocalMedia.Entity(
                 malId = 4,
                 type = "anime",
                 name = "Comedy",
-                url = URL("https://myanimelist.net/anime/genre/4/Comedy")
+                url = "https://myanimelist.net/anime/genre/4/Comedy"
             ),
             LocalMedia.Entity(
                 malId = 10,
                 type = "anime",
                 name = "Fantasy",
-                url = URL("https://myanimelist.net/anime/genre/10/Fantasy")
+                url = "https://myanimelist.net/anime/genre/10/Fantasy"
             )
         ),
         explicitGenres = listOf<LocalMedia.Entity>(),
@@ -258,7 +256,7 @@ private fun MediaListItemPreview() {
                 malId = 15,
                 type = "anime",
                 name = "Kids",
-                url = URL("https://myanimelist.net/anime/genre/15/Kids")
+                url = "https://myanimelist.net/anime/genre/15/Kids"
             )
         ),
     )

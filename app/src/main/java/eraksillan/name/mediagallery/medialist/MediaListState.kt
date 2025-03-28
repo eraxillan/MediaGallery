@@ -3,9 +3,7 @@ package eraksillan.name.mediagallery.medialist
 import eraksillan.name.mediagallery.local.model.LocalMedia
 import eraksillan.name.mediagallery.local.model.LocalMediaSortType
 import eraksillan.name.mediagallery.local.model.LocalMediaTypeFilter
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import eraksillan.name.mediagallery.local.utils.currentYear
 
 data class MediaListState(
     val type: LocalMediaTypeFilter,
@@ -16,7 +14,7 @@ data class MediaListState(
     companion object {
         fun getDefault(season: LocalMedia.Season): MediaListState {
             return MediaListState(
-                year = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).year,
+                year = currentYear(),
                 season = season,
                 type = LocalMediaTypeFilter.TV_NEW,
                 sortType = LocalMediaSortType.BY_MEMBER_COUNT

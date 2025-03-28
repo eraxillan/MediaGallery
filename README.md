@@ -4,3 +4,5 @@ https://medium.com/@cgaisl/how-to-pass-arguments-to-a-hiltviewmodel-from-compose
 https://medium.com/androiddevelopers/jetpack-compose-when-should-i-use-derivedstateof-63ce7954c11b
 https://medium.com/@akimaelio/advanced-viewmodel-injection-with-daggerhilt-in-jetpack-compose-0e8f74791a40
 https://stackoverflow.com/q/66712286/1794089
+https://medium.com/mercadona-tech/type-safety-in-navigation-compose-23c03e3d74a5
+https://stackoverflow.com/a/79087413

@@ -1,36 +1,40 @@
 package eraksillan.name.mediagallery
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import eraksillan.name.mediagallery.mediadetail.mediaDetailScreen
 import eraksillan.name.mediagallery.medialist.mediaListScreen
+import eraksillan.name.mediagallery.navigation.Route
+import eraksillan.name.mediagallery.seasonlist.seasonScreen
 
 @Composable
 fun MediaGalleryNavHost(
-    startDestination: String,
-    initNavController: (NavController) -> Unit,
+    startDestination: Route,
     modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
-    initNavController.invoke(navController)
-
-    val systemUiController = rememberSystemUiController()
 
     NavHost(
         navController = navController,
         startDestination = startDestination,
+        popExitTransition = {
+            scaleOut(
+                targetScale = 0.9f,
+                transformOrigin = TransformOrigin(pivotFractionX = 0.5f, pivotFractionY = 0.5f),
+            )
+        },
+        popEnterTransition = {
+            EnterTransition.None
+        },
         modifier = modifier,
     ) {
         mediaListScreen(navController = navController)
         mediaDetailScreen(navController = navController)
+        seasonScreen(navController = navController)
     }
-}
-
-enum class ComposeScreen {
-    MEDIA_LIST,
-    MEDIA_DETAIL,
 }

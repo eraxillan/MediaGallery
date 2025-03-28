@@ -55,15 +55,16 @@ import eraksillan.name.mediagallery.local.model.LocalMediaTypeFilter
 import eraksillan.name.mediagallery.local.utils.MediaSeasonInfo
 import eraksillan.name.mediagallery.local.utils.getSeasonTriple
 import eraksillan.name.mediagallery.paging.PagingListState
+import eraksillan.name.mediagallery.seasonlist.SeasonListCompose
+import eraksillan.name.mediagallery.seasonlist.SeasonListViewModel
 import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
-import java.net.URL
 
 @Composable
-fun MediaListCompose(viewModels: List<MediaListViewModel>) {
+fun MediaListCompose(viewModels: List<MediaListViewModel>, archiveSeasonViewModel: SeasonListViewModel) {
     val seasonTriple = getSeasonTriple() ?: return
+
     val tabTitles = listOf(
         R.string.last_tab,
         R.string.this_season,
@@ -94,7 +95,7 @@ fun MediaListCompose(viewModels: List<MediaListViewModel>) {
                         }
 
                         ARCHIVE_TAB_INDEX -> {
-                            ArchiveSeasonCompose()
+                            SeasonListCompose(archiveSeasonViewModel)
                         }
                     }
                 }
@@ -104,7 +105,7 @@ fun MediaListCompose(viewModels: List<MediaListViewModel>) {
 }
 
 @Composable
-private fun ActualSeasonCompose(
+fun ActualSeasonCompose(
     viewModel: MediaListViewModel,
     seasonInfo: MediaSeasonInfo
 ) {
@@ -115,15 +116,15 @@ private fun ActualSeasonCompose(
 
     val shouldStartPaginate by remember {
         derivedStateOf {
-            viewModel.canPaginate && !listState.canScrollForward
+            viewModel.mediaPagingVM.canPaginate && !listState.canScrollForward
         }
     }
 
-    val medias = viewModel.list
+    val medias = viewModel.mediaPagingVM.list
     val mediaTypes = LocalMediaTypeFilter.entries.map { stringResource(it.titleResId) }
     val season = stringResource(seasonInfo.tabTitleResId) + " " + seasonInfo.year
-    val pagingListState = viewModel.listState
-    val pageNo = viewModel.pageNo
+    val pagingListState = viewModel.mediaPagingVM.listState
+    val pageNo = viewModel.mediaPagingVM.pageNo
 
     ActualSeasonContentCompose(
         medias = medias,
@@ -222,7 +223,7 @@ private fun ActualSeasonContentCompose(
             contentPadding = PaddingValues(all = 16.dp),
         ) {
             items(items = medias, key = { it.uniqueId }) {
-                MediaListItem(it) { onEvent(MediaListAction.NavigateToDetail) }
+                MediaListItem(it) { onEvent(MediaListAction.NavigateToDetail(it)) }
             }
 
             fullWidthItem(
@@ -248,12 +249,6 @@ private fun ActualSeasonContentCompose(
             listInitialised = true
         }
     }
-}
-
-@Composable
-private fun ArchiveSeasonCompose() {
-    // TODO: implement
-    Box(modifier = Modifier.fillMaxSize())
 }
 
 @Composable
@@ -329,6 +324,7 @@ private fun LastPageLoadingCompose(coroutineScope: CoroutineScope, listState: La
     }
 }
 
+@Suppress("unused")
 @Composable
 @Preview(showBackground = true)
 private fun ActualSeasonContentComposePreview() {
@@ -336,17 +332,17 @@ private fun ActualSeasonContentComposePreview() {
         mutableStateListOf(
             LocalMedia(
                 malId = 4459,
-                url = URL("https://myanimelist.net/anime/4459/Ojarumaru"),
+                url = "https://myanimelist.net/anime/4459/Ojarumaru",
                 images = LocalMedia.Images(
                     jpeg = LocalMedia.ImageUrls(
-                        base = URL("https://cdn.myanimelist.net/images/anime/1839/132018.jpg"),
-                        small = URL("https://cdn.myanimelist.net/images/anime/1839/132018t.jpg"),
-                        large = URL("https://cdn.myanimelist.net/images/anime/1839/132018l.jpg")
+                        base = "https://cdn.myanimelist.net/images/anime/1839/132018.jpg",
+                        small = "https://cdn.myanimelist.net/images/anime/1839/132018t.jpg",
+                        large = "https://cdn.myanimelist.net/images/anime/1839/132018l.jpg"
                     ),
                     webp = LocalMedia.ImageUrls(
-                        base = URL("https://cdn.myanimelist.net/images/anime/1839/132018.webp"),
-                        small = URL("https://cdn.myanimelist.net/images/anime/1839/132018t.webp"),
-                        large = URL("https://cdn.myanimelist.net/images/anime/1839/132018l.webp")
+                        base = "https://cdn.myanimelist.net/images/anime/1839/132018.webp",
+                        small = "https://cdn.myanimelist.net/images/anime/1839/132018t.webp",
+                        large = "https://cdn.myanimelist.net/images/anime/1839/132018l.webp"
                     ),
                 ),
                 trailer = LocalMedia.Trailer(
@@ -367,7 +363,7 @@ private fun ActualSeasonContentComposePreview() {
                 status = LocalMedia.Status.CURRENTLY_AIRING,
                 airing = true,
                 aired = LocalMedia.Aired(
-                    from = Instant.parse("1998-10-05T00:00:00+00:00"),
+                    from = "1998-10-05T00:00:00+00:00",
                     to = null,
                     prop = LocalMedia.Aired.Prop(
                         from = LocalMedia.Aired.Date(day = 5, month = 10, year = 1998),
@@ -398,7 +394,7 @@ private fun ActualSeasonContentComposePreview() {
                         malId = 111,
                         type = "anime",
                         name = "NHK",
-                        url = URL("https://myanimelist.net/anime/producer/111/NHK")
+                        url = "https://myanimelist.net/anime/producer/111/NHK"
                     )
                 ),
                 licensors = listOf<LocalMedia.Entity>(
@@ -406,7 +402,7 @@ private fun ActualSeasonContentComposePreview() {
                         malId = 311,
                         type = "anime",
                         name = "Enoki Films",
-                        url = URL("https://myanimelist.net/anime/producer/311/Enoki_Films")
+                        url = "https://myanimelist.net/anime/producer/311/Enoki_Films"
                     )
                 ),
                 studios = listOf<LocalMedia.Entity>(
@@ -414,7 +410,7 @@ private fun ActualSeasonContentComposePreview() {
                         malId = 36,
                         type = "anime",
                         name = "Gallop",
-                        url = URL("https://myanimelist.net/anime/producer/36/Gallop")
+                        url = "https://myanimelist.net/anime/producer/36/Gallop"
                     )
                 ),
                 genres = listOf<LocalMedia.Entity>(
@@ -422,25 +418,25 @@ private fun ActualSeasonContentComposePreview() {
                         malId = 2,
                         type = "anime",
                         name = "Adventure",
-                        url = URL("https://myanimelist.net/anime/genre/2/Adventure")
+                        url = "https://myanimelist.net/anime/genre/2/Adventure"
                     ),
                     LocalMedia.Entity(
                         malId = 46,
                         type = "anime",
                         name = "Award Winning",
-                        url = URL("https://myanimelist.net/anime/genre/46/Award_Winning")
+                        url = "https://myanimelist.net/anime/genre/46/Award_Winning"
                     ),
                     LocalMedia.Entity(
                         malId = 4,
                         type = "anime",
                         name = "Comedy",
-                        url = URL("https://myanimelist.net/anime/genre/4/Comedy")
+                        url = "https://myanimelist.net/anime/genre/4/Comedy"
                     ),
                     LocalMedia.Entity(
                         malId = 10,
                         type = "anime",
                         name = "Fantasy",
-                        url = URL("https://myanimelist.net/anime/genre/10/Fantasy")
+                        url = "https://myanimelist.net/anime/genre/10/Fantasy"
                     )
                 ),
                 explicitGenres = listOf<LocalMedia.Entity>(),
@@ -450,7 +446,7 @@ private fun ActualSeasonContentComposePreview() {
                         malId = 15,
                         type = "anime",
                         name = "Kids",
-                        url = URL("https://myanimelist.net/anime/genre/15/Kids")
+                        url = "https://myanimelist.net/anime/genre/15/Kids"
                     )
                 ),
             )

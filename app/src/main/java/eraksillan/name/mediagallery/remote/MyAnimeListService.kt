@@ -2,8 +2,10 @@ package eraksillan.name.mediagallery.remote
 
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
 import eraksillan.name.mediagallery.local.model.LocalSchedule
+import eraksillan.name.mediagallery.local.model.LocalSeasonList
 import eraksillan.name.mediagallery.remote.model.MediaPictures
 import eraksillan.name.mediagallery.remote.model.Schedule
+import eraksillan.name.mediagallery.remote.model.SeasonList
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -20,6 +22,10 @@ interface MyAnimeListService {
         @Query("continuing") continuing: Boolean,
         @Query("sfw") safeForWork: Boolean = true
     ): RetrofitNetworkResult<Schedule, LocalSchedule>
+
+    // https://api.jikan.moe/v4/seasons
+    @GET("seasons")
+    suspend fun getSeasonList(): RetrofitNetworkResult<SeasonList, LocalSeasonList>
 
     // https://api.jikan.moe/v4/anime/4459/pictures
     @GET("anime/{id}/pictures")

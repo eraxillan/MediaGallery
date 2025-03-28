@@ -7,15 +7,10 @@ import eraksillan.name.mediagallery.local.model.LocalMedia.Season.SPRING
 import eraksillan.name.mediagallery.local.model.LocalMedia.Season.SUMMER
 import eraksillan.name.mediagallery.local.model.LocalMedia.Season.UNKNOWN
 import eraksillan.name.mediagallery.local.model.LocalMedia.Season.WINTER
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 fun getCurrentSeason(): Season {
-    val currentMonthNo = Clock.System.now()
-        .toLocalDateTime(TimeZone.currentSystemDefault())
-        .monthNumber
-    return when (currentMonthNo) {
+
+    return when (currentMonth()) {
         12, 1, 2 -> WINTER
         3, 4, 5 -> SPRING
         6, 7, 8 -> SUMMER
@@ -44,10 +39,18 @@ fun getNextSeason(): Season {
     }
 }
 
+fun getRemainingSeason(): Season {
+    return when (getNextSeason()) {
+        WINTER -> SPRING
+        SPRING -> SUMMER
+        SUMMER -> FALL
+        FALL -> WINTER
+        else -> UNKNOWN
+    }
+}
+
 fun getSeasonTriple(): MediaSeasonInfoTriple? {
-    val currentYear = Clock.System.now()
-        .toLocalDateTime(TimeZone.currentSystemDefault())
-        .year
+    val currentYear = currentYear()
     return when (getCurrentSeason()) {
         WINTER -> MediaSeasonInfoTriple(
             data = listOf(

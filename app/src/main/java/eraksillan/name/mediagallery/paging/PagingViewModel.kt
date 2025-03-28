@@ -13,10 +13,9 @@ import eraksillan.name.mediagallery.architecture.onSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-abstract class PagingViewModel<T : Any> : ViewModel() {
-
-    abstract var getPageCallback: (page: Int, pageSize: Int) -> Flow<NetworkResult<List<T>>>
-
+class PagingViewModel<T : Any>(
+    var getPageCallback: (page: Int, pageSize: Int) -> Flow<NetworkResult<List<T>>>
+) : ViewModel() {
     val list = mutableStateListOf<T>()
 
     var canPaginate by mutableStateOf(false)
@@ -26,7 +25,7 @@ abstract class PagingViewModel<T : Any> : ViewModel() {
         get() = page
 
     private var page by mutableIntStateOf(1)
-    private val pageSize = 24
+    private val pageSize = PAGE_SIZE
 
     private val isFirstPage: Boolean
         get() = page == 1
@@ -89,3 +88,5 @@ abstract class PagingViewModel<T : Any> : ViewModel() {
         super.onCleared()
     }
 }
+
+private const val PAGE_SIZE = 24

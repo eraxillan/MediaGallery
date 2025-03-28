@@ -2,8 +2,10 @@ package eraksillan.name.mediagallery.remote
 
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
 import eraksillan.name.mediagallery.local.model.LocalSchedule
+import eraksillan.name.mediagallery.local.model.LocalSeasonList
 import eraksillan.name.mediagallery.remote.model.MediaPictures
 import eraksillan.name.mediagallery.remote.model.Schedule
+import eraksillan.name.mediagallery.remote.model.SeasonList
 import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
@@ -47,6 +49,10 @@ class RetrofitNetwork @Inject constructor(
             filter = filter,
             continuing = continuing
         )
+    }
+
+    override suspend fun getSeasonList(): RetrofitNetworkResult<SeasonList, LocalSeasonList> {
+        return networkApi.getSeasonList()
     }
 
     override suspend fun getMediaPictures(

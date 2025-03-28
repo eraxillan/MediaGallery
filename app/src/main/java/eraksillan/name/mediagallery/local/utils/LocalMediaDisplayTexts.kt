@@ -1,6 +1,8 @@
 package eraksillan.name.mediagallery.local.utils
 
 import eraksillan.name.mediagallery.local.model.LocalMedia
+import eraksillan.name.mediagallery.remote.model.parseOrNull
+import kotlinx.datetime.Instant
 import kotlinx.datetime.format
 import kotlinx.datetime.format.DateTimeComponents
 import kotlinx.datetime.format.MonthNames.Companion.ENGLISH_ABBREVIATED
@@ -44,7 +46,7 @@ fun LocalMedia.displayStartDateText(): String {
         char(' ')
         year()
     }
-    return aired.from?.format(dateCustomFormat) ?: "N/A"
+    return Instant.parseOrNull(aired.from)?.format(dateCustomFormat) ?: "N/A"
 }
 
 fun LocalMedia.scoreDisplayText(): String {

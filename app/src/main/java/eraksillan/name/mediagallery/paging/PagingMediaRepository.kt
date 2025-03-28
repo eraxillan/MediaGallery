@@ -5,6 +5,7 @@ import eraksillan.name.mediagallery.architecture.NetworkResult
 import eraksillan.name.mediagallery.local.model.LocalMedia
 import eraksillan.name.mediagallery.local.model.LocalMediaTypeFilter
 import eraksillan.name.mediagallery.local.model.LocalSchedule
+import eraksillan.name.mediagallery.local.model.LocalSeasonList
 import eraksillan.name.mediagallery.remote.OnlineMediaRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -30,5 +31,13 @@ class PagingMediaRepository @Inject constructor(
         }
 
         emit(repository.getSeasonMedias(year, season, page, pageSize, filter, continuing))
+    }.flowOn(Dispatchers.IO)
+
+    fun getSeasonList(): Flow<NetworkResult<LocalSeasonList>> = flow {
+        if (BuildConfig.DEBUG) {
+            delay(2_000)
+        }
+
+        emit(repository.getSeasonList())
     }.flowOn(Dispatchers.IO)
 }

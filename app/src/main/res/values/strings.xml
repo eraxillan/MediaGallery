@@ -29,4 +29,6 @@
     <string name="sort_by_members">By Members</string>
     <string name="sort_by_start_date">By Start Date</string>
     <string name="sort_by_score">By Score</string>
+
+    <string name="later">Later</string>
 </resources>

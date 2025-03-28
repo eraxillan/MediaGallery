@@ -6,7 +6,6 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.net.URL
 
 @Serializable
 data class Media(
@@ -174,15 +173,13 @@ data class Media(
     )
 }
 
-fun urlOrNull(input: String?) = if (input.isNullOrEmpty()) null else URL(input)
-
 fun Media.ImageUrls.toLocal(): LocalMedia.ImageUrls {
     return LocalMedia.ImageUrls(
-        urlOrNull(base),
-        urlOrNull(small),
-        urlOrNull(medium),
-        urlOrNull(large),
-        urlOrNull(extraLarge)
+        base,
+        small,
+        medium,
+        large,
+        extraLarge
     )
 }
 
@@ -191,7 +188,7 @@ fun Media.Images.toLocal(): LocalMedia.Images {
 }
 
 fun Media.Trailer.toLocal(): LocalMedia.Trailer {
-    return LocalMedia.Trailer(youtubeId, urlOrNull(url), urlOrNull(embedUrl), images?.toLocal())
+    return LocalMedia.Trailer(youtubeId, url, embedUrl, images?.toLocal())
 }
 
 fun Media.Title.toLocal(): LocalMedia.Title {
@@ -240,8 +237,8 @@ fun Instant.Companion.parseOrNull(input: String?): Instant? {
 
 fun Media.Aired.toLocal(): LocalMedia.Aired {
     return LocalMedia.Aired(
-        Instant.parseOrNull(from),
-        Instant.parseOrNull(to),
+        from,
+        to,
         prop.toLocal(),
         displayString
     )
@@ -280,14 +277,14 @@ fun TimeZone.Companion.ofOrNull(input: String?): TimeZone? {
 fun Media.Broadcast.toLocal(): LocalMedia.Broadcast {
     return LocalMedia.Broadcast(
         day,
-        LocalTime.parseOrNull(time),
-        TimeZone.ofOrNull(timeZone),
+        time,
+        timeZone,
         displayString
     )
 }
 
 fun Media.Entity.toLocal(): LocalMedia.Entity {
-    return LocalMedia.Entity(malId, type, name, URL(url))
+    return LocalMedia.Entity(malId, type, name, url)
 }
 
 fun List<Media.Entity>.toLocal(): List<LocalMedia.Entity> = map { it.toLocal() }
@@ -295,7 +292,7 @@ fun List<Media.Entity>.toLocal(): List<LocalMedia.Entity> = map { it.toLocal() }
 fun Media.toLocal(): LocalMedia {
     return LocalMedia(
         malId = malId,
-        url = URL(url),
+        url = url,
         images = images.toLocal(),
         trailer = trailer.toLocal(),
         approved = approved,
