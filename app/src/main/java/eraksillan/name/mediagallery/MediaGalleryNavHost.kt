@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import eraksillan.name.mediagallery.fullscreenpicture.fullScreenPictureScreen
 import eraksillan.name.mediagallery.mediadetail.mediaDetailScreen
 import eraksillan.name.mediagallery.medialist.mediaListScreen
 import eraksillan.name.mediagallery.navigation.Route
@@ -36,5 +37,6 @@ fun MediaGalleryNavHost(
         mediaListScreen(navController = navController)
         mediaDetailScreen(navController = navController)
         seasonScreen(navController = navController)
+        fullScreenPictureScreen(navController = navController)
     }
 }

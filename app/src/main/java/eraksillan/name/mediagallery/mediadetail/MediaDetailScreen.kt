@@ -22,10 +22,10 @@ fun NavGraphBuilder.mediaDetailScreen(navController: NavController) {
 
         val viewModel =
             hiltViewModel<MediaDetailViewModel, MediaDetailViewModel.ViewModelFactory> { factory ->
-                factory.create(navController)
+                factory.create(navController, route.data)
             }
 
-        MediaDetailCompose(viewModel = viewModel)
+        MediaDetailCompose(data = route.data, viewModel = viewModel)
     }
 }
 

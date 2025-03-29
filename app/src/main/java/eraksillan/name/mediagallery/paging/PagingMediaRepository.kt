@@ -3,6 +3,7 @@ package eraksillan.name.mediagallery.paging
 import eraksillan.name.mediagallery.BuildConfig
 import eraksillan.name.mediagallery.architecture.NetworkResult
 import eraksillan.name.mediagallery.local.model.LocalMedia
+import eraksillan.name.mediagallery.local.model.LocalMediaPictures
 import eraksillan.name.mediagallery.local.model.LocalMediaTypeFilter
 import eraksillan.name.mediagallery.local.model.LocalSchedule
 import eraksillan.name.mediagallery.local.model.LocalSeasonList
@@ -39,5 +40,9 @@ class PagingMediaRepository @Inject constructor(
         }
 
         emit(repository.getSeasonList())
+    }.flowOn(Dispatchers.IO)
+
+    fun getMediaPictures(id: Int): Flow<NetworkResult<LocalMediaPictures>> = flow {
+        emit(repository.getMediaPictures(id))
     }.flowOn(Dispatchers.IO)
 }

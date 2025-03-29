@@ -31,4 +31,6 @@
     <string name="sort_by_score">By Score</string>
 
     <string name="later">Later</string>
+    <string name="media_detail">Media Details</string>
+    <string name="media_pictures">Media Pictures</string>
 </resources>
