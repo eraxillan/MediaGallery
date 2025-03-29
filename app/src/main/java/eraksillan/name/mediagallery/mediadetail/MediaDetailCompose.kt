@@ -1,6 +1,7 @@
 package eraksillan.name.mediagallery.mediadetail
 
 import android.util.Log
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -62,7 +65,7 @@ fun MediaDetailCompose(data: LocalMedia, viewModel: MediaDetailViewModel) {
                     IconButton(onClick = { viewModel.onEvent(MediaDetailAction.NavigateBackClicked) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Localized description",
+                            contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -79,15 +82,21 @@ fun MediaDetailCompose(data: LocalMedia, viewModel: MediaDetailViewModel) {
                     ) {
                         Icon(
                             imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                            contentDescription = "Localized description",
+                            contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
 
-                    IconButton(onClick = { viewModel.onEvent(MediaDetailAction.ShareMediaClicked) }) {
+                    val shareContentDescription = stringResource(R.string.menu_item_share_media)
+                    val activity = LocalActivity.current ?: return@CenterAlignedTopAppBar
+                    IconButton(
+                        onClick = { viewModel.onEvent(MediaDetailAction.ShareMediaClicked(activity)) },
+                        // Semantics in parent due to https://issuetracker.google.com/184825850
+                        modifier = Modifier.semantics { contentDescription = shareContentDescription }
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.Share,
-                            contentDescription = "Localized description",
+                            contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }

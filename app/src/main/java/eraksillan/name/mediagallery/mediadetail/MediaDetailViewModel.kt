@@ -8,6 +8,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eraksillan.name.mediagallery.architecture.NetworkResult
 import eraksillan.name.mediagallery.local.model.LocalMedia
+import eraksillan.name.mediagallery.local.utils.createShareIntent
 import eraksillan.name.mediagallery.navigation.Route
 import eraksillan.name.mediagallery.paging.PagingMediaRepository
 import eraksillan.name.mediagallery.paging.PagingViewModel
@@ -58,7 +59,8 @@ class MediaDetailViewModel @AssistedInject constructor(
             }
 
             is MediaDetailAction.ShareMediaClicked -> {
-                TODO()
+                val url = "https://myanimelist.net/anime/${data.malId}"
+                createShareIntent(action.activity, url)
             }
 
             is MediaDetailAction.FullScreenPictureClicked -> {

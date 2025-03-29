@@ -33,4 +33,5 @@
     <string name="later">Later</string>
     <string name="media_detail">Media Details</string>
     <string name="media_pictures">Media Pictures</string>
+    <string name="menu_item_share_media">Share</string>
 </resources>
