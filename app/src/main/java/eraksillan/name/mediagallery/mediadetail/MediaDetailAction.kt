@@ -14,4 +14,5 @@ sealed class MediaDetailAction {
     data object MoreInformationClicked : MediaDetailAction()
     class ProducerClicked(val index: Int) : MediaDetailAction()
     class ExternalLinkClicked(val index: Int) : MediaDetailAction()
+    class RelationClicked(val malId: Int) : MediaDetailAction()
 }

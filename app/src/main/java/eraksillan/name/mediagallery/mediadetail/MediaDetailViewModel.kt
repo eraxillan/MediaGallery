@@ -122,6 +122,10 @@ class MediaDetailViewModel @AssistedInject constructor(
             is MediaDetailAction.ExternalLinkClicked -> {
                 TODO()
             }
+
+            is MediaDetailAction.RelationClicked -> {
+                TODO()
+            }
         }
     }
 

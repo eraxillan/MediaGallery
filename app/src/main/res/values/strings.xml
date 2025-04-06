@@ -52,6 +52,9 @@
     <string name="synonyms">Synonyms</string>
     <string name="producers">Producers</string>
     <string name="external_links">External Links</string>
+    <string name="prequel">Prequel</string>
+    <string name="sequel">Sequel</string>
+    <string name="adaptation">Adaptation</string>
 
     <string name="rating_g">G (All Ages)</string>
     <string name="rating_pg">PG (Children)</string>

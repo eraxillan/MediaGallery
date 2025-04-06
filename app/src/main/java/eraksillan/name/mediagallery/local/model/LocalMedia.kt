@@ -190,11 +190,11 @@ data class LocalMedia(
         val type: Type,
         val entry: List<Entity>
     ) : Parcelable {
-        enum class Type {
-            PREQUEL,
-            SEQUEL,
-            ADAPTATION,
-            UNKNOWN,
+        enum class Type(val titleResId: Int) {
+            PREQUEL(R.string.prequel),
+            SEQUEL(R.string.sequel),
+            ADAPTATION(R.string.adaptation),
+            UNKNOWN(-1),
         }
     }
 

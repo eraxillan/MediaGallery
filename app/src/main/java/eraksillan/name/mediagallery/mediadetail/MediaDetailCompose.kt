@@ -66,6 +66,7 @@ import eraksillan.name.mediagallery.local.model.LocalMediaVideos
 import eraksillan.name.mediagallery.local.utils.displayDefaultTitle
 import eraksillan.name.mediagallery.local.utils.englishTitle
 import eraksillan.name.mediagallery.local.utils.mockMedia
+import eraksillan.name.mediagallery.local.utils.mockRelations
 import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
 import java.util.Locale
 
@@ -233,6 +234,28 @@ private fun MediaDetailContentCompose(
                     modifier = Modifier.align(Alignment.BottomEnd)
                 ) {
                     Text(text = stringResource(R.string.more_information))
+                }
+            }
+        }
+
+        item {
+            Column {
+                relations.forEach { relation ->
+                    val relationName = relation.entry.firstOrNull()?.name
+                    val malId = relation.entry.firstOrNull()?.malId ?: -1
+                    if (relationName != null) {
+                        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
+                            Text(text = stringResource(relation.type.titleResId), modifier = Modifier
+                                .weight(0.3f)
+                                .padding(top = 14.dp))
+                            TextButton(
+                                onClick = { onEvent(MediaDetailAction.RelationClicked(malId)) },
+                                modifier = Modifier.weight(0.7f)
+                            ) {
+                                Text(text = relationName)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -554,7 +577,7 @@ private fun MediaDetailComposePreview() {
             data = mockMedia,
             pictures = emptyList<LocalMedia.Images>(),
             videos = emptyList(),
-            relations = listOf(),
+            relations = mockRelations,
             { }
         )
     }
