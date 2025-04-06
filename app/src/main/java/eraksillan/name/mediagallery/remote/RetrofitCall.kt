@@ -12,6 +12,8 @@ class RetrofitCall<I : RetrofitResponse<O>, O : Any>(
 ) : Call<RetrofitNetworkResult<I, O>> {
 
     override fun enqueue(callback: Callback<RetrofitNetworkResult<I, O>>) {
+        Thread.sleep(1_000)
+
         proxy.enqueue(
             object : Callback<I> {
                 override fun onResponse(call: Call<I>, response: Response<I>) {

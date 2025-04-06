@@ -2,8 +2,6 @@ package eraksillan.name.mediagallery.remote.model
 
 import eraksillan.name.mediagallery.local.model.LocalMedia
 import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.TimeZone
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -161,6 +159,22 @@ data class Media(
     )
 
     @Serializable
+    data class Relation(
+        @SerialName("relation")
+        val type: String,
+        @SerialName("entry")
+        val entry: List<Entity>
+    )
+
+    @Serializable
+    data class Link(
+        @SerialName("name")
+        val name: String,
+        @SerialName("url")
+        val url: String,
+    )
+
+    @Serializable
     data class Entity(
         @SerialName("mal_id")
         val malId: Int,
@@ -249,7 +263,7 @@ fun String.toLocalRating(): LocalMedia.Rating {
         "G - All Ages" -> LocalMedia.Rating.G
         "PG - Children" -> LocalMedia.Rating.PG
         "PG-13 - Teens 13 or older" -> LocalMedia.Rating.PG_13
-        "R - 17+ (violence & profanity)" -> LocalMedia.Rating.R
+        "R - 17+ (violence & profanity)" -> LocalMedia.Rating.R_17
         "R+ - Mild Nudity" -> LocalMedia.Rating.R_PLUS
         "Rx - Hentai" -> LocalMedia.Rating.R_X
         else -> LocalMedia.Rating.UNKNOWN
@@ -266,12 +280,13 @@ fun String.toLocalSeason(): LocalMedia.Season {
     }
 }
 
-fun LocalTime.Companion.parseOrNull(input: String?): LocalTime? {
-    return if (input != null) parse(input) else null
-}
-
-fun TimeZone.Companion.ofOrNull(input: String?): TimeZone? {
-    return if (input != null) of(input) else null
+fun String.toLocalRelationType(): LocalMedia.Relation.Type {
+    return when (this) {
+        "Prequel" -> LocalMedia.Relation.Type.PREQUEL
+        "Sequel" -> LocalMedia.Relation.Type.SEQUEL
+        "Adaptation" -> LocalMedia.Relation.Type.ADAPTATION
+        else -> LocalMedia.Relation.Type.UNKNOWN
+    }
 }
 
 fun Media.Broadcast.toLocal(): LocalMedia.Broadcast {
@@ -281,6 +296,14 @@ fun Media.Broadcast.toLocal(): LocalMedia.Broadcast {
         timeZone,
         displayString
     )
+}
+
+fun Media.Relation.toLocal(): LocalMedia.Relation {
+    return LocalMedia.Relation(type.toLocalRelationType(), entry.toLocal())
+}
+
+fun Media.Link.toLocal(): LocalMedia.Link {
+    return LocalMedia.Link(name, url)
 }
 
 fun Media.Entity.toLocal(): LocalMedia.Entity {
@@ -322,6 +345,6 @@ fun Media.toLocal(): LocalMedia {
         genres = genres.toLocal(),
         explicitGenres = explicitGenres.toLocal(),
         themes = themes.toLocal(),
-        demographics = demographics.toLocal(),
+        demographics = demographics.toLocal()
     )
 }

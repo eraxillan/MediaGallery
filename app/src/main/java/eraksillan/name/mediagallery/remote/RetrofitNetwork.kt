@@ -1,9 +1,18 @@
 package eraksillan.name.mediagallery.remote
 
+import com.lembergsolutions.retrofitretry.implementation.RetrofitRetryCallAdapterFactory
+import eraksillan.name.mediagallery.local.model.LocalMediaExternalLinks
+import eraksillan.name.mediagallery.local.model.LocalMediaMoreInfo
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
+import eraksillan.name.mediagallery.local.model.LocalMediaRelations
+import eraksillan.name.mediagallery.local.model.LocalMediaVideos
 import eraksillan.name.mediagallery.local.model.LocalSchedule
 import eraksillan.name.mediagallery.local.model.LocalSeasonList
+import eraksillan.name.mediagallery.remote.model.MediaExternalLinks
+import eraksillan.name.mediagallery.remote.model.MediaMoreInfo
 import eraksillan.name.mediagallery.remote.model.MediaPictures
+import eraksillan.name.mediagallery.remote.model.MediaRelations
+import eraksillan.name.mediagallery.remote.model.MediaVideos
 import eraksillan.name.mediagallery.remote.model.Schedule
 import eraksillan.name.mediagallery.remote.model.SeasonList
 import kotlinx.serialization.json.Json
@@ -29,6 +38,7 @@ class RetrofitNetwork @Inject constructor(
             // to prevent initializing OkHttp on the main thread
             .callFactory { okhttpCallFactory.get().newCall(it) }
             .addConverterFactory(networkJson.asConverterFactory("application/json".toMediaType()))
+            .addCallAdapterFactory(RetrofitRetryCallAdapterFactory.createCoroutineAdapter())
             .addCallAdapterFactory(RetrofitCallAdapterFactory.create())
             .build()
             .create(MyAnimeListService::class.java)
@@ -51,13 +61,29 @@ class RetrofitNetwork @Inject constructor(
         )
     }
 
-    override suspend fun getSeasonList(): RetrofitNetworkResult<SeasonList, LocalSeasonList> {
-        return networkApi.getSeasonList()
-    }
-
     override suspend fun getMediaPictures(
         id: Int
     ): RetrofitNetworkResult<MediaPictures, LocalMediaPictures> {
         return networkApi.getAnimePictures(id)
+    }
+
+    override suspend fun getMediaVideos(id: Int): RetrofitNetworkResult<MediaVideos, LocalMediaVideos> {
+        return networkApi.getAnimeVideos(id)
+    }
+
+    override suspend fun getAnimeExternalLinks(id: Int): RetrofitNetworkResult<MediaExternalLinks, LocalMediaExternalLinks> {
+        return networkApi.getAnimeExternalLinks(id)
+    }
+
+    override suspend fun getAnimeRelations(id: Int): RetrofitNetworkResult<MediaRelations, LocalMediaRelations> {
+        return networkApi.getAnimeRelations(id)
+    }
+
+    override suspend fun getAnimeMoreInfo(id: Int): RetrofitNetworkResult<MediaMoreInfo, LocalMediaMoreInfo> {
+        return networkApi.getAnimeMoreInfo(id)
+    }
+
+    override suspend fun getSeasonList(): RetrofitNetworkResult<SeasonList, LocalSeasonList> {
+        return networkApi.getSeasonList()
     }
 }

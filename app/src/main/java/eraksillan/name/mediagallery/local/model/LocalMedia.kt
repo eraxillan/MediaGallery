@@ -44,21 +44,21 @@ data class LocalMedia(
     val demographics: List<Entity>,
 ) : Parcelable {
 
-    enum class Type {
-        TV,
-        OVA,
-        MOVIE,
-        SPECIAL,
-        ONA,
-        MUSIC,
-        UNKNOWN,
+    enum class Type(val titleResId: Int) {
+        TV(R.string.tv),
+        OVA(R.string.ova),
+        MOVIE(R.string.movie),
+        SPECIAL(R.string.special),
+        ONA(R.string.ona),
+        MUSIC(R.string.music),
+        UNKNOWN(-1),
     }
 
-    enum class Status {
-        FINISHED_AIRING,
-        CURRENTLY_AIRING,
-        NOT_YET_AIRED,
-        UNKNOWN,
+    enum class Status(val titleResId: Int) {
+        FINISHED_AIRING(R.string.finished),
+        CURRENTLY_AIRING(R.string.airing),
+        NOT_YET_AIRED(R.string.not_yet_aired),
+        UNKNOWN(-1),
     }
 
     enum class Season(val query: String, val titleResId: Int) {
@@ -69,38 +69,38 @@ data class LocalMedia(
         UNKNOWN("<unknown>", -1),
     }
 
-    enum class Rating {
+    enum class Rating(val titleResId: Int) {
         /**
          * All Ages
          */
-        G,
+        G(R.string.rating_g),
 
         /**
          * Children
          */
-        PG,
+        PG(R.string.rating_pg),
 
         /**
          * Teens 13 or older
          */
-        PG_13,
+        PG_13(R.string.rating_pg_13),
 
         /**
          * 17+ (vilence & profanity)
          */
-        R,
+        R_17(R.string.rating_r_17),
 
         /**
          *  Mild Nudity
          */
-        R_PLUS,
+        R_PLUS(R.string.rating_r_plus),
 
         /**
          * Hentai
          */
-        R_X,
+        R_X(R.string.rating_r_x),
 
-        UNKNOWN,
+        UNKNOWN(-1),
     }
 
     @Parcelize
@@ -182,6 +182,27 @@ data class LocalMedia(
         val time: String?,
         val timeZone: String?,
         val displayString: String?,
+    ) : Parcelable
+
+    @Parcelize
+    @Serializable
+    data class Relation(
+        val type: Type,
+        val entry: List<Entity>
+    ) : Parcelable {
+        enum class Type {
+            PREQUEL,
+            SEQUEL,
+            ADAPTATION,
+            UNKNOWN,
+        }
+    }
+
+    @Parcelize
+    @Serializable
+    data class Link(
+        val name: String,
+        val url: String,
     ) : Parcelable
 
     @Parcelize

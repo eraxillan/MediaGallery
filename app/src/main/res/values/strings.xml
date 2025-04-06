@@ -11,12 +11,14 @@
     <string name="summer">Summer</string>
     <string name="fall">Fall</string>
 
+    <string name="tv">TV</string>
     <string name="tv_new">TV (new)</string>
     <string name="tv_continued">TV (cont\'d)</string>
     <string name="ona">ONA</string>
     <string name="ova">OVA</string>
     <string name="movie">Movie</string>
     <string name="special">Special</string>
+    <string name="music">Music</string>
 
     <string name="media_season">Media Season</string>
     <string name="media_type">Media Type</string>
@@ -34,4 +36,36 @@
     <string name="media_detail">Media Details</string>
     <string name="media_pictures">Media Pictures</string>
     <string name="menu_item_share_media">Share</string>
+    <string name="score">Score: %s</string>
+    <string name="rank">Rank</string>
+    <string name="popularity">Popularity</string>
+    <string name="members">Members</string>
+    <string name="favorites">Favorites</string>
+    <string name="english">English</string>
+    <string name="japanese">Japanese</string>
+    <string name="source">Source</string>
+    <string name="season">Season</string>
+    <string name="studio">Studio</string>
+    <string name="aired">Aired</string>
+    <string name="rating">Rating</string>
+    <string name="licensor">Licensor</string>
+    <string name="synonyms">Synonyms</string>
+    <string name="producers">Producers</string>
+    <string name="external_links">External Links</string>
+
+    <string name="rating_g">G (All Ages)</string>
+    <string name="rating_pg">PG (Children)</string>
+    <string name="rating_pg_13">PG-13 (Teens 13 or older)</string>
+    <string name="rating_r_17">R - 17+ (Violence and profanity)</string>
+    <string name="rating_r_plus">R+ (Mild Nudity)</string>
+    <string name="rating_r_x">Rx (Hentai)</string>
+
+    <string name="not_applicable">N/A</string>
+    <string name="unknown">Unknown</string>
+
+    <string name="finished">Finished</string>
+    <string name="airing">Airing</string>
+    <string name="not_yet_aired">Not Yet Aired</string>
+
+    <string name="more_information">More Information</string>
 </resources>

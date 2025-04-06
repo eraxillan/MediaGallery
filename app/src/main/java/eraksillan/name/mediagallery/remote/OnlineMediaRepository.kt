@@ -2,11 +2,19 @@ package eraksillan.name.mediagallery.remote
 
 import eraksillan.name.mediagallery.architecture.NetworkResult
 import eraksillan.name.mediagallery.local.model.LocalMedia
+import eraksillan.name.mediagallery.local.model.LocalMediaExternalLinks
+import eraksillan.name.mediagallery.local.model.LocalMediaMoreInfo
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
+import eraksillan.name.mediagallery.local.model.LocalMediaRelations
 import eraksillan.name.mediagallery.local.model.LocalMediaTypeFilter
+import eraksillan.name.mediagallery.local.model.LocalMediaVideos
 import eraksillan.name.mediagallery.local.model.LocalSchedule
 import eraksillan.name.mediagallery.local.model.LocalSeasonList
+import eraksillan.name.mediagallery.remote.model.MediaExternalLinks
+import eraksillan.name.mediagallery.remote.model.MediaMoreInfo
 import eraksillan.name.mediagallery.remote.model.MediaPictures
+import eraksillan.name.mediagallery.remote.model.MediaRelations
+import eraksillan.name.mediagallery.remote.model.MediaVideos
 import eraksillan.name.mediagallery.remote.model.Schedule
 import eraksillan.name.mediagallery.remote.model.SeasonList
 import javax.inject.Inject
@@ -33,16 +41,36 @@ class OnlineMediaRepository @Inject constructor(
         return toLocal<Schedule, LocalSchedule>(result)
     }
 
-    suspend fun getSeasonList(): NetworkResult<LocalSeasonList> {
-        val result = network.getSeasonList()
-        return toLocal<SeasonList, LocalSeasonList>(result)
-    }
-
     suspend fun getMediaPictures(
         id: Int
     ): NetworkResult<LocalMediaPictures> {
         val result = network.getMediaPictures(id)
         return toLocal<MediaPictures, LocalMediaPictures>(result)
+    }
+
+    suspend fun getAnimeVideos(id: Int): NetworkResult<LocalMediaVideos> {
+        val result = network.getMediaVideos(id)
+        return toLocal<MediaVideos, LocalMediaVideos>(result)
+    }
+
+    suspend fun getAnimeExternalLinks(id: Int): NetworkResult<LocalMediaExternalLinks> {
+        val result = network.getAnimeExternalLinks(id)
+        return toLocal<MediaExternalLinks, LocalMediaExternalLinks>(result)
+    }
+
+    suspend fun getAnimeRelations(id: Int): NetworkResult<LocalMediaRelations> {
+        val result = network.getAnimeRelations(id)
+        return toLocal<MediaRelations, LocalMediaRelations>(result)
+    }
+
+    suspend fun getAnimeMoreInfo(id: Int): NetworkResult<LocalMediaMoreInfo> {
+        val result = network.getAnimeMoreInfo(id)
+        return toLocal<MediaMoreInfo, LocalMediaMoreInfo>(result)
+    }
+
+    suspend fun getSeasonList(): NetworkResult<LocalSeasonList> {
+        val result = network.getSeasonList()
+        return toLocal<SeasonList, LocalSeasonList>(result)
     }
 }
 

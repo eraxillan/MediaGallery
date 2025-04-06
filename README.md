@@ -7,3 +7,4 @@ https://stackoverflow.com/q/66712286/1794089
 https://medium.com/mercadona-tech/type-safety-in-navigation-compose-23c03e3d74a5
 https://stackoverflow.com/a/79087413
 https://stackoverflow.com/a/75931989
+https://medium.com/@munbonecci/how-to-implement-expandable-text-in-jetpack-compose-ca9ba35b645c

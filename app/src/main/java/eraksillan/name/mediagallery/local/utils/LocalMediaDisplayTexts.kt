@@ -15,6 +15,28 @@ fun LocalMedia.displayDefaultTitle(): String {
     }?.title ?: ""
 }
 
+fun LocalMedia.englishTitle(): String? {
+    return titles.firstOrNull {
+        it.type == LocalMedia.Title.Type.ENGLISH
+    }?.title
+}
+
+fun LocalMedia.japaneseTitle(): String? {
+    return titles.firstOrNull {
+        it.type == LocalMedia.Title.Type.JAPANESE
+    }?.title
+}
+
+fun LocalMedia.synonyms(): List<String> {
+    return titles.filter {
+        it.type == LocalMedia.Title.Type.SYNONYM
+    }.map { it.title }
+}
+
+fun LocalMedia.producers(): List<String> {
+    return producers.map { it.name }
+}
+
 fun LocalMedia.displayGenresText(): String {
     val displayThemes = themes.joinToString(", ") { it.name }
     val displayDemographics = demographics.joinToString(", ") { it.name }
