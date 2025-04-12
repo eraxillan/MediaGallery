@@ -14,8 +14,11 @@ sealed interface Route {
     data class MediaExtendedDetail(val data: LocalMedia) : Route
 
     @Serializable
-    data class Season(val year: Int, val season: LocalMedia.Season) : Route
+    data class MediaSeason(val year: Int, val season: LocalMedia.Season) : Route
 
     @Serializable
     data class FullScreenPicture(val url: String) : Route
+
+    @Serializable
+    data class MediaCast(val data: List<LocalMedia.Cast>) : Route
 }

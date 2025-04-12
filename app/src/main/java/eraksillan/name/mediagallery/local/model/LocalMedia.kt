@@ -2,7 +2,9 @@ package eraksillan.name.mediagallery.local.model
 
 import android.os.Parcelable
 import eraksillan.name.mediagallery.R
+import eraksillan.name.mediagallery.remote.model.Media
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -204,6 +206,42 @@ data class LocalMedia(
         val name: String,
         val url: String,
     ) : Parcelable
+
+    @Parcelize
+    @Serializable
+    data class Cast(
+        val character: MediaCharacter,
+        val role: String,
+        val favorites: Int,
+        val voiceActors: List<MediaVoiceActor>
+    ) : Parcelable {
+
+        @Parcelize
+        @Serializable
+        data class MediaCharacter(
+            val malId: Int,
+            val url: String,
+            val images: Images,
+            val name: String,
+        ) : Parcelable
+
+        @Parcelize
+        @Serializable
+        data class MediaVoiceActor(
+            val person: Person,
+            val language: String,
+        ) : Parcelable {
+
+            @Parcelize
+            @Serializable
+            data class Person(
+                val malId: Int,
+                val url: String,
+                val images: Images,
+                val name: String,
+            ) : Parcelable
+        }
+    }
 
     @Parcelize
     @Serializable

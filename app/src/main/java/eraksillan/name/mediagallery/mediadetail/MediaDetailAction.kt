@@ -2,6 +2,7 @@ package eraksillan.name.mediagallery.mediadetail
 
 import android.app.Activity
 import android.content.Context
+import eraksillan.name.mediagallery.local.model.LocalMedia
 
 sealed class MediaDetailAction {
     data object NavigateBackClicked : MediaDetailAction()
@@ -15,4 +16,7 @@ sealed class MediaDetailAction {
     class ProducerClicked(val index: Int) : MediaDetailAction()
     class ExternalLinkClicked(val index: Int) : MediaDetailAction()
     class RelationClicked(val malId: Int) : MediaDetailAction()
+    class CharacterClicked(val malId: Int) : MediaDetailAction()
+    class VoiceActorClicked(val malId: Int) : MediaDetailAction()
+    class MoreCastClicked(val data: List<LocalMedia.Cast>) : MediaDetailAction()
 }

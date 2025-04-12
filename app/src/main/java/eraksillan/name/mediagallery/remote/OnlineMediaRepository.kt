@@ -2,6 +2,7 @@ package eraksillan.name.mediagallery.remote
 
 import eraksillan.name.mediagallery.architecture.NetworkResult
 import eraksillan.name.mediagallery.local.model.LocalMedia
+import eraksillan.name.mediagallery.local.model.LocalMediaCast
 import eraksillan.name.mediagallery.local.model.LocalMediaExternalLinks
 import eraksillan.name.mediagallery.local.model.LocalMediaMoreInfo
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
@@ -10,6 +11,7 @@ import eraksillan.name.mediagallery.local.model.LocalMediaTypeFilter
 import eraksillan.name.mediagallery.local.model.LocalMediaVideos
 import eraksillan.name.mediagallery.local.model.LocalSchedule
 import eraksillan.name.mediagallery.local.model.LocalSeasonList
+import eraksillan.name.mediagallery.remote.model.MediaCast
 import eraksillan.name.mediagallery.remote.model.MediaExternalLinks
 import eraksillan.name.mediagallery.remote.model.MediaMoreInfo
 import eraksillan.name.mediagallery.remote.model.MediaPictures
@@ -66,6 +68,11 @@ class OnlineMediaRepository @Inject constructor(
     suspend fun getAnimeMoreInfo(id: Int): NetworkResult<LocalMediaMoreInfo> {
         val result = network.getAnimeMoreInfo(id)
         return toLocal<MediaMoreInfo, LocalMediaMoreInfo>(result)
+    }
+
+    suspend fun getAnimeCharacters(id: Int): NetworkResult<LocalMediaCast> {
+        val result = network.getAnimeCharacters(id)
+        return toLocal<MediaCast, LocalMediaCast>(result)
     }
 
     suspend fun getSeasonList(): NetworkResult<LocalSeasonList> {

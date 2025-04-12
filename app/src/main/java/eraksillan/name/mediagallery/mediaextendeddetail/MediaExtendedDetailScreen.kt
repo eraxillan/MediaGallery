@@ -6,13 +6,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import eraksillan.name.mediagallery.local.model.LocalMedia
-import eraksillan.name.mediagallery.mediadetail.LocalMediaType
+import eraksillan.name.mediagallery.local.utils.LocalMediaNavType
 import eraksillan.name.mediagallery.navigation.Route
 import kotlin.reflect.typeOf
 
 fun NavGraphBuilder.mediaExtendedDetailScreen(navController: NavController) {
     composable<Route.MediaExtendedDetail>(
-        typeMap = mapOf(typeOf<LocalMedia>() to LocalMediaType)
+        typeMap = mapOf(typeOf<LocalMedia>() to LocalMediaNavType)
     ) { backStackEntry ->
         val route: Route.MediaExtendedDetail = backStackEntry.toRoute()
 

@@ -55,6 +55,8 @@
     <string name="prequel">Prequel</string>
     <string name="sequel">Sequel</string>
     <string name="adaptation">Adaptation</string>
+    <string name="cast">Cast</string>
+    <string name="voice">Voice: %s</string>
 
     <string name="rating_g">G (All Ages)</string>
     <string name="rating_pg">PG (Children)</string>
@@ -70,5 +72,6 @@
     <string name="airing">Airing</string>
     <string name="not_yet_aired">Not Yet Aired</string>
 
-    <string name="more_information">More Information</string>
+    <string name="more_information">More information</string>
+    <string name="more_cast">More cast</string>
 </resources>

@@ -190,3 +190,163 @@ val mockRelations = listOf(
 )
 
 val mockMoreInfo = "Episodes 1-2 were previewed in the theatrical screening of Ore dake Level Up na Ken: ReAwakening on November 28, 2024. Regular broadcasting began on January 5, 2025."
+
+val mockCast = listOf<LocalMedia.Cast>(
+    LocalMedia.Cast(
+        character = LocalMedia.Cast.MediaCharacter(
+            malId = 174185,
+            url = "https://myanimelist.net/character/174185/Jin-Woo_Sung",
+            images = LocalMedia.Images(
+                jpeg = LocalMedia.ImageUrls(
+                    base = "https://cdn.myanimelist.net/images/characters/2/540692.jpg?s=84ef54c5990bd67985d24060a9ff3e84"
+                ),
+                webp = LocalMedia.ImageUrls(
+                    base = "https://cdn.myanimelist.net/images/characters/2/540692.webp?s=84ef54c5990bd67985d24060a9ff3e84",
+                    small = "https://cdn.myanimelist.net/images/characters/2/540692t.webp?s=84ef54c5990bd67985d24060a9ff3e84"
+                )
+            ),
+            name = "Sung, Jin-Woo"
+        ),
+        role = "Main",
+        favorites = 18807,
+        voiceActors = listOf(
+            LocalMedia.Cast.MediaVoiceActor(
+                person = LocalMedia.Cast.MediaVoiceActor.Person(
+                    malId = 47739,
+                    url = "https://myanimelist.net/people/47739/Taito_Ban",
+                    images = LocalMedia.Images(
+                        jpeg = LocalMedia.ImageUrls(
+                            base = "https://cdn.myanimelist.net/images/voiceactors/3/74502.jpg?s=8425b98a40dcca2bd35815c9356ec97c"
+                        )
+                    ),
+                    name = "Ban, Taito",
+                ),
+                language = "Japanese"
+            ),
+            LocalMedia.Cast.MediaVoiceActor(
+                person = LocalMedia.Cast.MediaVoiceActor.Person(
+                    malId = 12861,
+                    url = "https://myanimelist.net/people/12861/Charles_Emmanuel",
+                    images = LocalMedia.Images(
+                        jpeg = LocalMedia.ImageUrls(
+                            base = "https://cdn.myanimelist.net/images/voiceactors/3/60298.jpg?s=e631e54968a9b8e5a8bc88d43233f89d"
+                        )
+                    ),
+                    name = "Emmanuel, Charles",
+                ),
+                language = "Portuguese (BR)"
+            ),
+            LocalMedia.Cast.MediaVoiceActor(
+                person = LocalMedia.Cast.MediaVoiceActor.Person(
+                    malId = 50080,
+                    url = "https://myanimelist.net/people/50080/Aleks_Le",
+                    images = LocalMedia.Images(
+                        jpeg = LocalMedia.ImageUrls(
+                            base = "https://cdn.myanimelist.net/images/voiceactors/1/84619.jpg?s=6e382ce44f60c5c5e724d127dac1c79d"
+                        )
+                    ),
+                    name = "Le, Aleks",
+                ),
+                language = "English"
+            ),
+            LocalMedia.Cast.MediaVoiceActor(
+                person = LocalMedia.Cast.MediaVoiceActor.Person(
+                    malId = 55022,
+                    url = "https://myanimelist.net/people/55022/Alexis_Flamant",
+                    images = LocalMedia.Images(
+                        jpeg = LocalMedia.ImageUrls(
+                            base = "https://cdn.myanimelist.net/images/voiceactors/1/68228.jpg?s=80ff317b5b0fb7983663a55f18291158"
+                        )
+                    ),
+                    name = "Flamant, Alexis",
+                ),
+                language = "French"
+            ),
+            LocalMedia.Cast.MediaVoiceActor(
+                person = LocalMedia.Cast.MediaVoiceActor.Person(
+                    malId = 42614,
+                    url = "https://myanimelist.net/people/42614/Federico_Campaiola",
+                    images = LocalMedia.Images(
+                        jpeg = LocalMedia.ImageUrls(
+                            base = "https://cdn.myanimelist.net/images/voiceactors/1/45968.jpg?s=75feebb1cffc876a25fa1c09e5cb2da1"
+                        )
+                    ),
+                    name = "Campaiola, Federico",
+                ),
+                language = "Italian"
+            )
+        )
+    ),
+    LocalMedia.Cast(
+        character = LocalMedia.Cast.MediaCharacter(
+            malId = 173982,
+            url = "https://myanimelist.net/character/173982/Sang-Min_Ahn",
+            images = LocalMedia.Images(
+                jpeg = LocalMedia.ImageUrls(
+                    base = "https://cdn.myanimelist.net/images/characters/2/403236.jpg?s=90cdf39e9c21d0f7a4cfd94839ab3c0f"
+                ),
+                webp = LocalMedia.ImageUrls(
+                    base = "https://cdn.myanimelist.net/images/characters/2/403236.webp?s=90cdf39e9c21d0f7a4cfd94839ab3c0f",
+                    small = "https://cdn.myanimelist.net/images/characters/2/403236t.webp?s=90cdf39e9c21d0f7a4cfd94839ab3c0f"
+                )
+            ),
+            name = "Ahn, Sang-Min"
+        ),
+        role = "Supporting",
+        favorites = 0,
+        voiceActors = listOf(
+            LocalMedia.Cast.MediaVoiceActor(
+                person = LocalMedia.Cast.MediaVoiceActor.Person(
+                    malId = 11840,
+                    url = "https://myanimelist.net/people/11840/Hironori_Kondou",
+                    images = LocalMedia.Images(
+                        jpeg = LocalMedia.ImageUrls(
+                            base = "https://cdn.myanimelist.net/images/voiceactors/2/75762.jpg?s=ee5cc5c4a31a9d0112bd8eb977d61b47"
+                        )
+                    ),
+                    name = "Kondou, Hironori",
+                ),
+                language = "Japanese"
+            ),
+            LocalMedia.Cast.MediaVoiceActor(
+                person = LocalMedia.Cast.MediaVoiceActor.Person(
+                    malId = 54502,
+                    url = "https://myanimelist.net/people/54502/Cory_Yee",
+                    images = LocalMedia.Images(
+                        jpeg = LocalMedia.ImageUrls(
+                            base = "https://cdn.myanimelist.net/images/voiceactors/1/70948.jpg?s=73c5f11d58107a9b782cbafa36226863"
+                        )
+                    ),
+                    name = "Yee, Cory",
+                ),
+                language = "English"
+            ),
+            LocalMedia.Cast.MediaVoiceActor(
+                person = LocalMedia.Cast.MediaVoiceActor.Person(
+                    malId = 55946,
+                    url = "https://myanimelist.net/people/55946/Ailton_Rosa",
+                    images = LocalMedia.Images(
+                        jpeg = LocalMedia.ImageUrls(
+                            base = "https://cdn.myanimelist.net/images/voiceactors/2/79873.jpg?s=b979decb37542478f5bfff3062d3cae1"
+                        )
+                    ),
+                    name = "Rosa, Ailton",
+                ),
+                language = "Portuguese (BR)"
+            ),
+            LocalMedia.Cast.MediaVoiceActor(
+                person = LocalMedia.Cast.MediaVoiceActor.Person(
+                    malId = 56796,
+                    url = "https://myanimelist.net/people/56796/Marc_Weiss",
+                    images = LocalMedia.Images(
+                        jpeg = LocalMedia.ImageUrls(
+                            base = "https://cdn.myanimelist.net/images/voiceactors/2/67726.jpg?s=03d41e4e7f63b95530b7ae41e455953d"
+                        )
+                    ),
+                    name = "Weiss, Marc",
+                ),
+                language = "French"
+            ),
+        )
+    )
+)

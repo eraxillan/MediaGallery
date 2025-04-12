@@ -1,6 +1,7 @@
 package eraksillan.name.mediagallery.remote
 
 import com.lembergsolutions.retrofitretry.implementation.RetrofitRetryCallAdapterFactory
+import eraksillan.name.mediagallery.local.model.LocalMediaCast
 import eraksillan.name.mediagallery.local.model.LocalMediaExternalLinks
 import eraksillan.name.mediagallery.local.model.LocalMediaMoreInfo
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
@@ -8,6 +9,7 @@ import eraksillan.name.mediagallery.local.model.LocalMediaRelations
 import eraksillan.name.mediagallery.local.model.LocalMediaVideos
 import eraksillan.name.mediagallery.local.model.LocalSchedule
 import eraksillan.name.mediagallery.local.model.LocalSeasonList
+import eraksillan.name.mediagallery.remote.model.MediaCast
 import eraksillan.name.mediagallery.remote.model.MediaExternalLinks
 import eraksillan.name.mediagallery.remote.model.MediaMoreInfo
 import eraksillan.name.mediagallery.remote.model.MediaPictures
@@ -81,6 +83,10 @@ class RetrofitNetwork @Inject constructor(
 
     override suspend fun getAnimeMoreInfo(id: Int): RetrofitNetworkResult<MediaMoreInfo, LocalMediaMoreInfo> {
         return networkApi.getAnimeMoreInfo(id)
+    }
+
+    override suspend fun getAnimeCharacters(id: Int): RetrofitNetworkResult<MediaCast, LocalMediaCast> {
+        return networkApi.getAnimeCharacters(id)
     }
 
     override suspend fun getSeasonList(): RetrofitNetworkResult<SeasonList, LocalSeasonList> {

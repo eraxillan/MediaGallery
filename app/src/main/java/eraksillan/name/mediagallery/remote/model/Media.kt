@@ -175,6 +175,50 @@ data class Media(
     )
 
     @Serializable
+    data class Cast(
+        @SerialName("character")
+        val character: MediaCharacter,
+        @SerialName("role")
+        val role: String,
+        @SerialName("favorites")
+        val favorites: Int,
+        @SerialName("voice_actors")
+        val voiceActors: List<MediaVoiceActor>
+    ) {
+        @Serializable
+        data class MediaCharacter(
+            @SerialName("mal_id")
+            val malId: Int,
+            @SerialName("url")
+            val url: String,
+            @SerialName("images")
+            val images: Images,
+            @SerialName("name")
+            val name: String,
+        )
+
+        @Serializable
+        data class MediaVoiceActor(
+            @SerialName("person")
+            val person: Person,
+            @SerialName("language")
+            val language: String,
+        ) {
+            @Serializable
+            data class Person(
+                @SerialName("mal_id")
+                val malId: Int,
+                @SerialName("url")
+                val url: String,
+                @SerialName("images")
+                val images: Images,
+                @SerialName("name")
+                val name: String,
+            )
+        }
+    }
+
+    @Serializable
     data class Entity(
         @SerialName("mal_id")
         val malId: Int,
@@ -304,6 +348,22 @@ fun Media.Relation.toLocal(): LocalMedia.Relation {
 
 fun Media.Link.toLocal(): LocalMedia.Link {
     return LocalMedia.Link(name, url)
+}
+
+fun Media.Cast.MediaCharacter.toLocal(): LocalMedia.Cast.MediaCharacter {
+    return LocalMedia.Cast.MediaCharacter(malId, url, images.toLocal(), name)
+}
+
+fun Media.Cast.MediaVoiceActor.Person.toLocal(): LocalMedia.Cast.MediaVoiceActor.Person {
+    return LocalMedia.Cast.MediaVoiceActor.Person(malId, url, images.toLocal(), name)
+}
+
+fun Media.Cast.MediaVoiceActor.toLocal(): LocalMedia.Cast.MediaVoiceActor {
+    return LocalMedia.Cast.MediaVoiceActor(person.toLocal(), language)
+}
+
+fun Media.Cast.toLocal(): LocalMedia.Cast {
+    return LocalMedia.Cast(character.toLocal(), role, favorites, voiceActors.map { it.toLocal() })
 }
 
 fun Media.Entity.toLocal(): LocalMedia.Entity {

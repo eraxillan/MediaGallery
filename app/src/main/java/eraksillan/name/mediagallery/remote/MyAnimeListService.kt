@@ -2,6 +2,7 @@ package eraksillan.name.mediagallery.remote
 
 import com.lembergsolutions.retrofitretry.api.RetryHandler
 import com.lembergsolutions.retrofitretry.api.RetryOnError
+import eraksillan.name.mediagallery.local.model.LocalMediaCast
 import eraksillan.name.mediagallery.local.model.LocalMediaExternalLinks
 import eraksillan.name.mediagallery.local.model.LocalMediaMoreInfo
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
@@ -9,6 +10,7 @@ import eraksillan.name.mediagallery.local.model.LocalMediaRelations
 import eraksillan.name.mediagallery.local.model.LocalMediaVideos
 import eraksillan.name.mediagallery.local.model.LocalSchedule
 import eraksillan.name.mediagallery.local.model.LocalSeasonList
+import eraksillan.name.mediagallery.remote.model.MediaCast
 import eraksillan.name.mediagallery.remote.model.MediaExternalLinks
 import eraksillan.name.mediagallery.remote.model.MediaMoreInfo
 import eraksillan.name.mediagallery.remote.model.MediaPictures
@@ -76,6 +78,13 @@ interface MyAnimeListService {
     suspend fun getAnimeMoreInfo(
         @Path("id") id: Int
     ) : RetrofitNetworkResult<MediaMoreInfo, LocalMediaMoreInfo>
+
+    // https://api.jikan.moe/v4/anime/{id}/characters
+    @RetryOnError
+    @GET("anime/{id}/characters")
+    suspend fun getAnimeCharacters(
+        @Path("id") id: Int
+    ) : RetrofitNetworkResult<MediaCast, LocalMediaCast>
 
     // https://api.jikan.moe/v4/seasons
     @RetryOnError(10, handlerClass = MyCustomRetryHandler::class)

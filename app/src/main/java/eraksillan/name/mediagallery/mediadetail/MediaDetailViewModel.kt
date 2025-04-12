@@ -1,9 +1,5 @@
 package eraksillan.name.mediagallery.mediadetail
 
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import dagger.assisted.Assisted
@@ -21,7 +17,6 @@ import eraksillan.name.mediagallery.paging.PagingViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 
 // https://medium.com/@cgaisl/how-to-pass-arguments-to-a-hiltviewmodel-from-compose-97c74a75f772
 @HiltViewModel(assistedFactory = MediaDetailViewModel.ViewModelFactory::class)
@@ -73,10 +68,24 @@ class MediaDetailViewModel @AssistedInject constructor(
         }
     )
 
+    val castsPagingVM = PagingViewModel<LocalMedia.Cast>(
+        getPageCallback = { page: Int, pageSize: Int ->
+            repository.getMediaCast(data.malId)
+                .map {
+                    when (it) {
+                        is NetworkResult.Success -> NetworkResult.Success(it.data.data)
+                        is NetworkResult.Error -> NetworkResult.Error(it.code, it.message)
+                        is NetworkResult.Exception -> NetworkResult.Exception(it.e)
+                    }
+                }
+        }
+    )
+
     init {
         imagesPagingVM.getPageData()
         videosPagingVM.getPageData()
         relationsPagingVM.getPageData()
+        castsPagingVM.getPageData()
     }
 
     fun onEvent(action: MediaDetailAction) {
@@ -111,7 +120,6 @@ class MediaDetailViewModel @AssistedInject constructor(
             }
 
             is MediaDetailAction.MoreInformationClicked -> {
-                //_state.update { it.copy(showMoreInformation = !it.showMoreInformation) }
                 navController.navigate(Route.MediaExtendedDetail(data))
             }
 
@@ -126,6 +134,18 @@ class MediaDetailViewModel @AssistedInject constructor(
             is MediaDetailAction.RelationClicked -> {
                 TODO()
             }
+
+            is MediaDetailAction.CharacterClicked -> {
+                TODO()
+            }
+
+            is MediaDetailAction.VoiceActorClicked -> {
+                TODO()
+            }
+
+            is MediaDetailAction.MoreCastClicked -> {
+                navController.navigate(Route.MediaCast(action.data))
+            }
         }
     }
 
@@ -134,6 +154,7 @@ class MediaDetailViewModel @AssistedInject constructor(
         imagesPagingVM.reset()
         videosPagingVM.reset()
         relationsPagingVM.reset()
+        castsPagingVM.reset()
     }
 
     @AssistedFactory

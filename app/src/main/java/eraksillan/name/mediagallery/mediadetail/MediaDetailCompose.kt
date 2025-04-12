@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
@@ -19,6 +20,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
@@ -41,6 +44,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -65,6 +69,7 @@ import eraksillan.name.mediagallery.local.model.LocalMedia
 import eraksillan.name.mediagallery.local.model.LocalMediaVideos
 import eraksillan.name.mediagallery.local.utils.displayDefaultTitle
 import eraksillan.name.mediagallery.local.utils.englishTitle
+import eraksillan.name.mediagallery.local.utils.mockCast
 import eraksillan.name.mediagallery.local.utils.mockMedia
 import eraksillan.name.mediagallery.local.utils.mockRelations
 import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
@@ -149,6 +154,7 @@ fun MediaDetailCompose(data: LocalMedia, viewModel: MediaDetailViewModel) {
             pictures = viewModel.imagesPagingVM.list,
             videos = viewModel.videosPagingVM.list,
             relations = viewModel.relationsPagingVM.list,
+            casts = viewModel.castsPagingVM.list,
             onEvent = { viewModel.onEvent(it) },
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         )
@@ -162,6 +168,7 @@ private fun MediaDetailContentCompose(
     pictures: List<LocalMedia.Images>,
     videos: List<LocalMediaVideos.Trailer>,
     relations: List<LocalMedia.Relation>,
+    casts: List<LocalMedia.Cast>,
     onEvent: (MediaDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -239,23 +246,22 @@ private fun MediaDetailContentCompose(
         }
 
         item {
-            Column {
-                relations.forEach { relation ->
-                    val relationName = relation.entry.firstOrNull()?.name
-                    val malId = relation.entry.firstOrNull()?.malId ?: -1
-                    if (relationName != null) {
-                        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
-                            Text(text = stringResource(relation.type.titleResId), modifier = Modifier
-                                .weight(0.3f)
-                                .padding(top = 14.dp))
-                            TextButton(
-                                onClick = { onEvent(MediaDetailAction.RelationClicked(malId)) },
-                                modifier = Modifier.weight(0.7f)
-                            ) {
-                                Text(text = relationName)
-                            }
-                        }
-                    }
+            MediaRelationsCompose(relations, onEvent)
+        }
+
+        item {
+            val casts = casts.sortedBy { it.favorites }.asReversed().takeWhile { it.favorites > CAST_FAVORITES_THRESHOLD }
+            MediaCastCompose(casts, onEvent)
+        }
+
+        item {
+            val casts = casts.sortedBy { it.favorites }.asReversed()
+            Box(modifier = Modifier.fillMaxWidth()) {
+                TextButton(
+                    onClick = { onEvent(MediaDetailAction.MoreCastClicked(casts)) },
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                ) {
+                    Text(text = stringResource(R.string.more_cast))
                 }
             }
         }
@@ -568,6 +574,130 @@ private fun MediaBasicInfoCompose(
     }
 }
 
+@Composable
+private fun MediaRelationsCompose(
+    relations: List<LocalMedia.Relation>,
+    onEvent: (MediaDetailAction) -> Unit
+) {
+    Column {
+        relations.forEach { relation ->
+            val relationName = relation.entry.firstOrNull()?.name
+            val malId = relation.entry.firstOrNull()?.malId ?: -1
+            if (relationName != null) {
+                Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = stringResource(relation.type.titleResId), modifier = Modifier
+                            .weight(0.3f)
+                            .padding(top = 14.dp)
+                    )
+                    TextButton(
+                        onClick = { onEvent(MediaDetailAction.RelationClicked(malId)) },
+                        modifier = Modifier.weight(0.7f)
+                    ) {
+                        Text(text = relationName)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MediaCastCompose(casts: List<LocalMedia.Cast>, onEvent: (MediaDetailAction) -> Unit) {
+    val imageStub = painterResource(id = R.drawable.media_item_placeholder)
+    LazyHorizontalGrid(
+        rows = GridCells.Fixed(2),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(all = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            // FIXME: the crutch, we need to calculate height dynamically somehow
+            .height(400.dp)
+    ) {
+        for (i in 0..casts.size - 1) {
+            val cast = casts[i]
+            item {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    AsyncImage(
+                        model = cast.character.images.jpeg?.base,
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(250.dp)
+                            .clickable { onEvent(MediaDetailAction.CharacterClicked(cast.character.malId)) },
+                        placeholder = imageStub,
+                        error = imageStub,
+                        contentScale = ContentScale.Crop,
+                        contentDescription = null,
+                        onError = { error ->
+                            Log.e("MediaGallery", error.result.toString())
+                        }
+                    )
+
+                    Box(modifier = Modifier.matchParentSize()) {
+                        Box(
+                            modifier = Modifier
+                                .alpha(0.7f)
+                                .background(Color.Black)
+                                .align(Alignment.BottomStart)
+                        ) {
+                            Text(
+                                text = cast.character.name,
+                                style = MaterialTheme.typography.labelLarge,
+                                color = Color.White,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 8.dp)
+                            )
+                        }
+                    }
+                }
+            }
+            item {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    val imageUrl = cast.voiceActors
+                        .firstOrNull { it.language == "Japanese" }?.person?.images?.jpeg?.base
+                    val voiceActorName = cast.voiceActors
+                        .firstOrNull { it.language == "Japanese" }?.person?.name ?: stringResource(R.string.unknown)
+
+                    AsyncImage(
+                        model = imageUrl,
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(250.dp)
+                            .clickable { onEvent(MediaDetailAction.CharacterClicked(cast.character.malId)) },
+                        placeholder = imageStub,
+                        error = imageStub,
+                        contentScale = ContentScale.Crop,
+                        contentDescription = null,
+                        onError = { error ->
+                            Log.e("MediaGallery", error.result.toString())
+                        }
+                    )
+
+                    Box(modifier = Modifier.matchParentSize()) {
+                        Box(
+                            modifier = Modifier
+                                .alpha(0.7f)
+                                .background(Color.Black)
+                                .align(Alignment.BottomStart)
+                        ) {
+                            Text(
+                                text = voiceActorName,
+                                style = MaterialTheme.typography.labelLarge,
+                                color = Color.White,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 8.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Suppress("unused")
 @Composable
 @Preview(showBackground = true)
@@ -578,7 +708,11 @@ private fun MediaDetailComposePreview() {
             pictures = emptyList<LocalMedia.Images>(),
             videos = emptyList(),
             relations = mockRelations,
+            casts = mockCast,
             { }
         )
     }
 }
+
+
+private const val CAST_FAVORITES_THRESHOLD = 150

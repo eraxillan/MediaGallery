@@ -37,7 +37,7 @@ class SeasonListViewModel @AssistedInject constructor(
     }
 
     fun navigateToSeason(year: Int, season: LocalMedia.Season) {
-        navController.navigate(Route.Season(year, season))
+        navController.navigate(Route.MediaSeason(year, season))
     }
 
     fun onEvent(action: SeasonListAction) {

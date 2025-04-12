@@ -30,8 +30,8 @@ import eraksillan.name.mediagallery.navigation.Route
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.seasonScreen(navController: NavController) {
-    composable<Route.Season> { backStackEntry ->
-        val route: Route.Season = backStackEntry.toRoute()
+    composable<Route.MediaSeason> { backStackEntry ->
+        val route: Route.MediaSeason = backStackEntry.toRoute()
 
         val viewModel =
             hiltViewModel<MediaListViewModel, MediaListViewModel.ViewModelFactory>(
