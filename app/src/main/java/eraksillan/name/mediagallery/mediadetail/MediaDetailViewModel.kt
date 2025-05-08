@@ -81,11 +81,25 @@ class MediaDetailViewModel @AssistedInject constructor(
         }
     )
 
+    val staffPagingVM = PagingViewModel<LocalMedia.Person>(
+        getPageCallback = { page: Int, pageSize: Int ->
+            repository.getMediaStaff(data.malId)
+                .map {
+                    when (it) {
+                        is NetworkResult.Success -> NetworkResult.Success(it.data.data)
+                        is NetworkResult.Error -> NetworkResult.Error(it.code, it.message)
+                        is NetworkResult.Exception -> NetworkResult.Exception(it.e)
+                    }
+                }
+        }
+    )
+
     init {
         imagesPagingVM.getPageData()
         videosPagingVM.getPageData()
         relationsPagingVM.getPageData()
         castsPagingVM.getPageData()
+        staffPagingVM.getPageData()
     }
 
     fun onEvent(action: MediaDetailAction) {
@@ -146,6 +160,14 @@ class MediaDetailViewModel @AssistedInject constructor(
             is MediaDetailAction.MoreCastClicked -> {
                 navController.navigate(Route.MediaCast(action.data))
             }
+
+            is MediaDetailAction.PersonClicked -> {
+                TODO()
+            }
+
+            is MediaDetailAction.MoreStaffClicked -> {
+                navController.navigate(Route.MediaStaff(action.data))
+            }
         }
     }
 
@@ -155,6 +177,7 @@ class MediaDetailViewModel @AssistedInject constructor(
         videosPagingVM.reset()
         relationsPagingVM.reset()
         castsPagingVM.reset()
+        staffPagingVM.reset()
     }
 
     @AssistedFactory

@@ -19,4 +19,6 @@ sealed class MediaDetailAction {
     class CharacterClicked(val malId: Int) : MediaDetailAction()
     class VoiceActorClicked(val malId: Int) : MediaDetailAction()
     class MoreCastClicked(val data: List<LocalMedia.Cast>) : MediaDetailAction()
+    class PersonClicked(val malId: Int) : MediaDetailAction()
+    class MoreStaffClicked(val data: List<LocalMedia.Person>) : MediaDetailAction()
 }

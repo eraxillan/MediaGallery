@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.material.icons.Icons
@@ -72,6 +74,7 @@ import eraksillan.name.mediagallery.local.utils.englishTitle
 import eraksillan.name.mediagallery.local.utils.mockCast
 import eraksillan.name.mediagallery.local.utils.mockMedia
 import eraksillan.name.mediagallery.local.utils.mockRelations
+import eraksillan.name.mediagallery.local.utils.mockStaff
 import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
 import java.util.Locale
 
@@ -155,6 +158,7 @@ fun MediaDetailCompose(data: LocalMedia, viewModel: MediaDetailViewModel) {
             videos = viewModel.videosPagingVM.list,
             relations = viewModel.relationsPagingVM.list,
             casts = viewModel.castsPagingVM.list,
+            staff = viewModel.staffPagingVM.list,
             onEvent = { viewModel.onEvent(it) },
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         )
@@ -169,6 +173,7 @@ private fun MediaDetailContentCompose(
     videos: List<LocalMediaVideos.Trailer>,
     relations: List<LocalMedia.Relation>,
     casts: List<LocalMedia.Cast>,
+    staff: List<LocalMedia.Person>,
     onEvent: (MediaDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -262,6 +267,23 @@ private fun MediaDetailContentCompose(
                     modifier = Modifier.align(Alignment.BottomEnd)
                 ) {
                     Text(text = stringResource(R.string.more_cast))
+                }
+            }
+        }
+
+        item {
+            val staff = staff.sortedBy { it.person.malId }.asReversed().take(STAFF_MAX_COUNT)
+            MediaStaffCompose(staff, onEvent)
+        }
+
+        item {
+            val staff = staff.sortedBy { it.person.malId }.asReversed()
+            Box(modifier = Modifier.fillMaxWidth()) {
+                TextButton(
+                    onClick = { onEvent(MediaDetailAction.MoreStaffClicked(staff)) },
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                ) {
+                    Text(text = stringResource(R.string.more_staff))
                 }
             }
         }
@@ -698,6 +720,55 @@ private fun MediaCastCompose(casts: List<LocalMedia.Cast>, onEvent: (MediaDetail
     }
 }
 
+@Composable
+private fun MediaStaffCompose(staff: List<LocalMedia.Person>, onEvent: (MediaDetailAction) -> Unit) {
+    val imageStub = painterResource(id = R.drawable.media_item_placeholder)
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(all = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)
+    ) {
+        items(staff) { person ->
+            Box(modifier = Modifier.fillMaxSize()) {
+                AsyncImage(
+                    model = person.person.images.jpeg?.base,
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(250.dp)
+                        .clickable { onEvent(MediaDetailAction.PersonClicked(person.person.malId)) },
+                    placeholder = imageStub,
+                    error = imageStub,
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                    onError = { error ->
+                        Log.e("MediaGallery", error.result.toString())
+                    }
+                )
+
+                Box(modifier = Modifier.matchParentSize()) {
+                    Box(
+                        modifier = Modifier
+                            .alpha(0.7f)
+                            .background(Color.Black)
+                            .align(Alignment.BottomStart)
+                    ) {
+                        Text(
+                            text = person.person.name,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = Color.White,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 8.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Suppress("unused")
 @Composable
 @Preview(showBackground = true)
@@ -709,6 +780,7 @@ private fun MediaDetailComposePreview() {
             videos = emptyList(),
             relations = mockRelations,
             casts = mockCast,
+            staff = mockStaff,
             { }
         )
     }
@@ -716,3 +788,4 @@ private fun MediaDetailComposePreview() {
 
 
 private const val CAST_FAVORITES_THRESHOLD = 150
+private const val STAFF_MAX_COUNT = 10

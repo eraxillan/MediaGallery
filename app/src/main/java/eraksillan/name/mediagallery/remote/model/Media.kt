@@ -219,6 +219,26 @@ data class Media(
     }
 
     @Serializable
+    data class PersonData(
+        @SerialName("mal_id")
+        val malId: Int,
+        @SerialName("url")
+        val url: String,
+        @SerialName("images")
+        val images: Images,
+        @SerialName("name")
+        val name: String,
+    )
+
+    @Serializable
+    data class Person(
+        @SerialName("person")
+        val person: PersonData,
+        @SerialName("positions")
+        val positions: List<String>
+    )
+
+    @Serializable
     data class Entity(
         @SerialName("mal_id")
         val malId: Int,
@@ -364,6 +384,14 @@ fun Media.Cast.MediaVoiceActor.toLocal(): LocalMedia.Cast.MediaVoiceActor {
 
 fun Media.Cast.toLocal(): LocalMedia.Cast {
     return LocalMedia.Cast(character.toLocal(), role, favorites, voiceActors.map { it.toLocal() })
+}
+
+fun Media.PersonData.toLocal(): LocalMedia.PersonData {
+    return LocalMedia.PersonData(malId, url, images.toLocal(), name)
+}
+
+fun Media.Person.toLocal(): LocalMedia.Person {
+    return LocalMedia.Person(person.toLocal(), positions)
 }
 
 fun Media.Entity.toLocal(): LocalMedia.Entity {

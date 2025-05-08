@@ -350,3 +350,61 @@ val mockCast = listOf<LocalMedia.Cast>(
         )
     )
 )
+
+val mockStaff = listOf<LocalMedia.Person>(
+    LocalMedia.Person(
+        LocalMedia.PersonData(
+            malId = 81348,
+            url = "https://myanimelist.net/people/81348/Jinkeun_Choi",
+            images = LocalMedia.Images(
+                LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/images/questionmark_23.gif?s=f7dcbc4a4603d18356d3dfef8abd655c")
+            ),
+            name = "Choi, Jinkeun"
+        ),
+        positions = listOf("Producer")
+    ),
+    LocalMedia.Person(
+        LocalMedia.PersonData(
+            malId = 65510,
+            url = "https://myanimelist.net/people/65510/Souta_Furuhashi",
+            images = LocalMedia.Images(
+                LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/images/voiceactors/3/75112.jpg?s=b8cf3f449adab7e7c39538d20927cfb4")
+            ),
+            name = "Furuhashi, Souta"
+        ),
+        positions = listOf("Producer")
+    ),
+    LocalMedia.Person(
+        LocalMedia.PersonData(
+            malId = 70967,
+            url = "https://myanimelist.net/people/70967/Atsushi_Kaneko",
+            images = LocalMedia.Images(
+                LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/images/voiceactors/3/81133.jpg?s=912005fd82f8f122d02c0cb27ffeb09b")
+            ),
+            name = "Kaneko, Atsushi"
+        ),
+        positions = listOf("Producer")
+    ),
+    LocalMedia.Person(
+        LocalMedia.PersonData(
+            malId = 81349,
+            url = "https://myanimelist.net/people/81349/Ayoung_Kim",
+            images = LocalMedia.Images(
+                LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/images/questionmark_23.gif?s=f7dcbc4a4603d18356d3dfef8abd655c")
+            ),
+            name = "Kim, Ayoung"
+        ),
+        positions = listOf("Producer")
+    ),
+    LocalMedia.Person(
+        LocalMedia.PersonData(
+            malId = 68136,
+            url = "https://myanimelist.net/people/68136/Jinhae_Park",
+            images = LocalMedia.Images(
+                LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/images/questionmark_23.gif?s=f7dcbc4a4603d18356d3dfef8abd655c")
+            ),
+            name = "Park, Jinhae"
+        ),
+        positions = listOf("Producer")
+    ),
+)
