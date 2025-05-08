@@ -1,6 +1,5 @@
 package eraksillan.name.mediagallery.remote
 
-import com.lembergsolutions.retrofitretry.implementation.RetrofitRetryCallAdapterFactory
 import eraksillan.name.mediagallery.local.model.LocalMediaCast
 import eraksillan.name.mediagallery.local.model.LocalMediaExternalLinks
 import eraksillan.name.mediagallery.local.model.LocalMediaMoreInfo
@@ -42,7 +41,6 @@ class RetrofitNetwork @Inject constructor(
             // to prevent initializing OkHttp on the main thread
             .callFactory { okhttpCallFactory.get().newCall(it) }
             .addConverterFactory(networkJson.asConverterFactory("application/json".toMediaType()))
-            .addCallAdapterFactory(RetrofitRetryCallAdapterFactory.createCoroutineAdapter())
             .addCallAdapterFactory(RetrofitCallAdapterFactory.create())
             .build()
             .create(MyAnimeListService::class.java)

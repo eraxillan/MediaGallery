@@ -21,7 +21,7 @@ ksp = "2.1.10-1.0.30"
 retrofit = "2.11.0"
 okhttp = "4.12.0"
 coil = "3.1.0"
-retrofit-retry = "1.0.0"
+java-guava = "33.4.8-android"
 
 [libraries]
 accompanist-adaptive = { module = "com.google.accompanist:accompanist-adaptive", version.ref = "accompanist" }
@@ -56,7 +56,7 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 coil-kt-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-kt-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
-retrofit-retry = { group ="com.lembergsolutions", name = "retrofitretry", version.ref = "retrofit-retry" }
+java-guava = { group = "com.google.guava", name = "guava", version.ref = "java-guava" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

@@ -74,7 +74,7 @@ dependencies {
     implementation(libs.coil.kt.compose)
     implementation(libs.coil.kt.network.okhttp)
 
-    implementation(libs.retrofit.retry)
+    implementation(libs.java.guava)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
