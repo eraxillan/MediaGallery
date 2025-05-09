@@ -408,3 +408,11 @@ val mockStaff = listOf<LocalMedia.Person>(
         positions = listOf("Producer")
     ),
 )
+
+val mockThemes = LocalMedia.Themes(
+    openings = listOf("\"ReawakeR (feat. Felix of Stray Kids)\" by LiSA (eps 1-11,13)"),
+    endings = listOf(
+        "1: \"UN-APEX\" by TK from Ling tosite sigure (TK from 凛として時雨) (eps 1-12)",
+        "2: \"LEveL\" by SawanoHiroyuki[nZk]:TOMORROW X TOGETHER (eps 13)"
+    )
+)

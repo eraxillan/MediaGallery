@@ -21,9 +21,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
@@ -75,6 +76,7 @@ import eraksillan.name.mediagallery.local.utils.mockCast
 import eraksillan.name.mediagallery.local.utils.mockMedia
 import eraksillan.name.mediagallery.local.utils.mockRelations
 import eraksillan.name.mediagallery.local.utils.mockStaff
+import eraksillan.name.mediagallery.local.utils.mockThemes
 import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
 import java.util.Locale
 
@@ -159,6 +161,7 @@ fun MediaDetailCompose(data: LocalMedia, viewModel: MediaDetailViewModel) {
             relations = viewModel.relationsPagingVM.list,
             casts = viewModel.castsPagingVM.list,
             staff = viewModel.staffPagingVM.list,
+            themes = viewModel.themesPagingVM.list.first(),
             onEvent = { viewModel.onEvent(it) },
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         )
@@ -174,6 +177,7 @@ private fun MediaDetailContentCompose(
     relations: List<LocalMedia.Relation>,
     casts: List<LocalMedia.Cast>,
     staff: List<LocalMedia.Person>,
+    themes: LocalMedia.Themes,
     onEvent: (MediaDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -286,6 +290,10 @@ private fun MediaDetailContentCompose(
                     Text(text = stringResource(R.string.more_staff))
                 }
             }
+        }
+
+        item {
+            MediaThemesCompose(themes)
         }
     }
 }
@@ -769,6 +777,54 @@ private fun MediaStaffCompose(staff: List<LocalMedia.Person>, onEvent: (MediaDet
     }
 }
 
+@Composable
+private fun MediaTheme(name: String) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.baseline_play_circle_outline_24),
+            contentDescription = null,
+            tint = Color.LightGray,
+            modifier = Modifier.size(24.dp)
+        )
+        Text(text = name, modifier = Modifier
+            .padding(start = 8.dp, end = 8.dp)
+            .weight(1.0f))
+        Box(
+            modifier = Modifier
+                .background(
+                    MaterialTheme.colorScheme.surfaceVariant,
+                    RoundedCornerShape(8.dp)
+                )
+        ) {
+            Text(
+                text = "MV",
+                color = Color.White,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(4.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun MediaThemesCompose(themes: LocalMedia.Themes) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(text = stringResource(R.string.opening_theme), color = MaterialTheme.colorScheme.outline)
+        Column {
+            themes.openings.forEach {
+                MediaTheme(it)
+            }
+        }
+        Spacer(Modifier.height(8.dp))
+        Text(text = stringResource(R.string.ending_theme), color = MaterialTheme.colorScheme.outline)
+        themes.endings.forEach {
+            Row {
+                MediaTheme(it)
+            }
+        }
+    }
+}
+
 @Suppress("unused")
 @Composable
 @Preview(showBackground = true)
@@ -781,6 +837,7 @@ private fun MediaDetailComposePreview() {
             relations = mockRelations,
             casts = mockCast,
             staff = mockStaff,
+            themes = mockThemes,
             { }
         )
     }

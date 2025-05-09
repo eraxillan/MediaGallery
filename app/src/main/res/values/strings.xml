@@ -58,6 +58,8 @@
     <string name="cast">Cast</string>
     <string name="voice">Voice: %s</string>
     <string name="staff">Staff</string>
+    <string name="opening_theme">Opening Theme</string>
+    <string name="ending_theme">Ending Theme</string>
 
     <string name="rating_g">G (All Ages)</string>
     <string name="rating_pg">PG (Children)</string>

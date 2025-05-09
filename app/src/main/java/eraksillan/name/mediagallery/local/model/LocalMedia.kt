@@ -259,6 +259,13 @@ data class LocalMedia(
 
     @Parcelize
     @Serializable
+    data class Themes(
+        val openings: List<String>,
+        val endings: List<String>
+    ) : Parcelable
+
+    @Parcelize
+    @Serializable
     data class Entity(
         val malId: Int,
         val type: String,

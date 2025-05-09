@@ -94,12 +94,26 @@ class MediaDetailViewModel @AssistedInject constructor(
         }
     )
 
+    val themesPagingVM = PagingViewModel<LocalMedia.Themes>(
+        getPageCallback = { page: Int, pageSize: Int ->
+            repository.getMediaThemes(data.malId)
+                .map {
+                    when (it) {
+                        is NetworkResult.Success -> NetworkResult.Success(listOf(it.data.data))
+                        is NetworkResult.Error -> NetworkResult.Error(it.code, it.message)
+                        is NetworkResult.Exception -> NetworkResult.Exception(it.e)
+                    }
+                }
+        }
+    )
+
     init {
         imagesPagingVM.getPageData()
         videosPagingVM.getPageData()
         relationsPagingVM.getPageData()
         castsPagingVM.getPageData()
         staffPagingVM.getPageData()
+        themesPagingVM.getPageData()
     }
 
     fun onEvent(action: MediaDetailAction) {

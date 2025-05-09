@@ -239,6 +239,14 @@ data class Media(
     )
 
     @Serializable
+    data class Themes(
+        @SerialName("openings")
+        val openings: List<String>,
+        @SerialName("endings")
+        val endings: List<String>
+    )
+
+    @Serializable
     data class Entity(
         @SerialName("mal_id")
         val malId: Int,
@@ -392,6 +400,10 @@ fun Media.PersonData.toLocal(): LocalMedia.PersonData {
 
 fun Media.Person.toLocal(): LocalMedia.Person {
     return LocalMedia.Person(person.toLocal(), positions)
+}
+
+fun Media.Themes.toLocal(): LocalMedia.Themes {
+    return LocalMedia.Themes(openings, endings)
 }
 
 fun Media.Entity.toLocal(): LocalMedia.Entity {
