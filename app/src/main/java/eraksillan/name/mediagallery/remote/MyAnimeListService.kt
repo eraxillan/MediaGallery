@@ -5,6 +5,7 @@ import eraksillan.name.mediagallery.local.model.LocalMediaExternalLinks
 import eraksillan.name.mediagallery.local.model.LocalMediaMoreInfo
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
 import eraksillan.name.mediagallery.local.model.LocalMediaRelations
+import eraksillan.name.mediagallery.local.model.LocalMediaReviews
 import eraksillan.name.mediagallery.local.model.LocalMediaStaff
 import eraksillan.name.mediagallery.local.model.LocalMediaThemes
 import eraksillan.name.mediagallery.local.model.LocalMediaVideos
@@ -15,6 +16,7 @@ import eraksillan.name.mediagallery.remote.model.MediaExternalLinks
 import eraksillan.name.mediagallery.remote.model.MediaMoreInfo
 import eraksillan.name.mediagallery.remote.model.MediaPictures
 import eraksillan.name.mediagallery.remote.model.MediaRelations
+import eraksillan.name.mediagallery.remote.model.MediaReviews
 import eraksillan.name.mediagallery.remote.model.MediaStaff
 import eraksillan.name.mediagallery.remote.model.MediaThemes
 import eraksillan.name.mediagallery.remote.model.MediaVideos
@@ -84,6 +86,12 @@ interface MyAnimeListService {
     suspend fun getAnimeThemes(
         @Path("id") id: Int
     ) : RetrofitNetworkResult<MediaThemes, LocalMediaThemes>
+
+    // https://api.jikan.moe/v4/anime/{id}/reviews
+    @GET("anime/{id}/reviews?preliminary=true&spoilers=true")
+    suspend fun getAnimeReviews(
+        @Path("id") id: Int
+    ) : RetrofitNetworkResult<MediaReviews, LocalMediaReviews>
 
     // https://api.jikan.moe/v4/seasons
     @GET("seasons")

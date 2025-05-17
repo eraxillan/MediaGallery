@@ -266,6 +266,44 @@ data class LocalMedia(
 
     @Parcelize
     @Serializable
+    data class ReviewUser(
+        val name: String,
+        val url: String,
+        val images: Images?,
+    ) : Parcelable
+
+    @Parcelize
+    @Serializable
+    data class ReviewReactions(
+        val overall: Int,
+        val nice: Int,
+        val loveIt: Int,
+        val funny: Int,
+        val confusing: Int,
+        val informative: Int,
+        val wellWritten: Int,
+        val creative: Int,
+    ) : Parcelable
+
+    @Parcelize
+    @Serializable
+    data class Review(
+        val user: ReviewUser,
+        val malId: Int,
+        val url: String,
+        val type: String,
+        val reactions: ReviewReactions,
+        val date: String,
+        val review: String,
+        val score: Int,
+        val tags: List<String>,
+        val isSpoiler: Boolean,
+        val isPreliminary: Boolean,
+        val episodesWatched: Int?,
+    ) : Parcelable
+
+    @Parcelize
+    @Serializable
     data class Entity(
         val malId: Int,
         val type: String,

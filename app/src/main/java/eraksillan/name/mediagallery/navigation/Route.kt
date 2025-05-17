@@ -24,4 +24,7 @@ sealed interface Route {
 
     @Serializable
     data class MediaStaff(val data: List<LocalMedia.Person>) : Route
+
+    @Serializable
+    data class MediaReviews(val data: List<LocalMedia.Review>) : Route
 }

@@ -247,6 +247,64 @@ data class Media(
     )
 
     @Serializable
+    data class ReviewUser(
+        @SerialName("username")
+        val name: String,
+        @SerialName("url")
+        val url: String,
+        @SerialName("images")
+        val images: Images?,
+    )
+
+    @Serializable
+    data class ReviewReactions(
+        @SerialName("overall")
+        val overall: Int,
+        @SerialName("nice")
+        val nice: Int,
+        @SerialName("love_it")
+        val loveIt: Int,
+        @SerialName("funny")
+        val funny: Int,
+        @SerialName("confusing")
+        val confusing: Int,
+        @SerialName("informative")
+        val informative: Int,
+        @SerialName("well_written")
+        val wellWritten: Int,
+        @SerialName("creative")
+        val creative: Int,
+    )
+
+    @Serializable
+    data class Review(
+        @SerialName("user")
+        val user: ReviewUser,
+        @SerialName("mal_id")
+        val malId: Int,
+        @SerialName("url")
+        val url: String,
+        @SerialName("type")
+        val type: String,
+        @SerialName("reactions")
+        val reactions: ReviewReactions,
+        @SerialName("date")
+        val date: String,
+        @SerialName("review")
+        val review: String,
+        @SerialName("score")
+        val score: Int,
+        @SerialName("tags")
+        val tags: List<String>,
+        @SerialName("is_spoiler")
+        val isSpoiler: Boolean,
+        @SerialName("is_preliminary")
+        val isPreliminary: Boolean,
+        @SerialName("episodes_watched")
+        val episodesWatched: Int?,
+    )
+
+    @Serializable
     data class Entity(
         @SerialName("mal_id")
         val malId: Int,
@@ -404,6 +462,40 @@ fun Media.Person.toLocal(): LocalMedia.Person {
 
 fun Media.Themes.toLocal(): LocalMedia.Themes {
     return LocalMedia.Themes(openings, endings)
+}
+
+fun Media.ReviewUser.toLocal(): LocalMedia.ReviewUser {
+    return LocalMedia.ReviewUser(name, url, images?.toLocal())
+}
+
+fun Media.ReviewReactions.toLocal(): LocalMedia.ReviewReactions {
+    return LocalMedia.ReviewReactions(
+        overall,
+        nice,
+        loveIt,
+        funny,
+        confusing,
+        informative,
+        wellWritten,
+        creative
+    )
+}
+
+fun Media.Review.toLocal(): LocalMedia.Review {
+    return LocalMedia.Review(
+        user = user.toLocal(),
+        malId = malId,
+        url = url,
+        type = type,
+        reactions = reactions.toLocal(),
+        date = date,
+        review = review,
+        score = score,
+        tags = tags,
+        isSpoiler = isSpoiler,
+        isPreliminary = isPreliminary,
+        episodesWatched = episodesWatched
+    )
 }
 
 fun Media.Entity.toLocal(): LocalMedia.Entity {

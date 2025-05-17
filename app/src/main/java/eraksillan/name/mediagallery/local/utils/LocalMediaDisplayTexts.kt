@@ -1,12 +1,6 @@
 package eraksillan.name.mediagallery.local.utils
 
 import eraksillan.name.mediagallery.local.model.LocalMedia
-import eraksillan.name.mediagallery.remote.model.parseOrNull
-import kotlinx.datetime.Instant
-import kotlinx.datetime.format
-import kotlinx.datetime.format.DateTimeComponents
-import kotlinx.datetime.format.MonthNames.Companion.ENGLISH_ABBREVIATED
-import kotlinx.datetime.format.char
 import java.util.Locale
 
 fun LocalMedia.displayDefaultTitle(): String {
@@ -59,16 +53,7 @@ fun LocalMedia.displayGenresText(): String {
 }
 
 fun LocalMedia.displayStartDateText(): String {
-    // Example: Mar 26, 2025
-    val dateCustomFormat = DateTimeComponents.Format {
-        monthName(ENGLISH_ABBREVIATED)
-        char(' ')
-        dayOfMonth()
-        char(',')
-        char(' ')
-        year()
-    }
-    return Instant.parseOrNull(aired.from)?.format(dateCustomFormat) ?: "N/A"
+    return monthAndDayText(aired.from)
 }
 
 fun LocalMedia.scoreDisplayText(): String {

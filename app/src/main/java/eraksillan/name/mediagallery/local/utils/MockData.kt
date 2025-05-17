@@ -416,3 +416,96 @@ val mockThemes = LocalMedia.Themes(
         "2: \"LEveL\" by SawanoHiroyuki[nZk]:TOMORROW X TOGETHER (eps 13)"
     )
 )
+
+val mockReviews = listOf<LocalMedia.Review>(
+    LocalMedia.Review(
+        user = LocalMedia.ReviewUser(
+            name = "Marinate1016",
+            url = "https://myanimelist.net/profile/Marinate1016",
+            images = LocalMedia.Images(
+                jpeg = LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/s/common/userimages/a6ec3ffc-a661-4605-8619-ce0bf635272a_42x62_i?s=31c20b71d4d91a8ce0085e77657afad2"),
+                webp = LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/s/common/userimages/a6ec3ffc-a661-4605-8619-ce0bf635272a_42x62_i?s=31c20b71d4d91a8ce0085e77657afad2")
+            )
+        ),
+        malId = 556582,
+        url = "https://myanimelist.net/reviews.php?id=556582",
+        type = "anime",
+        reactions = LocalMedia.ReviewReactions(
+            overall = 241,
+            nice = 126,
+            loveIt = 36,
+            funny = 39,
+            confusing = 21,
+            informative = 0,
+            wellWritten = 19,
+            creative = 0
+        ),
+        date = "2025-03-29T08:52:00+00:00",
+        review = "No amount of memes or social media posts could ever make me hate Solo Leveling. No, Solo Leveling doesn’t have the strongest story, yes Jinwoo aura farms every episode and beats the bad guy, yes A-1 and Sawano help take this series to new heights, but is it a crime to just enjoy shows for the spectacle? At the end of the day, anime is about entertainment and pushing the envelope of the animation medium, which solo leveling does. Not everything needs to reinvent the wheel, it’s sort of like expecting every meal you eat to be a Michelin star restaurant. It’s ok to enjoya fast food meal every now and again if you just view and accept it as such. That’s basically how I feel about Solo Leveling. It’s not the best anime ever, but it is very enjoyable and unlike many people, I actually enjoy the story, characters and premise. Season 2 was only an upgrade in every way for me and is a must watch for any action or sakuga fan.\n\nWhile I don’t think Solo Leveling’s story is the best, I have to say I’m in the minority of people who actually think it’s kind of good? Sure, it’s slow to play out, but there’s been a clear goal in this series from day 1, curing Jinwoo’s mother and not so subtle hints about the magic beast gates/raids being more than they seem. Season 2 builds on this by clearly setting up some greater power that’s pitting humanity against the magic beasts. For what reason? We don’t know, it’s a slow build up, but I completely disagree with the logic that “Solo leveling has no story” I really enjoy the mystery and speculating every week about what’s going on in the world. If you’re looking for something extremely complex then yea, Solo leveling isn’t going to knock your socks off, it’s unashamedly a power fantasy, but if you go in with an open mind and actually analyze it in good faith I think many people will agree that there’s a decent amount of intrigue here.\n\nMy one real complaint with Solo leveling is that Jinwoo feels so one dimensional. It’s like he actually regressed as a person, but improved as a hunter since he got his abilities. Sometimes it feels like watching a cardboard cutout rather than a person. That’s just me speaking as an anime only who’s only got these two seasons to go off of though. I assume he’s going to actually change as the story goes on and new threats emerge, but damn he just feels so edgy in this season. This isn’t entirely out of place given the stuff he’s been through in the past, his family situation, etc., but I would like to see a little more personality!\n\nGoes without saying A-1 and Sawano delivered yet another masterclass this season. I think the OST is even better, the OP with my goat Felix from stray kidz and LiSA has been on repeat nonstop since it dropped. The fights in this season surpass the first and the art is very good as usual. The production quality is amazing, it’s one of the best looking anime out there and it just reaffirms my belief that A-1 pictures at their best are as good as anyone in this industry. SAO Alicization, 86 and now Solo Leveling have shown that they have arrived and are here to stay. So many times during this season I just found my jaw on the floor with how great the choreography and storyboarding looked. Bravo.\n\nIf you step back and simply consider Solo Leveling as an easily digestible feast on the eyes with a simple, but interesting plot, you’ll enjoy this. If you come into it trying to be an anime critic and nitpick every aspect of the series, you’ll be miserable. There’s a reason why it’s one of the most popular manhwa ever. \n\nSolo leveling season 2 gets 9 out of 10",
+        score = 9,
+        tags = listOf("Recommended"),
+        isSpoiler = false,
+        isPreliminary = false,
+        episodesWatched = null
+    ),
+    LocalMedia.Review(
+        user = LocalMedia.ReviewUser(
+            name = "Bardwyne",
+            url = "https://myanimelist.net/profile/Bardwyne",
+            images = LocalMedia.Images(
+                jpeg = LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/s/common/userimages/e22e3484-9970-4fc7-b548-2f38e79c3359_42x62_i?s=98fc9ce58519074167eae46cdc8625ff"),
+                webp = LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/s/common/userimages/e22e3484-9970-4fc7-b548-2f38e79c3359_42x62_i?s=98fc9ce58519074167eae46cdc8625ff")
+            )
+        ),
+        malId = 556652,
+        url = "https://myanimelist.net/reviews.php?id=556652",
+        type = "anime",
+        reactions = LocalMedia.ReviewReactions(
+            overall = 123,
+            nice = 81,
+            loveIt = 1,
+            funny = 15,
+            confusing = 21,
+            informative = 2,
+            wellWritten = 2,
+            creative = 1
+        ),
+        date = "2025-03-29T14:45:00+00:00",
+        review = "Just as the last season, Solo Leveling s2 has flashy action and animation, but ultimately it's pretty substanceless - relying on hype and \"aura\" rather than characters or narrative. Considering that, It also takes itself way too seriously. Even for those who specifically want action they may find themselves uninterested in the fights due to a lack of compelling motivations or interest in the combatants. And even if that isn't an issue - plenty of shows could scratch the same itch for surface level action and hype, some of which are more technically impressive or otherwise better. But if all you need is some cool fights andhype - this is your jam.\nIf not, you're better off looking elsewhere.",
+        score = 6,
+        tags = listOf("Mixed Feelings"),
+        isSpoiler = false,
+        isPreliminary = false,
+        episodesWatched = null
+    ),
+    LocalMedia.Review(
+        user = LocalMedia.ReviewUser(
+            name = "Tkit",
+            url = "https://myanimelist.net/profile/Tkit",
+            images = LocalMedia.Images(
+                jpeg = LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/s/common/userimages/56bd3ea6-2bf8-47ed-8f0e-c6275dfbce17_225w?s=5ace8145f949260580e4840da945d578"),
+                webp = LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/s/common/userimages/56bd3ea6-2bf8-47ed-8f0e-c6275dfbce17_225w?s=5ace8145f949260580e4840da945d578")
+            )
+        ),
+        malId = 556578,
+        url = "https://myanimelist.net/reviews.php?id=556578",
+        type = "anime",
+        reactions = LocalMedia.ReviewReactions(
+            overall = 523,
+            nice = 234,
+            loveIt = 22,
+            funny = 135,
+            confusing = 121,
+            informative = 0,
+            wellWritten = 10,
+            creative = 1
+        ),
+        date = "2025-04-02T08:39:00+00:00",
+        review = "This is genuinely the most pathetic new mainstream anime I've seen. Solo Leveling shows no ambition, no effort and no emotion. Even if considered among the big range of slop power fantasy it is one of the blandest of guilty pleasures one can have. There is no skill in terms of writing here, therefore it is critical to have a thorough look at Solo Leveling's animation and how it handles its role as said power fantasy. Those are its only values and even here it is overhyped and lacking. Everything here is made to revolve around our great Sung lil-bitch. Structure of the story and the'characters' are here to highlight how cool the mc is and to react to how cool he is, that is their whole goal. Every female is made to start lusting over Sung except for his family, which is also here to show that he is cool and cares about his family, beside that they react (as the rest of npcs do) to his epic aura. Story in here follows roughly this structure:\nSung 'needs to get stronger' (we will get back to it) \nHe goes to grind, which goes effortlessly \nHe encounters a boss which is strong enough to warrant a longer fight, but still never had a chance to beat him.\nThroughout or at the end of those steps there are many npcs to react to his awesomeness\nRepeat 7 times \nFinish it with a super boss which trashes npcs, but ends up destroyed like the rest\n\nThe worst part about this awful story is how easily it could have been improved. Why Sung lil-bitch needs to get stronger? To get money for his sister and find a way to save his mother. Why isn't there a time limit to this? His mother can just lay in bed for the next 10 years and his sister was doing fine even without the money. All they had to do was having his mother get so ill that she would die in two months or something and have it destroy her body. Same with the sister, just have her in heavy debt and maybe forced to work some side job that is dangerous and hinders her school life. Those are the smallest, easiest to implement changes and already you have some urgency, drama and tension which don't exist in this show as of now. Sung himself could have been also easily improved. Show hints at his moral fall but does nothing with it. Dude casually murders someone because in the state of panic a frightened npc attacks him. There are moments when he lacks empathy and comments on it, why isn't it expanded into something meaningful? Instead he is just cool, edgy and always wins. That is what I mean by the lack of ambition, the power fantasy aspect is just MC STRONG with no creativity or ability.\n\nThe fact that this show doesn't seem to realize how much it sucks is very frustrating. Anime genuinely tries to have me worried about the moron npcs like they are people or something. Oh no, will the sniffa lady designed to be in love with lil-bitch die on the first real mission I see her on? Oh no will those heroic fighters get wiped out (repeat 6 times)? Same with the mc. The funniest shit is how they try to build tension for every unlosable fight. I loved for example the epic music for the 1st episode fight between a summon and random bear, truly an epic face off. Even the premise of the show is abandoned. I know it is called Solo Leveling, but instead of just having grind from games they could have brough some fun gaming strategies. Never have I seen Sung go 'this fight looks tough let me buff myself, setup some traps and creativly use some skills/equipment' its always just SMASH or SLASH.\n\nEnough about obvious flaws, let's talk visuals.\nSolo Leveling is widely considered pretty which is true, it is also important to note that second season has a much better production quality than the first one. On the other hand one hears so much about said quality that you might expect something revolutionary like a consistent peak animation, I'm here to say that that is not the case. Before we focus on the fights it is important to acknowledge that we don't always have said fights and outside of them anime decreases in quality. Its not awful, it is just standard, sometimes lighting will be pretty cool tho. In the fights by far VFX are the best, some elemental spells look beautiful. Lightning, particles, etc. are cool and movement made slick. Fights have quite a few animation highlights to the point that sometimes we even get some decent choreography. It happens quite rarely (most prominent in the 6th episode). It is quite a high accomplishments for a slop anime, but it is important to remember than it has been done better before. Most disappointing were the backgrounds which at least sometimes existed in fights, but beside that weren't doing anything too impressive. You can see what I mean in the 12th episode. We change the fight to those controversial floating lines which always when executed correctly exists to highlight good background animation, but here said background is either non existent or gray and boring, with not much of anything going on.\nTalking about the climactic fight it was the biggest disappointment of Solo Leveling. 60% was just slapping each other, there was the aforementioned fumble with lines and the rest was also just vfx line attacks followed by damage, it looked cool, but was weaker than most of the other big fights of this series.\nWhole scale of the action sequences can't be handled by the anime. All the time we have big team fights and with so many individuals we often get to see a lot of poor cgi, which extends to cars as well.\n\nTo wrap it up, yes fights look good, but not good enough to carry this disaster on its own. That is why you can only enjoy this show if you can get entertainment from its super boring form of a classic power fantasy. You may say I'm nitpicking, but you have to realise that if all you have is animation than that is the level of scrutiny you are going to get. I genuinely believe that instead of watching this hit piece of shit you should invest 10 minutes of your life on research and you will easily find a truly good anime that has good animation and/or good power fantasy.",
+        score = 3,
+        tags = listOf("Not Recommended", "Funny"),
+        isSpoiler = false,
+        isPreliminary = false,
+        episodesWatched = null
+    )
+)

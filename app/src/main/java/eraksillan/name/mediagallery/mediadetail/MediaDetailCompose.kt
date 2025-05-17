@@ -75,8 +75,10 @@ import eraksillan.name.mediagallery.local.utils.englishTitle
 import eraksillan.name.mediagallery.local.utils.mockCast
 import eraksillan.name.mediagallery.local.utils.mockMedia
 import eraksillan.name.mediagallery.local.utils.mockRelations
+import eraksillan.name.mediagallery.local.utils.mockReviews
 import eraksillan.name.mediagallery.local.utils.mockStaff
 import eraksillan.name.mediagallery.local.utils.mockThemes
+import eraksillan.name.mediagallery.local.utils.monthAndDayText
 import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
 import java.util.Locale
 
@@ -161,7 +163,8 @@ fun MediaDetailCompose(data: LocalMedia, viewModel: MediaDetailViewModel) {
             relations = viewModel.relationsPagingVM.list,
             casts = viewModel.castsPagingVM.list,
             staff = viewModel.staffPagingVM.list,
-            themes = viewModel.themesPagingVM.list.first(),
+            themes = viewModel.themesPagingVM.list.firstOrNull(),
+            reviews = viewModel.reviewsPagingVM.list,
             onEvent = { viewModel.onEvent(it) },
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         )
@@ -177,7 +180,8 @@ private fun MediaDetailContentCompose(
     relations: List<LocalMedia.Relation>,
     casts: List<LocalMedia.Cast>,
     staff: List<LocalMedia.Person>,
-    themes: LocalMedia.Themes,
+    themes: LocalMedia.Themes?,
+    reviews: List<LocalMedia.Review>,
     onEvent: (MediaDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -293,7 +297,24 @@ private fun MediaDetailContentCompose(
         }
 
         item {
-            MediaThemesCompose(themes)
+            if (themes != null) {
+                MediaThemesCompose(themes)
+            }
+        }
+
+        item {
+            MediaReviewsCompose(reviews.take(REVIEW_MAX_COUNT), data.episodes, onEvent)
+        }
+
+        item {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                TextButton(
+                    onClick = { onEvent(MediaDetailAction.MoreReviewsClicked(reviews)) },
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                ) {
+                    Text(text = stringResource(R.string.more_reviews))
+                }
+            }
         }
     }
 }
@@ -786,9 +807,12 @@ private fun MediaTheme(name: String) {
             tint = Color.LightGray,
             modifier = Modifier.size(24.dp)
         )
-        Text(text = name, modifier = Modifier
-            .padding(start = 8.dp, end = 8.dp)
-            .weight(1.0f))
+        Text(
+            text = name,
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp)
+                .weight(1.0f)
+        )
         Box(
             modifier = Modifier
                 .background(
@@ -825,6 +849,61 @@ private fun MediaThemesCompose(themes: LocalMedia.Themes) {
     }
 }
 
+@Composable
+private fun MediaReviewCompose(review: LocalMedia.Review, episodes: Int?, onEvent: (MediaDetailAction) -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { onEvent(MediaDetailAction.ReviewClicked(review)) })
+    ) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.outline_star_outline_24),
+                contentDescription = null,
+                tint = Color.Black,
+                modifier = Modifier.size(16.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            // 9/10 by Marinate1016
+            Text(
+                text = stringResource(R.string.review_title, review.score, review.user.name),
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Box(modifier = Modifier.fillMaxWidth()) {
+            // 13/13 ep, 241 helpful   Mar 29, 2025
+            Text(
+                text = stringResource(
+                    R.string.review_subtitle,
+                    (review.episodesWatched?.toString() ?: episodes?.toString()) ?: "N/A",
+                    episodes?.toString() ?: "N/A",
+                    review.reactions.overall
+                ),
+                modifier = Modifier.align(Alignment.TopStart)
+            )
+            Text(
+                text = monthAndDayText(review.date),
+                modifier = Modifier.align(Alignment.TopEnd)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+        // Two lines of text with ellipsis
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = review.review, maxLines = 2, overflow = TextOverflow.Ellipsis)
+    }
+}
+
+@Composable
+private fun MediaReviewsCompose(reviews: List<LocalMedia.Review>, episodes: Int?, onEvent: (MediaDetailAction) -> Unit) {
+    Spacer(modifier = Modifier.height(32.dp))
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        reviews.forEach {
+            MediaReviewCompose(it, episodes, onEvent)
+        }
+    }
+}
+
 @Suppress("unused")
 @Composable
 @Preview(showBackground = true)
@@ -838,6 +917,7 @@ private fun MediaDetailComposePreview() {
             casts = mockCast,
             staff = mockStaff,
             themes = mockThemes,
+            reviews = mockReviews,
             { }
         )
     }
@@ -846,3 +926,4 @@ private fun MediaDetailComposePreview() {
 
 private const val CAST_FAVORITES_THRESHOLD = 150
 private const val STAFF_MAX_COUNT = 10
+private const val REVIEW_MAX_COUNT = 3
