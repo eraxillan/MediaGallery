@@ -304,6 +304,23 @@ data class LocalMedia(
 
     @Parcelize
     @Serializable
+    data class RecommendationEntry(
+        val malId: Int,
+        val url: String?,
+        val images: Images?,
+        val title: String?
+    ) : Parcelable
+
+    @Parcelize
+    @Serializable
+    data class Recommendation(
+        val entry: RecommendationEntry,
+        val url: String?,
+        val votes: Int?
+    ) : Parcelable
+
+    @Parcelize
+    @Serializable
     data class Entity(
         val malId: Int,
         val type: String,

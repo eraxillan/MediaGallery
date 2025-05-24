@@ -509,3 +509,48 @@ val mockReviews = listOf<LocalMedia.Review>(
         episodesWatched = null
     )
 )
+
+val mockRecommendations = listOf<LocalMedia.Recommendation>(
+    LocalMedia.Recommendation(
+        entry = LocalMedia.RecommendationEntry(
+            malId = 53439,
+            url = "https://myanimelist.net/anime/53439/Boushoku_no_Berserk",
+            images = LocalMedia.Images(
+                jpeg = LocalMedia.ImageUrls(
+                    base = "https://cdn.myanimelist.net/images/anime/1951/138462.jpg?s=a26c3e021101d7a4f36587b023fabd0a",
+                    small = "https://cdn.myanimelist.net/images/anime/1951/138462t.jpg?s=a26c3e021101d7a4f36587b023fabd0a",
+                    large = "https://cdn.myanimelist.net/images/anime/1951/138462l.jpg?s=a26c3e021101d7a4f36587b023fabd0a"
+                ),
+                webp = LocalMedia.ImageUrls(
+                    base = "https://cdn.myanimelist.net/images/anime/1951/138462.webp?s=a26c3e021101d7a4f36587b023fabd0a",
+                    small = "https://cdn.myanimelist.net/images/anime/1951/138462t.webp?s=a26c3e021101d7a4f36587b023fabd0a",
+                    large = "https://cdn.myanimelist.net/images/anime/1951/138462l.webp?s=a26c3e021101d7a4f36587b023fabd0a"
+                )
+            ),
+            title = "Boushoku no Berserk"
+        ),
+        url = "https://myanimelist.net/recommendations/anime/53439-58567",
+        votes = 1
+    ),
+    LocalMedia.Recommendation(
+        entry = LocalMedia.RecommendationEntry(
+            malId = 11061,
+            url = "https://myanimelist.net/anime/11061/Hunter_x_Hunter_2011",
+            images = LocalMedia.Images(
+                jpeg = LocalMedia.ImageUrls(
+                    base = "https://cdn.myanimelist.net/images/anime/1337/99013.jpg?s=1838e905a0aa3542a009fbcf78000701",
+                    small = "https://cdn.myanimelist.net/images/anime/1337/99013t.jpg?s=1838e905a0aa3542a009fbcf78000701",
+                    large = "https://cdn.myanimelist.net/images/anime/1337/99013l.jpg?s=1838e905a0aa3542a009fbcf78000701"
+                ),
+                webp = LocalMedia.ImageUrls(
+                    base = "https://cdn.myanimelist.net/images/anime/1337/99013.webp?s=1838e905a0aa3542a009fbcf78000701",
+                    small = "https://cdn.myanimelist.net/images/anime/1337/99013t.webp?s=1838e905a0aa3542a009fbcf78000701",
+                    large = "https://cdn.myanimelist.net/images/anime/1337/99013l.webp?s=1838e905a0aa3542a009fbcf78000701"
+                )
+            ),
+            title = "Hunter x Hunter (2011)"
+        ),
+        url = "https://myanimelist.net/recommendations/anime/11061-58567",
+        votes = 1
+    )
+)

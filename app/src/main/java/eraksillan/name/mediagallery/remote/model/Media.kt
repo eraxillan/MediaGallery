@@ -305,6 +305,28 @@ data class Media(
     )
 
     @Serializable
+    data class RecommendationEntry(
+        @SerialName("mal_id")
+        val malId: Int,
+        @SerialName("url")
+        val url: String,
+        @SerialName("images")
+        val images: Images,
+        @SerialName("title")
+        val title: String
+    )
+
+    @Serializable
+    data class Recommendation(
+        @SerialName("entry")
+        val entry: RecommendationEntry,
+        @SerialName("url")
+        val url: String,
+        @SerialName("votes")
+        val votes: Int
+    )
+
+    @Serializable
     data class Entity(
         @SerialName("mal_id")
         val malId: Int,
@@ -495,6 +517,23 @@ fun Media.Review.toLocal(): LocalMedia.Review {
         isSpoiler = isSpoiler,
         isPreliminary = isPreliminary,
         episodesWatched = episodesWatched
+    )
+}
+
+fun Media.RecommendationEntry.toLocal(): LocalMedia.RecommendationEntry {
+    return LocalMedia.RecommendationEntry(
+        malId = malId,
+        url = url,
+        images = images.toLocal(),
+        title = title
+    )
+}
+
+fun Media.Recommendation.toLocal(): LocalMedia.Recommendation {
+    return LocalMedia.Recommendation(
+        entry.toLocal(),
+        url = url,
+        votes = votes
     )
 }
 

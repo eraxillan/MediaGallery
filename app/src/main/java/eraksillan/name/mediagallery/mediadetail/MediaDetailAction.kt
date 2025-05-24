@@ -23,4 +23,6 @@ sealed class MediaDetailAction {
     class MoreStaffClicked(val data: List<LocalMedia.Person>) : MediaDetailAction()
     class ReviewClicked(val review: LocalMedia.Review) : MediaDetailAction()
     class MoreReviewsClicked(val data: List<LocalMedia.Review>) : MediaDetailAction()
+    class RecommendationClicked(val recommendation: LocalMedia.Recommendation) : MediaDetailAction()
+    class MoreRecommendationsClicked(val data: List<LocalMedia.Recommendation>) : MediaDetailAction()
 }

@@ -74,6 +74,7 @@ import eraksillan.name.mediagallery.local.utils.displayDefaultTitle
 import eraksillan.name.mediagallery.local.utils.englishTitle
 import eraksillan.name.mediagallery.local.utils.mockCast
 import eraksillan.name.mediagallery.local.utils.mockMedia
+import eraksillan.name.mediagallery.local.utils.mockRecommendations
 import eraksillan.name.mediagallery.local.utils.mockRelations
 import eraksillan.name.mediagallery.local.utils.mockReviews
 import eraksillan.name.mediagallery.local.utils.mockStaff
@@ -165,12 +166,14 @@ fun MediaDetailCompose(data: LocalMedia, viewModel: MediaDetailViewModel) {
             staff = viewModel.staffPagingVM.list,
             themes = viewModel.themesPagingVM.list.firstOrNull(),
             reviews = viewModel.reviewsPagingVM.list,
+            recommendations = viewModel.recommendationsPagingVM.list,
             onEvent = { viewModel.onEvent(it) },
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         )
     }
 }
 
+@Suppress("LongParameterList")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 private fun MediaDetailContentCompose(
@@ -182,6 +185,7 @@ private fun MediaDetailContentCompose(
     staff: List<LocalMedia.Person>,
     themes: LocalMedia.Themes?,
     reviews: List<LocalMedia.Review>,
+    recommendations: List<LocalMedia.Recommendation>,
     onEvent: (MediaDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -313,6 +317,21 @@ private fun MediaDetailContentCompose(
                     modifier = Modifier.align(Alignment.BottomEnd)
                 ) {
                     Text(text = stringResource(R.string.more_reviews))
+                }
+            }
+        }
+
+        item {
+            MediaRecommendationsCompose(recommendations, onEvent)
+        }
+
+        item {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                TextButton(
+                    onClick = { onEvent(MediaDetailAction.MoreRecommendationsClicked(recommendations)) },
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                ) {
+                    Text(text = stringResource(R.string.more_recommendations))
                 }
             }
         }
@@ -904,6 +923,30 @@ private fun MediaReviewsCompose(reviews: List<LocalMedia.Review>, episodes: Int?
     }
 }
 
+@Composable
+private fun MediaRecommendationsCompose(recommendations: List<LocalMedia.Recommendation>, onEvent: (MediaDetailAction) -> Unit) {
+    val imageStub = painterResource(id = R.drawable.media_item_placeholder)
+    Spacer(modifier = Modifier.height(16.dp))
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        items(recommendations, { it.entry.malId }) { recommendation ->
+            AsyncImage(
+                model = recommendation.entry.images?.jpeg?.base,
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(150.dp)
+                    .clickable { onEvent(MediaDetailAction.RecommendationClicked(recommendation)) },
+                placeholder = imageStub,
+                error = imageStub,
+                contentScale = ContentScale.Crop,
+                contentDescription = null,
+                onError = { error ->
+                    Log.e("MediaGallery", error.result.toString())
+                }
+            )
+        }
+    }
+}
+
 @Suppress("unused")
 @Composable
 @Preview(showBackground = true)
@@ -918,11 +961,11 @@ private fun MediaDetailComposePreview() {
             staff = mockStaff,
             themes = mockThemes,
             reviews = mockReviews,
+            recommendations = mockRecommendations,
             { }
         )
     }
 }
-
 
 private const val CAST_FAVORITES_THRESHOLD = 150
 private const val STAFF_MAX_COUNT = 10

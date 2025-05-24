@@ -6,6 +6,7 @@ import eraksillan.name.mediagallery.local.model.LocalMediaCast
 import eraksillan.name.mediagallery.local.model.LocalMediaExternalLinks
 import eraksillan.name.mediagallery.local.model.LocalMediaMoreInfo
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
+import eraksillan.name.mediagallery.local.model.LocalMediaRecommendations
 import eraksillan.name.mediagallery.local.model.LocalMediaRelations
 import eraksillan.name.mediagallery.local.model.LocalMediaReviews
 import eraksillan.name.mediagallery.local.model.LocalMediaStaff
@@ -18,6 +19,7 @@ import eraksillan.name.mediagallery.remote.model.MediaCast
 import eraksillan.name.mediagallery.remote.model.MediaExternalLinks
 import eraksillan.name.mediagallery.remote.model.MediaMoreInfo
 import eraksillan.name.mediagallery.remote.model.MediaPictures
+import eraksillan.name.mediagallery.remote.model.MediaRecommendations
 import eraksillan.name.mediagallery.remote.model.MediaRelations
 import eraksillan.name.mediagallery.remote.model.MediaReviews
 import eraksillan.name.mediagallery.remote.model.MediaStaff
@@ -94,6 +96,11 @@ class OnlineMediaRepository @Inject constructor(
     suspend fun getAnimeReviews(id: Int) : NetworkResult<LocalMediaReviews> {
         val result = network.getAnimeReviews(id)
         return toLocal<MediaReviews, LocalMediaReviews>(result)
+    }
+
+    suspend fun getAnimeRecommendations(id: Int) : NetworkResult<LocalMediaRecommendations> {
+        val result = network.getAnimeRecommendations(id)
+        return toLocal<MediaRecommendations, LocalMediaRecommendations>(result)
     }
 
     suspend fun getSeasonList(): NetworkResult<LocalSeasonList> {
