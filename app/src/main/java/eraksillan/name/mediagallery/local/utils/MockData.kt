@@ -554,3 +554,62 @@ val mockRecommendations = listOf<LocalMedia.Recommendation>(
         votes = 1
     )
 )
+
+val mockNews = listOf<LocalMedia.NewsItem>(
+    LocalMedia.NewsItem(
+        malId = 72198005,
+        url = "https://myanimelist.net/news/72198005",
+        title = "Winter 2025 Simulcast List [Update 2/23]",
+        date = "2025-01-01T13:41:00+00:00",
+        authorUserName = "Snow",
+        authorUrl = "https://myanimelist.net/profile/Snow",
+        forumUrl = "https://myanimelist.net/forum/?topicid=2196138",
+        images = LocalMedia.Images(
+            jpeg = LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/s/common/uploaded_files/1735767646-917f6b6ffad088264150a53664c0256f.jpeg?s=c243dc599511b6f811e3c138c9ce50f7")
+        ),
+        comments = 13,
+        excerpt = "In this thread, you'll find a comprehensive list of television anime acquired for simulcast release during the Winter 2025 season. Anime series licensed for hom..."
+    ),
+    LocalMedia.NewsItem(
+        malId = 72144487,
+        url = "https://myanimelist.net/news/72144487",
+        title = "Winter 2025 Preview",
+        date = "2024-12-19T05:31:00+00:00",
+        authorUserName = "Snow",
+        authorUrl = "https://myanimelist.net/profile/Snow",
+        forumUrl = "https://myanimelist.net/forum/?topicid=2194169",
+        images = LocalMedia.Images(
+            jpeg = LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/s/common/uploaded_files/1734614769-77f208f25d755a34d4366533068d8d53.jpeg?s=503f6e115b10540d323791557369bc04")
+        ),
+        comments = 0,
+        excerpt = "In this thread, you'll find a comprehensive list of Winter 2025 titles with an accompanying promotional video, commercial, teaser, or trailer. This post will be..."
+    ),
+    LocalMedia.NewsItem(
+        malId = 71689990,
+        url = "https://myanimelist.net/news/71689990",
+        title = "'Ore dake Level Up na Ken' Second Season Announces January 2025 Premiere, First Season Compilation Movie",
+        date = "2024-09-15T20:51:00+00:00",
+        authorUserName = "DatRandomDude",
+        authorUrl = "https://myanimelist.net/profile/DatRandomDude",
+        forumUrl = "https://myanimelist.net/forum/?topicid=2179376",
+        images = LocalMedia.Images(
+            jpeg = LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/s/common/uploaded_files/1726458618-e383211c62147e19a7edfd11e17acbbd.jpeg?s=3c4d1a4fb20f04f1987676a3c6428f97")
+        ),
+        comments = 8,
+        excerpt = "The Ore dake Level Up na Ken (Solo Leveling) Aniplex Online Fest 2024 presentation revealed on Monday a key visual (pictured) for the second season. The new season i..."
+    ),
+    LocalMedia.NewsItem(
+        malId = 70782992,
+        url = "https://myanimelist.net/news/70782992",
+        title = "Second Season of 'Ore dake Level Up na Ken' Announced",
+        date = "2024-03-30T09:51:00+00:00",
+        authorUserName = "Vindstot",
+        authorUrl = "https://myanimelist.net/profile/Vindstot",
+        forumUrl = "https://myanimelist.net/forum/?topicid=2153083",
+        images = LocalMedia.Images(
+            jpeg = LocalMedia.ImageUrls(base = "https://cdn.myanimelist.net/s/common/uploaded_files/1711817467-0fa554319f7b83400d8b50c3f8c3bbf6.jpeg?s=573227b1e2dae3b5d2c96cc6d5b677d7")
+        ),
+        comments = 29,
+        excerpt = "A second season for the Ore dake Level Up na Ken (Solo Leveling) television anime was announced following the broadcast of its 12th and final episode on Sunday. The ..."
+    ),
+)

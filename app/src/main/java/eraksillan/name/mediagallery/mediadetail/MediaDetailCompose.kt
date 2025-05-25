@@ -74,6 +74,7 @@ import eraksillan.name.mediagallery.local.utils.displayDefaultTitle
 import eraksillan.name.mediagallery.local.utils.englishTitle
 import eraksillan.name.mediagallery.local.utils.mockCast
 import eraksillan.name.mediagallery.local.utils.mockMedia
+import eraksillan.name.mediagallery.local.utils.mockNews
 import eraksillan.name.mediagallery.local.utils.mockRecommendations
 import eraksillan.name.mediagallery.local.utils.mockRelations
 import eraksillan.name.mediagallery.local.utils.mockReviews
@@ -167,6 +168,7 @@ fun MediaDetailCompose(data: LocalMedia, viewModel: MediaDetailViewModel) {
             themes = viewModel.themesPagingVM.list.firstOrNull(),
             reviews = viewModel.reviewsPagingVM.list,
             recommendations = viewModel.recommendationsPagingVM.list,
+            news = viewModel.newsPagingVM.list,
             onEvent = { viewModel.onEvent(it) },
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         )
@@ -186,6 +188,7 @@ private fun MediaDetailContentCompose(
     themes: LocalMedia.Themes?,
     reviews: List<LocalMedia.Review>,
     recommendations: List<LocalMedia.Recommendation>,
+    news: List<LocalMedia.NewsItem>,
     onEvent: (MediaDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -332,6 +335,21 @@ private fun MediaDetailContentCompose(
                     modifier = Modifier.align(Alignment.BottomEnd)
                 ) {
                     Text(text = stringResource(R.string.more_recommendations))
+                }
+            }
+        }
+
+        item {
+            MediaNewsCompose(news, onEvent)
+        }
+
+        item {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                TextButton(
+                    onClick = { onEvent(MediaDetailAction.MoreNewsClicked(news)) },
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                ) {
+                    Text(text = stringResource(R.string.more_news))
                 }
             }
         }
@@ -947,6 +965,49 @@ private fun MediaRecommendationsCompose(recommendations: List<LocalMedia.Recomme
     }
 }
 
+@Composable
+private fun MediaNewsCompose(news: List<LocalMedia.NewsItem>, onEvent: (MediaDetailAction) -> Unit) {
+    val imageStub = painterResource(id = R.drawable.media_item_placeholder)
+    Spacer(modifier = Modifier.height(16.dp))
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        news.take(2).forEach { newsItem ->
+            Row {
+                AsyncImage(
+                    model = newsItem.images?.jpeg?.base,
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(150.dp)
+                        .clickable { onEvent(MediaDetailAction.NewsItemClicked(newsItem)) },
+                    placeholder = imageStub,
+                    error = imageStub,
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                    onError = { error ->
+                        Log.e("MediaGallery", error.result.toString())
+                    }
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Column {
+                    Text(
+                        text = newsItem.title ?: stringResource(R.string.not_applicable),
+                        style = MaterialTheme.typography.titleMedium,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = monthAndDayText(newsItem.date),
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                    Text(
+                        text = stringResource(R.string.comments_count, newsItem.comments ?: 0),
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                }
+            }
+        }
+    }
+}
+
 @Suppress("unused")
 @Composable
 @Preview(showBackground = true)
@@ -962,6 +1023,7 @@ private fun MediaDetailComposePreview() {
             themes = mockThemes,
             reviews = mockReviews,
             recommendations = mockRecommendations,
+            news = mockNews,
             { }
         )
     }

@@ -321,6 +321,21 @@ data class LocalMedia(
 
     @Parcelize
     @Serializable
+    data class NewsItem(
+        val malId: Int,
+        val url: String,
+        val title: String?,
+        val date: String?,
+        val authorUserName: String?,
+        val authorUrl: String?,
+        val forumUrl: String?,
+        val images: Images?,
+        val comments: Int?,
+        val excerpt: String?
+    ) : Parcelable
+
+    @Parcelize
+    @Serializable
     data class Entity(
         val malId: Int,
         val type: String,

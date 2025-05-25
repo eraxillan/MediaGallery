@@ -133,6 +133,19 @@ class MediaDetailViewModel @AssistedInject constructor(
         }
     )
 
+    val newsPagingVM = PagingViewModel<LocalMedia.NewsItem>(
+        getPageCallback = { page: Int, pageSize: Int ->
+            repository.getMediaNews(data.malId)
+                .map {
+                    when (it) {
+                        is NetworkResult.Success -> NetworkResult.Success(it.data.data)
+                        is NetworkResult.Error -> NetworkResult.Error(it.code, it.message)
+                        is NetworkResult.Exception -> NetworkResult.Exception(it.e)
+                    }
+                }
+        }
+    )
+
     init {
         imagesPagingVM.getPageData()
         videosPagingVM.getPageData()
@@ -142,6 +155,7 @@ class MediaDetailViewModel @AssistedInject constructor(
         themesPagingVM.getPageData()
         reviewsPagingVM.getPageData()
         recommendationsPagingVM.getPageData()
+        newsPagingVM.getPageData()
     }
 
     fun onEvent(action: MediaDetailAction) {
@@ -226,6 +240,14 @@ class MediaDetailViewModel @AssistedInject constructor(
             is MediaDetailAction.MoreRecommendationsClicked -> {
                 navController.navigate(Route.MediaRecommendations(action.data))
             }
+
+            is MediaDetailAction.NewsItemClicked -> {
+                TODO()
+            }
+
+            is MediaDetailAction.MoreNewsClicked -> {
+                navController.navigate(Route.MediaNews(action.data))
+            }
         }
     }
 
@@ -237,6 +259,7 @@ class MediaDetailViewModel @AssistedInject constructor(
         castsPagingVM.reset()
         staffPagingVM.reset()
         recommendationsPagingVM.reset()
+        newsPagingVM.reset()
     }
 
     @AssistedFactory

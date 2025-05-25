@@ -12,6 +12,7 @@ import eraksillan.name.mediagallery.mediacast.mediaCastScreen
 import eraksillan.name.mediagallery.mediadetail.mediaDetailScreen
 import eraksillan.name.mediagallery.mediaextendeddetail.mediaExtendedDetailScreen
 import eraksillan.name.mediagallery.medialist.mediaListScreen
+import eraksillan.name.mediagallery.medianews.mediaNewsScreen
 import eraksillan.name.mediagallery.mediarecommendations.mediaRecommendationsScreen
 import eraksillan.name.mediagallery.mediareviews.mediaReviewsScreen
 import eraksillan.name.mediagallery.mediastaff.mediaStaffScreen
@@ -48,5 +49,6 @@ fun MediaGalleryNavHost(
         mediaStaffScreen(navController = navController)
         mediaReviewsScreen(navController = navController)
         mediaRecommendationsScreen(navController = navController)
+        mediaNewsScreen(navController = navController)
     }
 }

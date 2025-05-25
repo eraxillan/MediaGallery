@@ -327,6 +327,30 @@ data class Media(
     )
 
     @Serializable
+    data class NewsItem(
+        @SerialName("mal_id")
+        val malId: Int,
+        @SerialName("url")
+        val url: String,
+        @SerialName("title")
+        val title: String?,
+        @SerialName("date")
+        val date: String?,
+        @SerialName("author_username")
+        val authorUserName: String?,
+        @SerialName("author_url")
+        val authorUrl: String?,
+        @SerialName("forum_url")
+        val forumUrl: String?,
+        @SerialName("images")
+        val images: Images?,
+        @SerialName("comments")
+        val comments: Int?,
+        @SerialName("excerpt")
+        val excerpt: String?
+    )
+
+    @Serializable
     data class Entity(
         @SerialName("mal_id")
         val malId: Int,
@@ -534,6 +558,21 @@ fun Media.Recommendation.toLocal(): LocalMedia.Recommendation {
         entry.toLocal(),
         url = url,
         votes = votes
+    )
+}
+
+fun Media.NewsItem.toLocal(): LocalMedia.NewsItem {
+    return LocalMedia.NewsItem(
+        malId = malId,
+        url = url,
+        title = title,
+        date = date,
+        authorUserName = authorUserName,
+        authorUrl = authorUrl,
+        forumUrl = forumUrl,
+        images = images?.toLocal(),
+        comments = comments,
+        excerpt = excerpt
     )
 }
 

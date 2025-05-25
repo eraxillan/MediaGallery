@@ -6,6 +6,7 @@ import eraksillan.name.mediagallery.local.model.LocalMedia
 import eraksillan.name.mediagallery.local.model.LocalMediaCast
 import eraksillan.name.mediagallery.local.model.LocalMediaExternalLinks
 import eraksillan.name.mediagallery.local.model.LocalMediaMoreInfo
+import eraksillan.name.mediagallery.local.model.LocalMediaNews
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
 import eraksillan.name.mediagallery.local.model.LocalMediaRecommendations
 import eraksillan.name.mediagallery.local.model.LocalMediaRelations
@@ -81,6 +82,10 @@ class PagingMediaRepository @Inject constructor(
 
     fun getMediaRecommendations(id: Int): Flow<NetworkResult<LocalMediaRecommendations>> = flow {
         emit(repository.getAnimeRecommendations(id))
+    }
+
+    fun getMediaNews(id: Int): Flow<NetworkResult<LocalMediaNews>> = flow {
+        emit(repository.getAnimeNews(id))
     }
 
     fun getSeasonList(): Flow<NetworkResult<LocalSeasonList>> = flow {

@@ -3,6 +3,7 @@ package eraksillan.name.mediagallery.remote
 import eraksillan.name.mediagallery.local.model.LocalMediaCast
 import eraksillan.name.mediagallery.local.model.LocalMediaExternalLinks
 import eraksillan.name.mediagallery.local.model.LocalMediaMoreInfo
+import eraksillan.name.mediagallery.local.model.LocalMediaNews
 import eraksillan.name.mediagallery.local.model.LocalMediaPictures
 import eraksillan.name.mediagallery.local.model.LocalMediaRecommendations
 import eraksillan.name.mediagallery.local.model.LocalMediaRelations
@@ -15,6 +16,7 @@ import eraksillan.name.mediagallery.local.model.LocalSeasonList
 import eraksillan.name.mediagallery.remote.model.MediaCast
 import eraksillan.name.mediagallery.remote.model.MediaExternalLinks
 import eraksillan.name.mediagallery.remote.model.MediaMoreInfo
+import eraksillan.name.mediagallery.remote.model.MediaNews
 import eraksillan.name.mediagallery.remote.model.MediaPictures
 import eraksillan.name.mediagallery.remote.model.MediaRecommendations
 import eraksillan.name.mediagallery.remote.model.MediaRelations
@@ -100,6 +102,12 @@ interface MyAnimeListService {
     suspend fun getAnimeRecommendations(
         @Path("id") id: Int
     ) : RetrofitNetworkResult<MediaRecommendations, LocalMediaRecommendations>
+
+    // https://api.jikan.moe/v4/anime/{id}/news
+    @GET("anime/{id}/news")
+    suspend fun getAnimeNews(
+        @Path("id") id: Int
+    ) : RetrofitNetworkResult<MediaNews, LocalMediaNews>
 
     // https://api.jikan.moe/v4/seasons
     @GET("seasons")
