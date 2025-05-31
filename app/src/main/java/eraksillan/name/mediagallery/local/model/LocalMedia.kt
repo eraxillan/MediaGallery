@@ -336,6 +336,28 @@ data class LocalMedia(
 
     @Parcelize
     @Serializable
+    data class DiscussionComment(
+        val url: String,
+        val authorUserName: String?,
+        val authorUrl: String?,
+        val date: String?
+    ) : Parcelable
+
+    @Parcelize
+    @Serializable
+    data class Discussion(
+        val malId: Int,
+        val url: String,
+        val title: String?,
+        val date: String?,
+        val authorUserName: String?,
+        val authorUrl: String?,
+        val comments: Int?,
+        val lastComment: DiscussionComment
+    ) : Parcelable
+
+    @Parcelize
+    @Serializable
     data class Entity(
         val malId: Int,
         val type: String,

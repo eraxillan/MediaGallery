@@ -35,7 +35,7 @@ fun monthAndDayText(date: String?): String {
     return Instant.parseOrNull(date)?.format(dateCustomFormat) ?: "N/A"
 }
 
-fun formatReviewTime(input: String): String {
+fun formatReviewTime(input: String?): String {
     // Jan 18, 8:28 AM
     val customFormat = DateTimeComponents.Format {
         monthName(ENGLISH_ABBREVIATED)

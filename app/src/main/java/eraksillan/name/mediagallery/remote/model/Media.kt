@@ -351,6 +351,38 @@ data class Media(
     )
 
     @Serializable
+    data class DiscussionComment(
+        @SerialName("url")
+        val url: String,
+        @SerialName("author_username")
+        val authorUserName: String?,
+        @SerialName("author_url")
+        val authorUrl: String?,
+        @SerialName("date")
+        val date: String?
+    )
+
+    @Serializable
+    data class Discussion(
+        @SerialName("mal_id")
+        val malId: Int,
+        @SerialName("url")
+        val url: String,
+        @SerialName("title")
+        val title: String?,
+        @SerialName("date")
+        val date: String?,
+        @SerialName("author_username")
+        val authorUserName: String?,
+        @SerialName("author_url")
+        val authorUrl: String?,
+        @SerialName("comments")
+        val comments: Int?,
+        @SerialName("last_comment")
+        val lastComment: DiscussionComment
+    )
+
+    @Serializable
     data class Entity(
         @SerialName("mal_id")
         val malId: Int,
@@ -573,6 +605,28 @@ fun Media.NewsItem.toLocal(): LocalMedia.NewsItem {
         images = images?.toLocal(),
         comments = comments,
         excerpt = excerpt
+    )
+}
+
+fun Media.DiscussionComment.toLocal(): LocalMedia.DiscussionComment {
+    return LocalMedia.DiscussionComment(
+        url = url,
+        authorUserName = authorUserName,
+        authorUrl =authorUrl,
+        date = date
+    )
+}
+
+fun Media.Discussion.toLocal(): LocalMedia.Discussion {
+    return LocalMedia.Discussion(
+        malId = malId,
+        url = url,
+        title = title,
+        date = date,
+        authorUserName = authorUserName,
+        authorUrl = authorUrl,
+        comments = comments,
+        lastComment = lastComment.toLocal()
     )
 }
 

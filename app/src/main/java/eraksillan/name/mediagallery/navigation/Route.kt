@@ -33,4 +33,7 @@ sealed interface Route {
 
     @Serializable
     data class MediaNews(val data: List<LocalMedia.NewsItem>)
+
+    @Serializable
+    data class MediaDiscussions(val data: List<LocalMedia.Discussion>)
 }

@@ -613,3 +613,111 @@ val mockNews = listOf<LocalMedia.NewsItem>(
         excerpt = "A second season for the Ore dake Level Up na Ken (Solo Leveling) television anime was announced following the broadcast of its 12th and final episode on Sunday. The ..."
     ),
 )
+
+val mockDiscussions = listOf<LocalMedia.Discussion>(
+    LocalMedia.Discussion(
+        malId = 2215880,
+        url = "https://myanimelist.net/forum/?topicid=2215880",
+        title = "Job change quest question",
+        date = "2025-05-24T00:00:00+00:00",
+        authorUserName = "Squarkz",
+        authorUrl = "https://myanimelist.net/profile/Squarkz",
+        comments = 4,
+        lastComment = LocalMedia.DiscussionComment(
+            url = "https://myanimelist.net/forum/?topicid=2215880&goto=lastpost",
+            authorUserName = "ApolloD",
+            authorUrl = "https://myanimelist.net/profile/ApolloD",
+            date = "2025-05-25T01:26:44+00:00"
+        )
+    ),
+    LocalMedia.Discussion(
+        malId = 2208030,
+        url = "https://myanimelist.net/forum/?topicid=2208030",
+        title = "Ore dake Level Up na Ken Season 2: Arise from the Shadow Episode 13 Discussion",
+        date = "2025-03-29T00:00:00+00:00",
+        authorUserName = "Ricky16",
+        authorUrl = "https://myanimelist.net/profile/Ricky16",
+        comments = 403,
+        lastComment = LocalMedia.DiscussionComment(
+            url = "https://myanimelist.net/forum/?topicid=2208030&goto=lastpost",
+            authorUserName = "rafcio_",
+            authorUrl = "https://myanimelist.net/profile/rafcio_",
+            date = "2025-05-24T10:34:00+00:00"
+        )
+    ),
+    LocalMedia.Discussion(
+        malId = 2205078,
+        url = "https://myanimelist.net/forum/?topicid=2205078",
+        title = "Ore dake Level Up na Ken Season 2: Arise from the Shadow Episode 10 Discussion",
+        date = "2025-03-08T00:00:00+00:00",
+        authorUserName = "Stark700",
+        authorUrl = "https://myanimelist.net/profile/Stark700",
+        comments = 301,
+        lastComment = LocalMedia.DiscussionComment(
+            url = "https://myanimelist.net/forum/?topicid=2205078&goto=lastpost",
+            authorUserName = "Dr_Hayoula",
+            authorUrl = "https://myanimelist.net/profile/Dr_Hayoula",
+            date = "2025-05-23T10:44:00+00:00"
+        )
+    ),
+    LocalMedia.Discussion(
+        malId = 2195819,
+        url = "https://myanimelist.net/forum/?topicid=2195819",
+        title = "Solo leveling is an Isekai well done/written",
+        date = "2024-12-30T00:00:00+00:00",
+        authorUserName = "Bourriche",
+        authorUrl = "https://myanimelist.net/profile/Bourriche",
+        comments = 220,
+        lastComment = LocalMedia.DiscussionComment(
+            url = "https://myanimelist.net/forum/?topicid=2195819&goto=lastpost",
+            authorUserName = "aurora_yuuki",
+            authorUrl = "https://myanimelist.net/profile/aurora_yuuki",
+            date = "2025-05-21T10:11:00+00:00"
+        )
+    ),
+    LocalMedia.Discussion(
+        malId = 2213388,
+        url = "https://myanimelist.net/forum/?topicid=2213388",
+        title = "Constant Complainers",
+        date = "2025-05-05T00:00:00+00:00",
+        authorUserName = "DiznyOrdiz",
+        authorUrl = "https://myanimelist.net/profile/DiznyOrdiz",
+        comments = 77,
+        lastComment = LocalMedia.DiscussionComment(
+            url = "https://myanimelist.net/forum/?topicid=2213388&goto=lastpost",
+            authorUserName = "Leon888",
+            authorUrl = "https://myanimelist.net/profile/Leon888",
+            date = "2025-05-21T05:31:00+00:00"
+        )
+    ),
+    LocalMedia.Discussion(
+        malId = 2206997,
+        url = "https://myanimelist.net/forum/?topicid=2206997",
+        title = "Ore dake Level Up na Ken Season 2: Arise from the Shadow Episode 12 Discussion",
+        date = "2025-03-22T00:00:00+00:00",
+        authorUserName = "Stark700",
+        authorUrl = "https://myanimelist.net/profile/Stark700",
+        comments = 633,
+        lastComment = LocalMedia.DiscussionComment(
+            url = "https://myanimelist.net/forum/?topicid=2206997&goto=lastpost",
+            authorUserName = "Harshit27",
+            authorUrl = "https://myanimelist.net/profile/Harshit27",
+            date = "2025-05-17T12:51:00+00:00"
+        )
+    ),
+    LocalMedia.Discussion(
+        malId = 2205971,
+        url = "https://myanimelist.net/forum/?topicid=2205971",
+        title = "Ore dake Level Up na Ken Season 2: Arise from the Shadow Episode 11 Discussion",
+        date = "2025-03-15T00:00:00+00:00",
+        authorUserName = "Stark700",
+        authorUrl = "https://myanimelist.net/profile/Stark700",
+        comments = 430,
+        lastComment = LocalMedia.DiscussionComment(
+            url = "https://myanimelist.net/forum/?topicid=2205971&goto=lastpost",
+            authorUserName = "bryansao",
+            authorUrl = "https://myanimelist.net/profile/bryansao",
+            date = "2025-05-15T05:36:00+00:00"
+        )
+    ),
+)

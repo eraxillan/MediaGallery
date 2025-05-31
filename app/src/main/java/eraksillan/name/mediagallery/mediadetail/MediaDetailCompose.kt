@@ -73,6 +73,7 @@ import eraksillan.name.mediagallery.local.model.LocalMediaVideos
 import eraksillan.name.mediagallery.local.utils.displayDefaultTitle
 import eraksillan.name.mediagallery.local.utils.englishTitle
 import eraksillan.name.mediagallery.local.utils.mockCast
+import eraksillan.name.mediagallery.local.utils.mockDiscussions
 import eraksillan.name.mediagallery.local.utils.mockMedia
 import eraksillan.name.mediagallery.local.utils.mockNews
 import eraksillan.name.mediagallery.local.utils.mockRecommendations
@@ -80,6 +81,7 @@ import eraksillan.name.mediagallery.local.utils.mockRelations
 import eraksillan.name.mediagallery.local.utils.mockReviews
 import eraksillan.name.mediagallery.local.utils.mockStaff
 import eraksillan.name.mediagallery.local.utils.mockThemes
+import eraksillan.name.mediagallery.local.utils.mockDiscussions
 import eraksillan.name.mediagallery.local.utils.monthAndDayText
 import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
 import java.util.Locale
@@ -169,6 +171,7 @@ fun MediaDetailCompose(data: LocalMedia, viewModel: MediaDetailViewModel) {
             reviews = viewModel.reviewsPagingVM.list,
             recommendations = viewModel.recommendationsPagingVM.list,
             news = viewModel.newsPagingVM.list,
+            discussions = viewModel.discussionsPagingVM.list,
             onEvent = { viewModel.onEvent(it) },
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         )
@@ -189,6 +192,7 @@ private fun MediaDetailContentCompose(
     reviews: List<LocalMedia.Review>,
     recommendations: List<LocalMedia.Recommendation>,
     news: List<LocalMedia.NewsItem>,
+    discussions: List<LocalMedia.Discussion>,
     onEvent: (MediaDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -350,6 +354,21 @@ private fun MediaDetailContentCompose(
                     modifier = Modifier.align(Alignment.BottomEnd)
                 ) {
                     Text(text = stringResource(R.string.more_news))
+                }
+            }
+        }
+
+        item {
+            MediaDiscussionsCompose(discussions, onEvent)
+        }
+
+        item {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                TextButton(
+                    onClick = { onEvent(MediaDetailAction.MoreDiscussionsClicked(discussions)) },
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                ) {
+                    Text(text = stringResource(R.string.more_discussions))
                 }
             }
         }
@@ -1008,6 +1027,25 @@ private fun MediaNewsCompose(news: List<LocalMedia.NewsItem>, onEvent: (MediaDet
     }
 }
 
+@Composable
+private fun MediaDiscussionsCompose(discussions: List<LocalMedia.Discussion>, onEvent: (MediaDetailAction) -> Unit) {
+    Spacer(modifier = Modifier.height(16.dp))
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        discussions.take(4).forEach { discussion ->
+            Column {
+                Text(text = discussion.title.orEmpty(), maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Text(
+                    text = stringResource(
+                        R.string.discussion_description,
+                        discussion.comments ?: 0,
+                        monthAndDayText(discussion.date), discussion.authorUserName.orEmpty()
+                    )
+                )
+            }
+        }
+    }
+}
+
 @Suppress("unused")
 @Composable
 @Preview(showBackground = true)
@@ -1024,6 +1062,7 @@ private fun MediaDetailComposePreview() {
             reviews = mockReviews,
             recommendations = mockRecommendations,
             news = mockNews,
+            discussions = mockDiscussions,
             { }
         )
     }

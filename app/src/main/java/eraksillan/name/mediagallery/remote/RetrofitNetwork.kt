@@ -1,6 +1,7 @@
 package eraksillan.name.mediagallery.remote
 
 import eraksillan.name.mediagallery.local.model.LocalMediaCast
+import eraksillan.name.mediagallery.local.model.LocalMediaDiscussions
 import eraksillan.name.mediagallery.local.model.LocalMediaExternalLinks
 import eraksillan.name.mediagallery.local.model.LocalMediaMoreInfo
 import eraksillan.name.mediagallery.local.model.LocalMediaNews
@@ -14,6 +15,7 @@ import eraksillan.name.mediagallery.local.model.LocalMediaVideos
 import eraksillan.name.mediagallery.local.model.LocalSchedule
 import eraksillan.name.mediagallery.local.model.LocalSeasonList
 import eraksillan.name.mediagallery.remote.model.MediaCast
+import eraksillan.name.mediagallery.remote.model.MediaDiscussions
 import eraksillan.name.mediagallery.remote.model.MediaExternalLinks
 import eraksillan.name.mediagallery.remote.model.MediaMoreInfo
 import eraksillan.name.mediagallery.remote.model.MediaNews
@@ -115,6 +117,10 @@ class RetrofitNetwork @Inject constructor(
 
     override suspend fun getAnimeNews(id: Int): RetrofitNetworkResult<MediaNews, LocalMediaNews> {
         return networkApi.getAnimeNews(id)
+    }
+
+    override suspend fun getAnimeDiscussions(id: Int): RetrofitNetworkResult<MediaDiscussions, LocalMediaDiscussions> {
+        return networkApi.getAnimeDiscussions(id)
     }
 
     override suspend fun getSeasonList(): RetrofitNetworkResult<SeasonList, LocalSeasonList> {

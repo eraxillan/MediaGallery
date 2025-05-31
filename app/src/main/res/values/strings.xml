@@ -67,6 +67,10 @@
     <string name="votes_count">Votes: %d</string>
     <string name="news">News</string>
     <string name="comments_count">Comments: %d</string>
+    <string name="discussion_description">%d replies %s by %s</string>
+    <string name="discussions">Discussions</string>
+    <string name="replies_count">%d replies</string>
+    <string name="discussion_description_detail">%s by %s</string>
 
     <string name="rating_g">G (All Ages)</string>
     <string name="rating_pg">PG (Children)</string>
@@ -88,4 +92,5 @@
     <string name="more_reviews">More reviews</string>
     <string name="more_recommendations">More recommendations</string>
     <string name="more_news">More news</string>
+    <string name="more_discussions">More discussions</string>
 </resources>
