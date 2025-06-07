@@ -383,6 +383,34 @@ data class Media(
     )
 
     @Serializable
+    data class StatisticsScore(
+        @SerialName("score")
+        val score: Int,
+        @SerialName("votes")
+        val votes: Int,
+        @SerialName("percentage")
+        val percentage: Float
+    )
+
+    @Serializable
+    data class Statistics(
+        @SerialName("watching")
+        val watching: Int,
+        @SerialName("completed")
+        val completed: Int,
+        @SerialName("on_hold")
+        val onHold: Int,
+        @SerialName("dropped")
+        val dropped: Int,
+        @SerialName("plan_to_watch")
+        val planToWatch: Int,
+        @SerialName("total")
+        val total: Int,
+        @SerialName("scores")
+        val scores: List<StatisticsScore>
+    )
+
+    @Serializable
     data class Entity(
         @SerialName("mal_id")
         val malId: Int,
@@ -627,6 +655,26 @@ fun Media.Discussion.toLocal(): LocalMedia.Discussion {
         authorUrl = authorUrl,
         comments = comments,
         lastComment = lastComment.toLocal()
+    )
+}
+
+fun Media.StatisticsScore.toLocal(): LocalMedia.StatisticsScore {
+    return LocalMedia.StatisticsScore(
+        score = score,
+        votes = votes,
+        percentage = percentage
+    )
+}
+
+fun Media.Statistics.toLocal(): LocalMedia.Statistics {
+    return LocalMedia.Statistics(
+        watching = watching,
+        completed = completed,
+        onHold = onHold,
+        dropped = dropped,
+        planToWatch = planToWatch,
+        total = total,
+        scores = scores.map { it.toLocal() }
     )
 }
 

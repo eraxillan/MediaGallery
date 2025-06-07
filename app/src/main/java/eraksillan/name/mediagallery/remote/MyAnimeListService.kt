@@ -10,6 +10,7 @@ import eraksillan.name.mediagallery.local.model.LocalMediaRecommendations
 import eraksillan.name.mediagallery.local.model.LocalMediaRelations
 import eraksillan.name.mediagallery.local.model.LocalMediaReviews
 import eraksillan.name.mediagallery.local.model.LocalMediaStaff
+import eraksillan.name.mediagallery.local.model.LocalMediaStatistics
 import eraksillan.name.mediagallery.local.model.LocalMediaThemes
 import eraksillan.name.mediagallery.local.model.LocalMediaVideos
 import eraksillan.name.mediagallery.local.model.LocalSchedule
@@ -24,6 +25,7 @@ import eraksillan.name.mediagallery.remote.model.MediaRecommendations
 import eraksillan.name.mediagallery.remote.model.MediaRelations
 import eraksillan.name.mediagallery.remote.model.MediaReviews
 import eraksillan.name.mediagallery.remote.model.MediaStaff
+import eraksillan.name.mediagallery.remote.model.MediaStatistics
 import eraksillan.name.mediagallery.remote.model.MediaThemes
 import eraksillan.name.mediagallery.remote.model.MediaVideos
 import eraksillan.name.mediagallery.remote.model.Schedule
@@ -116,6 +118,12 @@ interface MyAnimeListService {
     suspend fun getAnimeDiscussions(
         @Path("id") id: Int
     ) : RetrofitNetworkResult<MediaDiscussions, LocalMediaDiscussions>
+
+    // https://api.jikan.moe/v4/anime/{id}/statistics
+    @GET("anime/{id}/statistics")
+    suspend fun getAnimeStatistics(
+        @Path("id") id: Int
+    ) : RetrofitNetworkResult<MediaStatistics, LocalMediaStatistics>
 
     // https://api.jikan.moe/v4/seasons
     @GET("seasons")

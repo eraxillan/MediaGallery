@@ -10,6 +10,7 @@ import eraksillan.name.mediagallery.local.model.LocalMediaRecommendations
 import eraksillan.name.mediagallery.local.model.LocalMediaRelations
 import eraksillan.name.mediagallery.local.model.LocalMediaReviews
 import eraksillan.name.mediagallery.local.model.LocalMediaStaff
+import eraksillan.name.mediagallery.local.model.LocalMediaStatistics
 import eraksillan.name.mediagallery.local.model.LocalMediaThemes
 import eraksillan.name.mediagallery.local.model.LocalMediaVideos
 import eraksillan.name.mediagallery.local.model.LocalSchedule
@@ -24,6 +25,7 @@ import eraksillan.name.mediagallery.remote.model.MediaRecommendations
 import eraksillan.name.mediagallery.remote.model.MediaRelations
 import eraksillan.name.mediagallery.remote.model.MediaReviews
 import eraksillan.name.mediagallery.remote.model.MediaStaff
+import eraksillan.name.mediagallery.remote.model.MediaStatistics
 import eraksillan.name.mediagallery.remote.model.MediaThemes
 import eraksillan.name.mediagallery.remote.model.MediaVideos
 import eraksillan.name.mediagallery.remote.model.Schedule
@@ -62,6 +64,8 @@ interface RetrofitMediaRepository {
     suspend fun getAnimeNews(id: Int) : RetrofitNetworkResult<MediaNews, LocalMediaNews>
 
     suspend fun getAnimeDiscussions(id: Int) : RetrofitNetworkResult<MediaDiscussions, LocalMediaDiscussions>
+
+    suspend fun getAnimeStatistics(id: Int) : RetrofitNetworkResult<MediaStatistics, LocalMediaStatistics>
 
     suspend fun getSeasonList(): RetrofitNetworkResult<SeasonList, LocalSeasonList>
 }

@@ -358,6 +358,28 @@ data class LocalMedia(
 
     @Parcelize
     @Serializable
+    data class StatisticsScore(
+        val score: Int,
+        val votes: Int,
+        val percentage: Float
+    ) : Parcelable
+
+    @Parcelize
+    @Serializable
+    data class Statistics(
+        val watching: Int,
+        val completed: Int,
+        val onHold: Int,
+        val dropped: Int,
+        val planToWatch: Int,
+        val total: Int,
+        val scores: List<StatisticsScore>
+    ) : Parcelable {
+        val scoredMembers = scores.sumOf { it.votes }
+    }
+
+    @Parcelize
+    @Serializable
     data class Entity(
         val malId: Int,
         val type: String,

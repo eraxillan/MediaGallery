@@ -45,9 +45,13 @@ import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -59,6 +63,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
@@ -80,8 +86,8 @@ import eraksillan.name.mediagallery.local.utils.mockRecommendations
 import eraksillan.name.mediagallery.local.utils.mockRelations
 import eraksillan.name.mediagallery.local.utils.mockReviews
 import eraksillan.name.mediagallery.local.utils.mockStaff
+import eraksillan.name.mediagallery.local.utils.mockStatistics
 import eraksillan.name.mediagallery.local.utils.mockThemes
-import eraksillan.name.mediagallery.local.utils.mockDiscussions
 import eraksillan.name.mediagallery.local.utils.monthAndDayText
 import eraksillan.name.mediagallery.ui.theme.MediaGalleryTheme
 import java.util.Locale
@@ -172,6 +178,7 @@ fun MediaDetailCompose(data: LocalMedia, viewModel: MediaDetailViewModel) {
             recommendations = viewModel.recommendationsPagingVM.list,
             news = viewModel.newsPagingVM.list,
             discussions = viewModel.discussionsPagingVM.list,
+            statistics = viewModel.statisticsPagingVM.list.firstOrNull(),
             onEvent = { viewModel.onEvent(it) },
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
         )
@@ -193,6 +200,7 @@ private fun MediaDetailContentCompose(
     recommendations: List<LocalMedia.Recommendation>,
     news: List<LocalMedia.NewsItem>,
     discussions: List<LocalMedia.Discussion>,
+    statistics: LocalMedia.Statistics?,
     onEvent: (MediaDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -371,6 +379,10 @@ private fun MediaDetailContentCompose(
                     Text(text = stringResource(R.string.more_discussions))
                 }
             }
+        }
+
+        item {
+            MediaWatchingStatisticsCompose(statistics)
         }
     }
 }
@@ -1046,6 +1058,116 @@ private fun MediaDiscussionsCompose(discussions: List<LocalMedia.Discussion>, on
     }
 }
 
+@Composable
+private fun MediaWatchingStatisticsBarCompose(watching: Int, part: Float) {
+    val textMeasurer = rememberTextMeasurer()
+    val textToDraw = String.format(Locale.US, "%,d", watching)
+    val style = MaterialTheme.typography.labelLarge
+    val textLayoutResult = remember(textToDraw, style) {
+        textMeasurer.measure(textToDraw, style)
+    }
+
+    Box {
+        Text(
+            text = "",
+            modifier = Modifier
+                .fillMaxWidth()
+                .drawBehind {
+                    val barWidth = part * size.width
+                    drawRect(color = Color.Blue, size = Size(barWidth, size.height))
+
+                    val textToDrawRightX = size.width - textLayoutResult.size.width - 8.dp.toPx()
+                    val (textColor, textToDrawX) = if (textToDrawRightX >= barWidth) {
+                        Color.Black to barWidth + 8.dp.toPx()
+                    } else {
+                        Color.White to barWidth - textLayoutResult.size.width - 8.dp.toPx()
+                    }
+                    val textToDrawY = (size.height - textLayoutResult.size.height) / 2f
+
+                    drawText(
+                        textMeasurer = textMeasurer,
+                        text = textToDraw,
+                        style = style.copy(color = textColor),
+                        topLeft = Offset(
+                            x = textToDrawX,
+                            y = textToDrawY
+                        )
+                    )
+                }
+        )
+    }
+}
+
+@Composable
+private fun MediaWatchingStatisticsCompose(statistics: LocalMedia.Statistics?) {
+    val statistics = statistics ?: return
+
+    val watchingCount = listOf(statistics.watching, statistics.completed, statistics.onHold, statistics.dropped, statistics.planToWatch)
+    val watchingCountWidthPart = watchingCount.map { 1f * it / watchingCount.max() }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Row {
+        Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(text = stringResource(R.string.watching))
+            Text(text = stringResource(R.string.completed))
+            Text(text = stringResource(R.string.on_hold))
+            Text(text = stringResource(R.string.dropped))
+            Text(text = stringResource(R.string.plan_to_watch))
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            for (index in 0..watchingCount.size - 1) {
+                MediaWatchingStatisticsBarCompose(watchingCount[index], watchingCountWidthPart[index])
+            }
+
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = stringResource(
+                        R.string.all_members,
+                        String.format(Locale.US, "%,d", statistics.total)
+                    ),
+                    modifier = Modifier.align(Alignment.TopEnd)
+                )
+            }
+        }
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Row {
+        Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            for (index in 10 downTo 1) {
+                Text(text = index.toString())
+            }
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            val maxVotes = statistics.scores.maxBy { it.votes }.votes
+            for (item in statistics.scores.asReversed()) {
+                MediaWatchingStatisticsBarCompose(item.votes, 1f * item.votes / maxVotes)
+            }
+
+            val voteSum = statistics.scores.sumOf { it.votes }
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = stringResource(
+                        R.string.scored_members,
+                        String.format(Locale.US, "%,d", voteSum)
+                    ),
+                    modifier = Modifier.align(Alignment.TopEnd)
+                )
+            }
+        }
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+}
+
 @Suppress("unused")
 @Composable
 @Preview(showBackground = true)
@@ -1063,6 +1185,7 @@ private fun MediaDetailComposePreview() {
             recommendations = mockRecommendations,
             news = mockNews,
             discussions = mockDiscussions,
+            statistics = mockStatistics,
             { }
         )
     }

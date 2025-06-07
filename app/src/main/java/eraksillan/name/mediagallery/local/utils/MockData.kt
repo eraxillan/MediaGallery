@@ -189,7 +189,8 @@ val mockRelations = listOf(
     )
 )
 
-val mockMoreInfo = "Episodes 1-2 were previewed in the theatrical screening of Ore dake Level Up na Ken: ReAwakening on November 28, 2024. Regular broadcasting began on January 5, 2025."
+val mockMoreInfo =
+    "Episodes 1-2 were previewed in the theatrical screening of Ore dake Level Up na Ken: ReAwakening on November 28, 2024. Regular broadcasting began on January 5, 2025."
 
 val mockCast = listOf<LocalMedia.Cast>(
     LocalMedia.Cast(
@@ -720,4 +721,65 @@ val mockDiscussions = listOf<LocalMedia.Discussion>(
             date = "2025-05-15T05:36:00+00:00"
         )
     ),
+)
+
+val mockStatistics = LocalMedia.Statistics(
+    watching = 147618,
+    completed = 362915,
+    onHold = 2424,
+    dropped = 1915,
+    planToWatch = 75049,
+    total = 589921,
+    scores = listOf(
+        LocalMedia.StatisticsScore(
+            score = 1,
+            votes = 1183,
+            percentage = 0.3f
+        ),
+        LocalMedia.StatisticsScore(
+            score = 2,
+            votes = 399,
+            percentage = 0.1f
+        ),
+        LocalMedia.StatisticsScore(
+            score = 3,
+            votes = 570,
+            percentage = 0.2f
+        ),
+        LocalMedia.StatisticsScore(
+            score = 4,
+            votes = 1109,
+            percentage = 0.3f
+        ),
+        LocalMedia.StatisticsScore(
+            score = 5,
+            votes = 2914,
+            percentage = 0.8f
+        ),
+        LocalMedia.StatisticsScore(
+            score = 6,
+            votes = 7971,
+            percentage = 2.3f
+        ),
+        LocalMedia.StatisticsScore(
+            score = 7,
+            votes = 30270,
+            percentage = 8.7f
+        ),
+        LocalMedia.StatisticsScore(
+            score = 8,
+            votes = 81138,
+            percentage = 23.4f
+        ),
+        LocalMedia.StatisticsScore(
+            score = 9,
+            votes = 115887,
+            percentage = 33.4f
+        ),
+        LocalMedia.StatisticsScore(
+            score = 10,
+            votes = 105660,
+            percentage = 30.4f
+        )
+    )
 )
